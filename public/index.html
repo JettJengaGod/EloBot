@@ -1,0 +1,56 @@
+<!-- This is a static file -->
+<!-- served from your routes in server.js -->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sequelize SQLite3 Example</title>
+    <meta name="description" content="Sequelize SQLite3 Example">
+    <link id="favicon" rel="icon" href="https://hyperdev.com/favicon-app.ico" type="image/x-icon">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/style.css">
+  </head>
+  <body>
+    <header>
+      <h1>
+        A list of users
+      </h1>
+    </header>
+
+    <main>
+      <p>Add a new user:</p>
+      <form>
+        <input id="fName" type="text" maxlength="100" placeholder="John"> <input id="lName" type="text" maxlength="100" placeholder="Hancock">
+        <button type="submit">Submit</button>
+      </form>
+      <p>Users:</p>
+      <section class="users">
+        <ul id="users">
+        </ul>
+      </section>
+      <p><a href="/reset">Reset</a> | <a href="/clear">Clear</a></p>
+    </main>
+
+    <footer>
+      <p>
+        <a href="https://gomix.com/#!/remix/sqlite3-db/5dd56de5-79af-444e-a17e-bd60230962eb">
+          <img src="https://gomix.com/images/background-light/remix-on-gomix.svg">
+        </a>
+      </p>
+      <p>
+        <a href="https://gomix.com/#!/project/sqlite3-db">
+          View Code
+        </a>
+      </p>
+    </footer>
+
+    <!-- Your web-app is https, so your scripts need to be too -->
+    <script src="https://code.jquery.com/jquery-2.2.1.min.js"
+            integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00="
+            crossorigin="anonymous"></script>
+    <script src="/client.js"></script>
+
+  </body>
+</html>
