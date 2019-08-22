@@ -121,7 +121,8 @@ client.connect();
 // Called every time a message comes in
 function onMessageHandler (target, context, msg, self) {
   if (self) { return; } // Ignore messages from the bot
-
+  const command = msg.split(' ');
+  console.log(command);
   // Remove whitespace from chat message
   const commandName = msg.trim();
 
@@ -135,8 +136,10 @@ function onMessageHandler (target, context, msg, self) {
   }
   
     // If the command is known, let's execute it
-  if (commandName.startsWtih('!add')) {
+  if (command[0] == `!add` && command.length == 2) {
     
+    User.create({ firstName: command[1], lastName: command[2]});
+    client.say(target, `You added ${command[1]} ${command[2]}`);
   }
 }
 
