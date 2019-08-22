@@ -62,8 +62,11 @@ function setup(){
       for(var i=0; i<users.length; i++){ // loop through all users
         User.create({ firstName: users[i][0], lastName: users[i][1]}); // create a new entry in the users table
       }
-    });
-  
+      for(var i=0; i<tusers.length; i++){ // loop through all users
+        tUser.create({ tName: tusers[i][0]}); // create a new entry in the users table
+      }
+    console.log(`tUser.findAll()`)
+    });  
 }
 
 // http://expressjs.com/en/starter/static-files.html
