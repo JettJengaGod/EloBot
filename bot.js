@@ -172,15 +172,28 @@ function onMessageHandler (target, context, msg, self) {
   
     // If the command is known, let's execute it
   if (command[0] == `!add` && command.length == 2) {
-    
+    checkTuser(command[1]);
     addTuser(command[1]);
     client.say(target, `You added ${command[1]}`);
   }
-  if (command[0] == )
+  if (command[0] == `!match` && command.length == 3){
+    
+  }
+}
+
+function checkTuser(tname){
+  var check = tUser.findAll({
+    where: {
+      tName: tname
+    }
+  });
+  console.log(check);
+  console.log("*******************";
+  return (check == 'null');
 }
 
 function addTuser(tname){
-      tUser.create({ tName: tname, });
+      tUser.create({ tName: tname, rating: 1200});
 }
 
 // Function called when the "dice" command is issued
