@@ -166,30 +166,35 @@ function onMessageHandler (target, context, msg, self) {
     const num = rollDice(commandName);
     client.say(target, `You rolled a ${num}. Link: https://glitch.com/~twitch-chatbot`);
     console.log(`* Executed ${commandName} command`);
-  } else {
-    console.log(`* Unknown command ${commandName}`);
   }
   
     // If the command is known, let's execute it
-  if (command[0] == `!add` && command.length == 2) {
+  else if (command[0] == `!add` && command.length == 2) {
     checkTuser(command[1]);
     addTuser(command[1]);
     client.say(target, `You added ${command[1]}`);
   }
-  if (command[0] == `!match` && command.length == 3){
+  else if (command[0] == `!check` && command.length == 2){
+    console.log(checkTuser(command[1]), "**");
     
+    client.say(target, `You checked ${command[1]}`);
+  }
+   else {
+    console.log(`* Unknown command ${commandName}`);
   }
 }
 
 function checkTuser(tname){
-  var check = tUser.findAll({
+  tUser.findAll({
     where: {
       tName: tname
     }
+  }).then(function(user) { // find all entries in the users tables
+    
+    console.log(user);
+    console.log("*******************");
+    return (user.length === 0);
   });
-  console.log(check);
-  console.log("*******************";
-  return (check == 'null');
 }
 
 function addTuser(tname){
