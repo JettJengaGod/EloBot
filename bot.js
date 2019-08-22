@@ -63,7 +63,7 @@ function setup(){
         User.create({ firstName: users[i][0], lastName: users[i][1]}); // create a new entry in the users table
       }
       for(var i=0; i<tusers.length; i++){ // loop through all users
-        User.create({ tName: users[i][0]}); // create a new entry in the users table
+        tUser.create({ tName: tusers[i][0]}); // create a new entry in the users table
       }
     });  
 }
@@ -83,6 +83,16 @@ app.get("/users", function (request, response) {
       dbUsers.push([user.firstName,user.lastName]); // adds their info to the dbUsers value
     });
     response.send(dbUsers); // sends dbUsers back to the page
+  });
+});
+
+app.get("/tusers", function (request, response) {
+  var dbtUsers=[];
+  tUser.findAll().then(function(tusers) { // find all entries in the users tables
+    tusers.forEach(function(tuser) {
+      dbtUsers.push([tuser.tName]); // adds their info to the dbUsers value
+    });
+    response.send(dbtUsers); // sends dbUsers back to the page
   });
 });
 
@@ -147,10 +157,10 @@ function onMessageHandler (target, context, msg, self) {
   }
   
     // If the command is known, let's execute it
-  if (command[0] == `!add` && command.length == 3) {
+  if (command[0] == `!add` && command.length == 2) {
     
-    User.create({ firstName: command[1], lastName: command[2]});
-    client.say(target, `You added ${command[1]} ${command[2]}`);
+    tUser.create({ tName: command[1]});
+    client.say(target, `You added ${command[1]}`);
   }
 }
 

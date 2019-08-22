@@ -10,6 +10,11 @@ $(function() {
       $('<li></li>').text(user[0] + " " + user[1]).appendTo('ul#users');
     });
   });
+  $.get('/tusers', function(tusers) {
+    tusers.forEach(function(tuser) {
+      $('<li></li>').text(tuser[0]).appendTo('ul#tusers');
+    });
+  });
   $('form').submit(function(event) {
     event.preventDefault();
     const fName = $('input#fName').val();
