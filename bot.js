@@ -2,7 +2,8 @@ const tmi = require('tmi.js');
 // init project
 var express = require('express');
 var Sequelize = require('sequelize');
-var server = require('glicko.js')
+var EloRank = require('elo-rank');
+var elo = new EloRank();
 var app = express();
 // default user list
 var users = [
@@ -11,8 +12,8 @@ var users = [
       ["Ahmed","Khan"]
     ];
 var tusers = [
-  ["alexjett"],
-  ["jettelobt"]
+  ["alexjett", 1400],
+  ["jettelobt", 1200]
 ];
 var User;
 var tUser;
@@ -47,6 +48,9 @@ sequelize.authenticate()
     tUser = sequelize.define('tusers', {
       tName: {
         type: Sequelize.STRING
+      },
+      rating: {
+        type: Sequelize.INTEGER
       }
     });
     setup();
@@ -68,7 +72,7 @@ function setup(){
   .then(function(){
     // Add the default users to the database
     for(var i=0; i<tusers.length; i++){ // loop through all users
-      tUser.create({ tName: tusers[i][0]}); // create a new entry in the users table
+      tUser.create({ tName: tusers[i][0], rating: tusers[i][1]}); // create a new entry in the users table
     }
   });
 }

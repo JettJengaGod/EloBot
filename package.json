@@ -10,7 +10,8 @@
     "express": "^4.16.4",
     "tmi.js": "^1.4.2",
     "sqlite3": "^4.1.0",
-    "sequelize": "^6.0.0"
+    "sequelize": "^6.0.0",
+    "elo-rank": "^1.0.3"
   },
   "engines": {
     "node": "8.x"
