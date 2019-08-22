@@ -176,7 +176,7 @@ function onMessageHandler (target, context, msg, self) {
   }
   else if (command[0] == `!check` && command.length == 2){
     checkTuser(command[1]).then(function(exists){
-      console.log(exists);
+      console.log(exists,"***");
       client.say(target, `You checked ${command[1]}`);
     });
   }
@@ -186,17 +186,22 @@ function onMessageHandler (target, context, msg, self) {
 }
 
 async function checkTuser(tname){
-  tUser.findAll({
-    where: {
-      tName: tname
-    }
-  }).then(function(user) { // find all entries in the users tables
-    
-    console.log(user);
-    console.log(user.length);
-    console.log("*******************");
-    return (user.length === 0 ? true : false);
+  let res = false;
+  let promise = new Promise((resolve, reject) => {
+    tUser.findAll({
+      where: {
+        tName: tname
+      }
+    }).then(function(user) { // find all entries in the users tables
+
+      console.log(user);
+      console.log(user.length);
+      console.log("*******************");
+      return Promise.resolve(user.length === 0 ? true : false);
   });
+  });
+  res = await promise;
+  alert(res);
 }
 
 function addTuser(tname){
