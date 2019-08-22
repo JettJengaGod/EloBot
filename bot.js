@@ -14,7 +14,7 @@ var users = [
 var tusers = [
   ["alexjett", 1500],
   ["jettelobt", 1400],
-  ["jettelobt2", 1500]
+  ["jettelobt2", 1200]
 ];
 var User;
 var tUser;
@@ -173,9 +173,14 @@ function onMessageHandler (target, context, msg, self) {
     // If the command is known, let's execute it
   if (command[0] == `!add` && command.length == 2) {
     
-    tUser.create({ tName: command[1]});
+    addTuser(command[1]);
     client.say(target, `You added ${command[1]}`);
   }
+  if (command[0] == )
+}
+
+function addTuser(tname){
+      tUser.create({ tName: tname, });
 }
 
 // Function called when the "dice" command is issued
