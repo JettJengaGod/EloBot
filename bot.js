@@ -184,7 +184,7 @@ function onMessageHandler (target, context, msg, self) {
   }
 }
 
-function checkTuser(tname){
+async function checkTuser(tname){
   tUser.findAll({
     where: {
       tName: tname
