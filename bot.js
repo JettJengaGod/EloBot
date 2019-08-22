@@ -184,7 +184,7 @@ function onMessageHandler (target, context, msg, self) {
     console.log(`* Unknown command ${commandName}`);
   }
 }
-
+//TODO Fix this function
 async function checkTuser(tname){
   let res = false;
   let promise = new Promise((resolve, reject) => {
