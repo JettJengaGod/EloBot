@@ -2,6 +2,7 @@ const tmi = require('tmi.js');
 // init project
 var express = require('express');
 var Sequelize = require('sequelize');
+var server = require('glicko.js')
 var app = express();
 // default user list
 var users = [
@@ -63,7 +64,13 @@ function setup(){
         User.create({ firstName: users[i][0], lastName: users[i][1]}); // create a new entry in the users table
       }
     });
-  
+  tUser.sync({force: true}) // We use 'force: true' in this example to drop the table users if it already exists, and create a new one. You'll most likely want to remove this setting in your own apps
+  .then(function(){
+    // Add the default users to the database
+    for(var i=0; i<tusers.length; i++){ // loop through all users
+      tUser.create({ tName: tusers[i][0]}); // create a new entry in the users table
+    }
+  });
 }
 
 // http://expressjs.com/en/starter/static-files.html
@@ -109,6 +116,7 @@ app.get("/reset", function (request, response) {
 // removes all entries from the users table
 app.get("/clear", function (request, response) {
   User.destroy({where: {}});
+  tUser.destroy({where: {}});
   response.redirect("/");
 });
 
