@@ -12,8 +12,9 @@ var users = [
       ["Ahmed","Khan"]
     ];
 var tusers = [
-  ["alexjett", 1400],
-  ["jettelobt", 1200]
+  ["alexjett", 1500],
+  ["jettelobt", 1400],
+  ["jettelobt2", 1500]
 ];
 var User;
 var tUser;
@@ -99,7 +100,10 @@ app.get("/tusers", function (request, response) {
   var dbtUsers=[];
   tUser.findAll().then(function(tusers) { // find all entries in the users tables
     tusers.forEach(function(tuser) {
-      dbtUsers.push([tuser.tName]); // adds their info to the dbUsers value
+      dbtUsers.push([tuser.tName,tuser.rating]); // adds their info to the dbUsers value
+    });
+    dbtUsers.sort(function(a,b){
+        return b[1] - a[1];
     });
     response.send(dbtUsers); // sends dbUsers back to the page
   });
