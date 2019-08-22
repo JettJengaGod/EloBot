@@ -175,9 +175,10 @@ function onMessageHandler (target, context, msg, self) {
     client.say(target, `You added ${command[1]}`);
   }
   else if (command[0] == `!check` && command.length == 2){
-    console.log(checkTuser(command[1]), "**");
-    
-    client.say(target, `You checked ${command[1]}`);
+    checkTuser(command[1]).then(function(exists){
+      console.log(exists);
+      client.say(target, `You checked ${command[1]}`);
+    });
   }
    else {
     console.log(`* Unknown command ${commandName}`);
@@ -192,8 +193,9 @@ async function checkTuser(tname){
   }).then(function(user) { // find all entries in the users tables
     
     console.log(user);
+    console.log(user.length);
     console.log("*******************");
-    return (user.length === 0);
+    return (user.length === 0 ? true : false);
   });
 }
 
