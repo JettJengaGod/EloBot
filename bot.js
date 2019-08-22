@@ -9,8 +9,12 @@ var users = [
       ["Liz","Smith"],
       ["Ahmed","Khan"]
     ];
+var tusers = [
+  ["alexjett"],
+  ["jettelobt"]
+];
 var User;
-
+var tUser;
 // setup a new database
 // using database credentials set in .env
 var sequelize = new Sequelize('database', process.env.DB_USER, process.env.DB_PASS, {
@@ -39,7 +43,11 @@ sequelize.authenticate()
         type: Sequelize.STRING
       }
     });
-    
+    tUser = sequelize.define('tusers', {
+      tName: {
+        type: Sequelize.STRING
+      }
+    });
     setup();
   })
   .catch(function (err) {
@@ -53,6 +61,9 @@ function setup(){
       // Add the default users to the database
       for(var i=0; i<users.length; i++){ // loop through all users
         User.create({ firstName: users[i][0], lastName: users[i][1]}); // create a new entry in the users table
+      }
+      for(var i=0; i<tusers.length; i++){ // loop through all users
+        User.create({ tName: users[i][0]}); // create a new entry in the users table
       }
     });  
 }
@@ -136,7 +147,7 @@ function onMessageHandler (target, context, msg, self) {
   }
   
     // If the command is known, let's execute it
-  if (command[0] == `!add` && command.length == 2) {
+  if (command[0] == `!add` && command.length == 3) {
     
     User.create({ firstName: command[1], lastName: command[2]});
     client.say(target, `You added ${command[1]} ${command[2]}`);
