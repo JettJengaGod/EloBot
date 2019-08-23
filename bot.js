@@ -179,6 +179,19 @@ function onMessageHandler (target, context, msg, self) {
       client.say(target, `You checked ${command[1]} and ${exists}`);
     });
   }
+  else if (command[0] == `!update` && command.length == 3){
+    var tname = command[1];
+    var rating = parseInt(command[2]);
+    checkTuser(command[1]).then(function(exists){
+      client.say(target, `You checked ${tname} and ${exists}`);
+      if(exists){
+        tUser.update({ rating: rating }, {
+          where: { tName: tname}
+        });
+        client.say(target, `You updated ${tname} to ${rating}`);
+      }
+    });
+  }
    else {
     console.log(`* Unknown command ${commandName}`);
   }
@@ -199,6 +212,8 @@ function checkTuser(tname){
 function addTuser(tname){
       tUser.create({ tName: tname, rating: 1200});
 }
+
+
 
 // Function called when the "dice" command is issued
 function rollDice () {
