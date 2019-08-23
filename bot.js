@@ -176,36 +176,24 @@ function onMessageHandler (target, context, msg, self) {
   }
   else if (command[0] == `!check` && command.length == 2){
     checkTuser(command[1]).then(function(exists){
-      console.log(exists,"***");
-      client.say(target, `You checked ${command[1]}`);
+      client.say(target, `You checked ${command[1]} and ${exists}`);
     });
   }
    else {
     console.log(`* Unknown command ${commandName}`);
   }
 }
-//TODO Fix this function
 
-function 
-async function checkTuser(tname){
-  let res = false;
-  let promise = new Promise.resolve(
-    tUser.findAll({
-      where: {
-        tName: tname
-      }
-    }).then(function(user) { // find all entries in the users tables
 
-      console.log(user);
-      console.log(user.length);
-      console.log("*******************");
-      return Promise.resolve(user.length === 0 ? true : false);
-  })).then(function(result){
-    console.log(result);
+
+function checkTuser(tname){
+  return tUser.count({ where: {tName: tname}})
+   .then(count => {
+    if(count != 0) {
+      return true;
+    }
+    return false;
   });
-  
-  res = await promise;
-  alert(res);
 }
 
 function addTuser(tname){
