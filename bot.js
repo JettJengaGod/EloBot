@@ -158,6 +158,7 @@ function onMessageHandler (target, context, msg, self) {
   if (self) { return; } // Ignore messages from the bot
   const command = msg.split(' ');
   console.log(command);
+  console.log("**********");
   // Remove whitespace from chat message
   const commandName = msg.trim();
 
@@ -184,11 +185,14 @@ function onMessageHandler (target, context, msg, self) {
     var rating = parseInt(command[2]);
     checkTuser(command[1]).then(function(exists){
       client.say(target, `You checked ${tname} and ${exists}`);
-      if(exists){
-        tUser.update({ rating: rating }, {
-          where: { tName: tname}
-        });
-        client.say(target, `You updated ${tname} to ${rating}`);
+      if(exists===true){
+        tUser.update({ rating: command[2] }, {
+          where: { tName: command[1]}
+        }).then(client.say(target, `You updated ${tname} to ${rating}`));
+        
+      }
+      else{
+        client.say(target, `Failed`);
       }
     });
   }
