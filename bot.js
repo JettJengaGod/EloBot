@@ -185,9 +185,11 @@ function onMessageHandler (target, context, msg, self) {
   }
 }
 //TODO Fix this function
+
+function 
 async function checkTuser(tname){
   let res = false;
-  let promise = new Promise((resolve, reject) => {
+  let promise = new Promise.resolve(
     tUser.findAll({
       where: {
         tName: tname
@@ -198,8 +200,10 @@ async function checkTuser(tname){
       console.log(user.length);
       console.log("*******************");
       return Promise.resolve(user.length === 0 ? true : false);
+  })).then(function(result){
+    console.log(result);
   });
-  });
+  
   res = await promise;
   alert(res);
 }
