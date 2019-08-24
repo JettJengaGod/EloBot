@@ -183,14 +183,17 @@ function onMessageHandler (target, context, msg, self) {
   else if (command[0] == `!update` && command.length == 3){
     var tname = command[1];
     var rating = parseInt(command[2]);
+    updateTuser(tname,rating).then(function(response){
+          client.say(target, `Updated ${tname} to ${rating}`);
+      client.say(target, `Test`);
+        });
     checkTuser(command[1]).then(function(exists){
       client.say(target, `You checked ${tname} and ${exists}`);
       if(exists===true){
         console.log(`We made it here, ${rating}`);
-        tUser.update({ rating: command[2] }, {
-          where: { tName: command[1]}
-        }).then(client.say(target, `You updated ${tname} to ${rating}`));
-        
+        updateTuser(tname,rating).then(function(response){
+          client.say(target, `Updated ${tname} to ${rating}`);
+        });
       }
       else{
         client.say(target, `Failed`);
@@ -216,10 +219,7 @@ function checkTuser(tname){
 
 function updateTuser(tname, rating){
   return tUser.update({ rating: rating }, {
-          where: { tName: tname}
-        .then( response =>
-    {return `You updated ${tname} to ${rating}`}
-)});
+          where: { tName: tname}});
 }
 
 function addTuser(tname){
