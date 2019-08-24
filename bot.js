@@ -189,7 +189,7 @@ function onMessageHandler (target, context, msg, self) {
     
   }
   else if (command[0] == `!match` && command.length == 3){
-    match()
+    match(command[1],command[2]);
   }
    else {
     console.log(`* Unknown command ${commandName}`);
@@ -226,7 +226,9 @@ async function updateTuser(tname, rating){
 function addTuser(tname){
       tUser.create({ tName: tname, rating: 1200});
 }
-
+async function match(winner, loser){
+  let await
+}
 
 
 // Function called when the "dice" command is issued
