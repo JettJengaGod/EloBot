@@ -183,11 +183,13 @@ function onMessageHandler (target, context, msg, self) {
   else if (command[0] == `!update` && command.length == 3){
     var tname = command[1];
     var rating = parseInt(command[2]);
-    // updateTuser(tname,rating).then(function(response){
-    //       client.say(target, `Updated ${tname} to ${rating}`);
-    //   client.say(target, `Test`);
-    //     });
+    updateTuser(tname,rating).then(function(response){
+          client.say(target, response);
+        });
     
+  }
+  else if (command[0] == `!match` && command.length == 3){
+    match()
   }
    else {
     console.log(`* Unknown command ${commandName}`);
@@ -196,19 +198,29 @@ function onMessageHandler (target, context, msg, self) {
 
 
 
-function checkTuser(tname){
+async function checkTuser(tname){
   return tUser.count({ where: {tName: tname}})
    .then(count => {
     if(count != 0) {
       return true;
     }
+    addTuser(tname);
     return false;
   });
 }
 
 async function updateTuser(tname, rating){
-  return tUser.update({ rating: rating }, {
-          where: { tName: tname}});
+  try {
+    let check = await checkTuser(tname);
+    await tUser.update({ rating: rating }, {
+        where: { tName: tname}});
+    return `Updated ${tname} to ${rating}`;
+  }
+  catch(e){
+    console.log(e);
+    throw e;
+  }
+  return 
 }
 
 function addTuser(tname){
