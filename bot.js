@@ -183,12 +183,12 @@ function onMessageHandler (target, context, msg, self) {
   else if (command[0] == `!update` && command.length == 3){
     var tname = command[1];
     var rating = parseInt(command[2]);
-    updateTuser(tname,rating).then(function(response){
-          client.say(target, `Updated ${tname} to ${rating}`);
-      client.say(target, `Test`);
-        });
+    // updateTuser(tname,rating).then(function(response){
+    //       client.say(target, `Updated ${tname} to ${rating}`);
+    //   client.say(target, `Test`);
+    //     });
     checkTuser(command[1]).then(function(exists){
-      client.say(target, `You checked ${tname} and ${exists}`);
+      client.say(target, `You checked ${tname} and ${exists}`).then(function(test){
       if(exists===true){
         console.log(`We made it here, ${rating}`);
         updateTuser(tname,rating).then(function(response){
@@ -197,7 +197,7 @@ function onMessageHandler (target, context, msg, self) {
       }
       else{
         client.say(target, `Failed`);
-      }
+      }})
     });
   }
    else {
