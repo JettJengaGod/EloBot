@@ -189,7 +189,9 @@ function onMessageHandler (target, context, msg, self) {
     
   }
   else if (command[0] == `!match` && command.length == 3){
-    match(command[1],command[2]);
+    match(command[1],command[2]).then(function(response){
+      client.say(target, response);
+    });
   }
    else {
     console.log(`* Unknown command ${commandName}`);
@@ -201,11 +203,10 @@ function onMessageHandler (target, context, msg, self) {
 async function checkTuser(tname){
   let count = await tUser.count({ where: {tName: tname}});
   if(count > 0){
-    let rating = await User.find({
-        where: {tName: tname},
-        attributes: {rating}
+    let checked = await User.findAll({
+        where: {tName: tname}
       });
-    return rating
+    return checked[0].rating
   }
   else{
     addTuser(tname);
@@ -231,7 +232,16 @@ function addTuser(tname){
       tUser.create({ tName: tname, rating: 1200});
 }
 async function match(winner, loser){
-  // let await
+  let winner_r = await checkTuser(winner);
+  let loser_r = await checkTuser(loser);
+  let es_w = elo.getExpected(winner_r,loser_r);
+  let es_l = elo.getExpected(loser_r,winner_r);
+  
+  let new_w = elo.updateRating(es_w, 1, winner_r);
+  let new_l = elo.updateRating(es_l, 0, loser_r);
+  let win_u = await updateTuser(winner, new_w);
+  let loser_u = await updateTuser(loser, new_l);
+  return `${winner} ${new_w}+${new_w-winner_r} defeated ${loser} ${new_l}-${loser_r-new_l}`
 }
 
 
