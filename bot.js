@@ -199,14 +199,18 @@ function onMessageHandler (target, context, msg, self) {
 
 
 async function checkTuser(tname){
-  return tUser.count({ where: {tName: tname}})
-   .then(count => {
-    if(count != 0) {
-      return true;
-    }
+  let count = await tUser.count({ where: {tName: tname}});
+  if(count > 0){
+    let rating = await User.find({
+        where: {tName: tname},
+        attributes: {rating}
+      });
+    return rating
+  }
+  else{
     addTuser(tname);
-    return false;
-  });
+    return 1200;
+  }
 }
 
 async function updateTuser(tname, rating){
@@ -227,7 +231,7 @@ function addTuser(tname){
       tUser.create({ tName: tname, rating: 1200});
 }
 async function match(winner, loser){
-  let await
+  // let await
 }
 
 
