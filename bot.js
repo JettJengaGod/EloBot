@@ -13,8 +13,8 @@ var users = [
     ];
 var tusers = [
   ["alexjett", 1500],
-  ["jettelobt", 1400],
-  ["jettelobt2", 1200]
+  ["jettelobot", 1400],
+  ["jettelobot2", 1200]
 ];
 var User;
 var tUser;
@@ -157,7 +157,8 @@ client.connect();
 function onMessageHandler (target, context, msg, self) {
   if (self) { return; } // Ignore messages from the bot
   const command = msg.split(' ');
-  console.log(command,context,self,context.display-name);
+  const usr = context.username;
+  console.log(command,context.username,self);
   console.log("**********");
   // Remove whitespace from chat message
   const commandName = msg.trim();
@@ -208,6 +209,13 @@ function onMessageHandler (target, context, msg, self) {
     match(command[1],command[2]).then(function(response){
       client.say(target, response);
     });
+  }
+  else if (command[0] == `!rating`){
+    if(command.length === 1){
+      checkTuser(usr).then(function(response){
+        client.say(target, `Your rating is ${response}`)
+      });
+    }
   }
    else {
     console.log(`* Unknown command ${commandName}`);
