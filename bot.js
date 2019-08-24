@@ -186,6 +186,7 @@ function onMessageHandler (target, context, msg, self) {
     checkTuser(command[1]).then(function(exists){
       client.say(target, `You checked ${tname} and ${exists}`);
       if(exists===true){
+        console.log(`We made it here, ${rating}`);
         tUser.update({ rating: command[2] }, {
           where: { tName: command[1]}
         }).then(client.say(target, `You updated ${tname} to ${rating}`));
@@ -211,6 +212,14 @@ function checkTuser(tname){
     }
     return false;
   });
+}
+
+function updateTuser(tname, rating){
+  return tUser.update({ rating: rating }, {
+          where: { tName: tname}
+        .then( response =>
+    {return `You updated ${tname} to ${rating}`}
+)});
 }
 
 function addTuser(tname){
