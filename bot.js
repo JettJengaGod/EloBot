@@ -187,18 +187,7 @@ function onMessageHandler (target, context, msg, self) {
     //       client.say(target, `Updated ${tname} to ${rating}`);
     //   client.say(target, `Test`);
     //     });
-    checkTuser(command[1]).then(function(exists){
-      client.say(target, `You checked ${tname} and ${exists}`).then(function(test){
-      if(exists===true){
-        console.log(`We made it here, ${rating}`);
-        updateTuser(tname,rating).then(function(response){
-          client.say(target, `Updated ${tname} to ${rating}`);
-        });
-      }
-      else{
-        client.say(target, `Failed`);
-      }})
-    });
+    
   }
    else {
     console.log(`* Unknown command ${commandName}`);
@@ -217,7 +206,7 @@ function checkTuser(tname){
   });
 }
 
-function updateTuser(tname, rating){
+async function updateTuser(tname, rating){
   return tUser.update({ rating: rating }, {
           where: { tName: tname}});
 }
