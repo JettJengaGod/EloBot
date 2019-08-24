@@ -157,7 +157,7 @@ client.connect();
 function onMessageHandler (target, context, msg, self) {
   if (self) { return; } // Ignore messages from the bot
   const command = msg.split(' ');
-  console.log(command);
+  console.log(command,context,self,context.display-name);
   console.log("**********");
   // Remove whitespace from chat message
   const commandName = msg.trim();
@@ -189,6 +189,22 @@ function onMessageHandler (target, context, msg, self) {
     
   }
   else if (command[0] == `!match` && command.length == 3){
+    let winner = command[1];
+    if(winner.startsWith('@')){
+      winner = winner.substring(1);
+    }
+    else{
+      client.say(target,`Please tag the user with the @ symbol`);
+      return;
+    }
+    let loser = command[2];
+    if(loser.startsWith('@')){
+      loser = winner.substring(1);
+    }
+    else{
+      client.say(target,`Please tag the user with the @ symbol`);
+      return;
+    }
     match(command[1],command[2]).then(function(response){
       client.say(target, response);
     });
@@ -203,7 +219,7 @@ function onMessageHandler (target, context, msg, self) {
 async function checkTuser(tname){
   let count = await tUser.count({ where: {tName: tname}});
   if(count > 0){
-    let checked = await User.findAll({
+    let checked = await tUser.findAll({
         where: {tName: tname}
       });
     return checked[0].rating
