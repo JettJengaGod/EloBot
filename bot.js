@@ -139,7 +139,7 @@ app.get("/reset", function (request, response) {
 app.get("/clear", function (request, response) {
   User.destroy({where: {}});
   tUser.destroy({where: {}});
-  Match.destroy({where:{}})
+  Match.destroy({where:{}});
   response.redirect("/");
 });
 
@@ -173,17 +173,11 @@ function onMessageHandler (target, context, msg, self) {
   if (self) { return; } // Ignore messages from the bot
   const command = msg.split(' ');
   const usr = context.username;
-  console.log(command,context.username,self);
+  const mod = context.mod
+  console.log(command,context,self);
   console.log("**********");
   // Remove whitespace from chat message
   const commandName = msg.trim();
-
-  // If the command is known, let's execute it
-  if (commandName === '!d20') {
-    const num = rollDice(commandName);
-    client.say(target, `You rolled a ${num}. Link: https://glitch.com/~twitch-chatbot`);
-    console.log(`* Executed ${commandName} command`);
-  }
   
     // If the command is known, let's execute it
   else if (command[0] == `!add` && command.length == 2) {
@@ -325,12 +319,14 @@ async function lastMatch(winner,loser){
     limit : 1,
     order : [['createdAt', 'DESC']]
   });
-  console.log("Last match check");
-  console.log(check,check[0].winner,check[0].loser);
+  return (check[0].winner === winner&&check[0].loser === loser ? true : false)
 }
 
 async function match(winner, loser){
   let checklast = await lastMatch(winner, loser);
+  if(checklast){
+    return `This is the same result as the last match, assuming duplicate.`
+  }
   let winner_r = await checkTuser(winner);
   let loser_r = await checkTuser(loser);
   let es_w = elo.getExpected(winner_r,loser_r);
