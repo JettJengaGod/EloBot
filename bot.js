@@ -174,7 +174,7 @@ function onMessageHandler (target, context, msg, self) {
   const command = msg.split(' ');
   const usr = context.username;
   const mod = (context.mod || usr === 'alexjett' || usr === 't5ace');
-  console.log(command,context,self);
+  console.log(command,context,mod);
   console.log("**********");
   // Remove whitespace from chat message
   const commandName = msg.trim();
@@ -267,7 +267,7 @@ function onMessageHandler (target, context, msg, self) {
     console.log(`* Unknown command ${commandName}`);
   }
 }
-
+// TODO finish implemnting this 
 async function matchlist(){
   let matches = await Match.findAll({
     limit : 5,
