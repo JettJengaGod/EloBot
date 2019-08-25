@@ -229,7 +229,9 @@ function onMessageHandler (target, context, msg, self) {
     }
   }
   else if (command[0] == `!top` && command.length === 1){
-    
+    toplist().then(function(response){
+      client.say(target, response);
+    })
     
   }
    else {
@@ -237,7 +239,17 @@ function onMessageHandler (target, context, msg, self) {
   }
 }
 
-
+async function toplist(){
+  tusers = await tUser.findAll({
+    limit : 5,
+    order : [['rating', 'DESC']]
+  });
+  let out = []
+  tusers.forEach(function(tname) {
+    out.push([tname.tname,tname.rating]);
+  });
+  return `The top 5 is ${out}`
+}
 async function checkNoAdd(tname){
   let count = await tUser.count({ where: {tName: tname}});
   if(count > 0){
