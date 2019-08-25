@@ -244,9 +244,11 @@ async function toplist(){
     limit : 5,
     order : [['rating', 'DESC']]
   });
-  let out = []
+  let out = [];
+  let i = 0;
   tusers.forEach(function(tname) {
-    out.push([tname.tname,tname.rating]);
+    i++;
+    out.push([` ${i}.${tname.tName}${tname.rating}`]);
   });
   return `The top 5 is ${out}`
 }
