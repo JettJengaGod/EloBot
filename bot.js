@@ -193,7 +193,7 @@ function onMessageHandler (target, context, msg, self) {
         tname = tname.substring(1);
       }
       checkNoAdd(tname).then(function(response){
-        client.say(target, `${tname}\'s rating is ${response}`)
+        client.say(target, `${tname}\'s rating is ${response}`);
       });
     }
   }
@@ -201,7 +201,11 @@ function onMessageHandler (target, context, msg, self) {
     toplist().then(function(response){
       client.say(target, response);
     })
-
+  }
+  else if (command[0] == `!history` && command.length === 1){
+    matchlist(usr).then(function(response){
+      client.say(target, response);
+    })
   }
   else if (mod && command[0].startsWith('!')){
     // Mod commands
@@ -244,13 +248,38 @@ function onMessageHandler (target, context, msg, self) {
         client.say(target, response);
       });
     }
+    else if (command[0] == `!elohelp` && command.length === 1){
+      let res = `\"!rating\" to find your rating
+    \"!rating @user\" to find a user's rating
+    \"!top\" to find the top 5 users and their ratings.
+ Mod commands:
+\"!match @winner @loser\" Posts a match with @winner beating @loser`
+        client.say(target, res);
+    }
   }
   else if (command[0] == `!elohelp` && command.length === 1){
-    let res = `\"!rating to find your ra`
+    let res = `\"!rating\" to find your rating
+\"!rating @user\" to find a user's rating
+\"!top\" to find the top 5 users and their ratings.`
+    client.say(target, res);
   }
   else {
     console.log(`* Unknown command ${commandName}`);
   }
+}
+
+async function matchlist(){
+  let matches = await Match.findAll({
+    limit : 5,
+    order : [['rating', 'DESC']]
+  });
+  let out = [];
+  let i = 0;
+  tusers.forEach(function(tname) {
+    i++;
+    out.push([` ${i}.${tname.tName}${tname.rating}`]);
+  });
+  return `The top 5 is ${out}`
 }
 
 async function toplist(){
