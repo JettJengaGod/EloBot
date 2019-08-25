@@ -55,14 +55,26 @@ sequelize.authenticate()
         type: Sequelize.INTEGER
       }
     });
-    // Matches = sequelize.define('matches', {
-    //   tName: {
-    //     type: Sequelize.STRING
-    //   },
-    //   rating: {
-    //     type: Sequelize.INTEGER
-    //   }
-    // });
+    Matches = sequelize.define('matches', {
+      winner: {
+        type: Sequelize.STRING
+      },
+      w_r: {
+        type: Sequelize.INTEGER
+      },
+      w_rc: {
+        type: Sequelize.INTEGER
+      },
+      loser: {
+        type: Sequelize.STRING
+      },
+      l_r: {
+        type: Sequelize.INTEGER
+      },
+      l_rc: {
+        type: Sequelize.INTEGER
+      },
+    });
     setup();
   })
   .catch(function (err) {
