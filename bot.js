@@ -18,7 +18,7 @@ var tusers = [
 ];
 var User;
 var tUser;
-var Matches;
+var Match;
 // setup a new database
 // using database credentials set in .env
 var sequelize = new Sequelize('database', process.env.DB_USER, process.env.DB_PASS, {
@@ -55,7 +55,7 @@ sequelize.authenticate()
         type: Sequelize.INTEGER
       }
     });
-    Matches = sequelize.define('matches', {
+    Match = sequelize.define('matches', {
       winner: {
         type: Sequelize.STRING
       },
@@ -139,6 +139,7 @@ app.get("/reset", function (request, response) {
 app.get("/clear", function (request, response) {
   User.destroy({where: {}});
   tUser.destroy({where: {}});
+  Match.destroy({where:{}})
   response.redirect("/");
 });
 
@@ -305,7 +306,7 @@ async function updateTuser(tname, rating){
   return 
 }
 function addMatch(winner, loser, w_r, l_r, w_rc, l_rc){
-  Matches.create({
+  Match.create({
     winner: winner,
     loser: loser,
     w_r: w_r,
@@ -314,18 +315,22 @@ function addMatch(winner, loser, w_r, l_r, w_rc, l_rc){
     l_rc: l_rc
   })
 }
+
 function addTuser(tname){
       tUser.create({ tName: tname, rating: 1200});
 }
+
 async function lastMatch(winner,loser){
-  let check = await Matches.findAll({
+  let check = await Match.findAll({
     limit : 1,
     order : [['createdAt', 'DESC']]
   });
+  console.log("Last match check");
+  console.log(check,check[0].winner,check[0].loser);
 }
 
 async function match(winner, loser){
-  // let checklast = await lastMatch(winner, loser);
+  let checklast = await lastMatch(winner, loser);
   let winner_r = await checkTuser(winner);
   let loser_r = await checkTuser(loser);
   let es_w = elo.getExpected(winner_r,loser_r);
@@ -335,7 +340,7 @@ async function match(winner, loser){
   let new_l = elo.updateRating(es_l, 0, loser_r);
   let win_u = await updateTuser(winner, new_w);
   let loser_u = await updateTuser(loser, new_l);
-  addMatch(winner, loser, new_w, new_l, new_w, l_rc)
+  addMatch(winner, loser, new_w, new_l, new_w-winner_r, new_l-loser_r)
   return `${winner} ${new_w}(+${new_w-winner_r}) defeated ${loser} ${new_l}(-${loser_r-new_l})`
 }
 
