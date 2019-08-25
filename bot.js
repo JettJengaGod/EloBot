@@ -62,14 +62,14 @@ sequelize.authenticate()
 
 // populate table with default users
 function setup(){
-  User.sync({force: true}) // We use 'force: true' in this example to drop the table users if it already exists, and create a new one. You'll most likely want to remove this setting in your own apps
+  User.sync() // We use 'force: true' in this example to drop the table users if it already exists, and create a new one. You'll most likely want to remove this setting in your own apps
     .then(function(){
       // Add the default users to the database
       for(var i=0; i<users.length; i++){ // loop through all users
         User.create({ firstName: users[i][0], lastName: users[i][1]}); // create a new entry in the users table
       }
     });
-  tUser.sync({force: true}) // We use 'force: true' in this example to drop the table users if it already exists, and create a new one. You'll most likely want to remove this setting in your own apps
+  tUser.sync() // We use 'force: true' in this example to drop the table users if it already exists, and create a new one. You'll most likely want to remove this setting in your own apps
   .then(function(){
     // Add the default users to the database
     for(var i=0; i<tusers.length; i++){ // loop through all users
