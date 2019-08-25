@@ -318,11 +318,14 @@ function addTuser(tname){
       tUser.create({ tName: tname, rating: 1200});
 }
 async function lastMatch(winner,loser){
-  
+  let check = await Matches.findAll({
+    limit : 1,
+    order : [['createdAt', 'DESC']]
+  });
 }
 
 async function match(winner, loser){
-  let checklast = await lastMatch(winner, loser);
+  // let checklast = await lastMatch(winner, loser);
   let winner_r = await checkTuser(winner);
   let loser_r = await checkTuser(loser);
   let es_w = elo.getExpected(winner_r,loser_r);
@@ -332,6 +335,7 @@ async function match(winner, loser){
   let new_l = elo.updateRating(es_l, 0, loser_r);
   let win_u = await updateTuser(winner, new_w);
   let loser_u = await updateTuser(loser, new_l);
+  addMatch(winner, loser, new_w, new_l, new_w, l_rc)
   return `${winner} ${new_w}(+${new_w-winner_r}) defeated ${loser} ${new_l}(-${loser_r-new_l})`
 }
 
