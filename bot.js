@@ -173,53 +173,15 @@ function onMessageHandler (target, context, msg, self) {
   if (self) { return; } // Ignore messages from the bot
   const command = msg.split(' ');
   const usr = context.username;
-  const mod = context.mod
+  const mod = (context.mod || usr === 'alexjett' || usr === 't5ace');
   console.log(command,context,self);
   console.log("**********");
   // Remove whitespace from chat message
   const commandName = msg.trim();
   
     // If the command is known, let's execute it
-  else if (command[0] == `!add` && command.length == 2) {
-    checkTuser(command[1]);
-    addTuser(command[1]);
-    client.say(target, `You added ${command[1]}`);
-  }
-  else if (command[0] == `!check` && command.length == 2){
-    checkTuser(command[1]).then(function(exists){
-      client.say(target, `You checked ${command[1]} and ${exists}`);
-    });
-  }
-  else if (command[0] == `!update` && command.length == 3){
-    var tname = command[1];
-    var rating = parseInt(command[2]);
-    updateTuser(tname,rating).then(function(response){
-          client.say(target, response);
-        });
-    
-  }
-  else if (command[0] == `!match` && command.length == 3){
-    let winner = command[1];
-    if(winner.startsWith('@')){
-      winner = winner.substring(1);
-    }
-    else{
-      client.say(target,`Please tag the user with the @ symbol`);
-      return;
-    }
-    let loser = command[2];
-    if(loser.startsWith('@')){
-      loser = loser.substring(1);
-    }
-    else{
-      client.say(target,`Please tag the user with the @ symbol`);
-      return;
-    }
-    match(winner,loser).then(function(response){
-      client.say(target, response);
-    });
-  }
-  else if (command[0] == `!rating`){
+  // Normal commands
+  if (command[0] == `!rating`){
     if(command.length === 1){
       checkNoAdd(usr).then(function(response){
         client.say(target, `Your rating is ${response}`)
@@ -239,9 +201,54 @@ function onMessageHandler (target, context, msg, self) {
     toplist().then(function(response){
       client.say(target, response);
     })
-    
+
   }
-   else {
+  else if (mod && command[0].startsWith('!')){
+    // Mod commands
+    if (command[0] == `!add` && command.length == 2) {
+      checkTuser(command[1]);
+      addTuser(command[1]);
+      client.say(target, `You added ${command[1]}`);
+    }
+    else if (command[0] == `!check` && command.length == 2){
+      checkTuser(command[1]).then(function(exists){
+        client.say(target, `You checked ${command[1]} and ${exists}`);
+      });
+    }
+    else if (command[0] == `!update` && command.length == 3){
+      var tname = command[1];
+      var rating = parseInt(command[2]);
+      updateTuser(tname,rating).then(function(response){
+            client.say(target, response);
+          });
+
+    }
+    else if (command[0] == `!match` && command.length == 3){
+      let winner = command[1];
+      if(winner.startsWith('@')){
+        winner = winner.substring(1);
+      }
+      else{
+        client.say(target,`Please tag the user with the @ symbol`);
+        return;
+      }
+      let loser = command[2];
+      if(loser.startsWith('@')){
+        loser = loser.substring(1);
+      }
+      else{
+        client.say(target,`Please tag the user with the @ symbol`);
+        return;
+      }
+      match(winner,loser).then(function(response){
+        client.say(target, response);
+      });
+    }
+  }
+  else if (command[0] == `!elohelp` && command.length === 1){
+    let res = `\"!rating to find your ra`
+  }
+  else {
     console.log(`* Unknown command ${commandName}`);
   }
 }
