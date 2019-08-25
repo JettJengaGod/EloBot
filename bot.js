@@ -200,13 +200,13 @@ function onMessageHandler (target, context, msg, self) {
     }
     let loser = command[2];
     if(loser.startsWith('@')){
-      loser = winner.substring(1);
+      loser = loser.substring(1);
     }
     else{
       client.say(target,`Please tag the user with the @ symbol`);
       return;
     }
-    match(command[1],command[2]).then(function(response){
+    match(winner,loser).then(function(response){
       client.say(target, response);
     });
   }
@@ -260,12 +260,12 @@ async function match(winner, loser){
   let loser_r = await checkTuser(loser);
   let es_w = elo.getExpected(winner_r,loser_r);
   let es_l = elo.getExpected(loser_r,winner_r);
-  
+  console.log(winner,winner_r,loser,loser_r)
   let new_w = elo.updateRating(es_w, 1, winner_r);
   let new_l = elo.updateRating(es_l, 0, loser_r);
   let win_u = await updateTuser(winner, new_w);
   let loser_u = await updateTuser(loser, new_l);
-  return `${winner} ${new_w}+${new_w-winner_r} defeated ${loser} ${new_l}-${loser_r-new_l}`
+  return `${winner} ${new_w}(+${new_w-winner_r}) defeated ${loser} ${new_l}(-${loser_r-new_l})`
 }
 
 
