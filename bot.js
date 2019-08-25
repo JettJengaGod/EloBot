@@ -18,7 +18,7 @@ var tusers = [
 ];
 var User;
 var tUser;
-var matches;
+var Matches;
 // setup a new database
 // using database credentials set in .env
 var sequelize = new Sequelize('database', process.env.DB_USER, process.env.DB_PASS, {
@@ -55,6 +55,14 @@ sequelize.authenticate()
         type: Sequelize.INTEGER
       }
     });
+    // Matches = sequelize.define('matches', {
+    //   tName: {
+    //     type: Sequelize.STRING
+    //   },
+    //   rating: {
+    //     type: Sequelize.INTEGER
+    //   }
+    // });
     setup();
   })
   .catch(function (err) {
@@ -206,8 +214,17 @@ function onMessageHandler (target, context, msg, self) {
   }
   else if (command[0] == `!rating`){
     if(command.length === 1){
-      checkTuser(usr).then(function(response){
+      checkNoAdd(usr).then(function(response){
         client.say(target, `Your rating is ${response}`)
+      });
+    }
+    if(command.length === 2){
+      let tname = command[1];
+      if(tname.startsWith('@')){
+        tname = tname.substring(1);
+      }
+      checkNoAdd(tname).then(function(response){
+        client.say(target, `${tname}\'s rating is ${response}`)
       });
     }
   }
@@ -217,7 +234,19 @@ function onMessageHandler (target, context, msg, self) {
 }
 
 
-
+async function checkNoAdd(tname){
+  let count = await tUser.count({ where: {tName: tname}});
+  if(count > 0){
+    let checked = await tUser.findAll({
+        where: {tName: tname}
+      });
+    return checked[0].rating
+  }
+  else{
+    
+    return 'Not found';
+  }
+}
 async function checkTuser(tname){
   let count = await tUser.count({ where: {tName: tname}});
   if(count > 0){
