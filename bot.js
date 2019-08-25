@@ -317,8 +317,12 @@ function addMatch(winner, loser, w_r, l_r, w_rc, l_rc){
 function addTuser(tname){
       tUser.create({ tName: tname, rating: 1200});
 }
+async function lastMatch(winner,loser){
+  
+}
+
 async function match(winner, loser){
-  let checklast = await
+  let checklast = await lastMatch(winner, loser);
   let winner_r = await checkTuser(winner);
   let loser_r = await checkTuser(loser);
   let es_w = elo.getExpected(winner_r,loser_r);
