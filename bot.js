@@ -304,7 +304,7 @@ async function updateTuser(tname, rating){
   }
   return 
 }
-
+function addMatch()
 function addTuser(tname){
       tUser.create({ tName: tname, rating: 1200});
 }
