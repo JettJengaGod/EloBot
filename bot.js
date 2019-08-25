@@ -18,6 +18,7 @@ var tusers = [
 ];
 var User;
 var tUser;
+var matches;
 // setup a new database
 // using database credentials set in .env
 var sequelize = new Sequelize('database', process.env.DB_USER, process.env.DB_PASS, {
@@ -62,20 +63,13 @@ sequelize.authenticate()
 
 // populate table with default users
 function setup(){
-  User.sync() // We use 'force: true' in this example to drop the table users if it already exists, and create a new one. You'll most likely want to remove this setting in your own apps
+  User.sync({force : true}) // We use 'force: true' in this example to drop the table users if it already exists, and create a new one. You'll most likely want to remove this setting in your own apps
     .then(function(){
       // Add the default users to the database
       for(var i=0; i<users.length; i++){ // loop through all users
         User.create({ firstName: users[i][0], lastName: users[i][1]}); // create a new entry in the users table
       }
     });
-  tUser.sync() // We use 'force: true' in this example to drop the table users if it already exists, and create a new one. You'll most likely want to remove this setting in your own apps
-  .then(function(){
-    // Add the default users to the database
-    for(var i=0; i<tusers.length; i++){ // loop through all users
-      tUser.create({ tName: tusers[i][0], rating: tusers[i][1]}); // create a new entry in the users table
-    }
-  });
 }
 
 // http://expressjs.com/en/starter/static-files.html

@@ -12,7 +12,7 @@ $(function() {
   });
   $.get('/tusers', function(tusers) {
     tusers.forEach(function(tuser) {
-      $('<li></li>').text(tuser[0] + " " + tuser[1]).appendTo('ul#tusers');
+      $('<li></li>').text(tuser[0] + " " + tuser[1]).appendTo('ol#tusers');
     });
   });
   $('form').submit(function(event) {
