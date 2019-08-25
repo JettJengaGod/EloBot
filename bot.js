@@ -228,6 +228,10 @@ function onMessageHandler (target, context, msg, self) {
       });
     }
   }
+  else if (command[0] == `!top` && command.length === 1){
+    
+    
+  }
    else {
     console.log(`* Unknown command ${commandName}`);
   }
