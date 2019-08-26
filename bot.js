@@ -391,18 +391,18 @@ async function lastMatch(winner,loser){
     return false;
   }
 }
-
+// TODO Fix this 
 async function undo(winner,loser){
   let check = await Match.findAll({
-    where
+    where : {winner: winner, loser: loser},
     limit : 1,
     order : [['createdAt', 'DESC']]
   });
   if(check.length > 0){
-    return (check[0].winner === winner&&check[0].loser === loser ? true : false)
+    return ``;
   }
   else{
-    return false;
+    return `Match not found are you sure you typed it in right?`;
   }
 }
 
