@@ -130,18 +130,18 @@ app.post("/users", function (request, response) {
 });
 
 // drops the table users if it already exists, populates new users table it with just the default users.
-app.get("/reset", function (request, response) {
-  setup();
-  response.redirect("/");
-});
+// app.get("/reset", function (request, response) {
+//   setup();
+//   response.redirect("/");
+// });
 
-// removes all entries from the users table
-app.get("/clear", function (request, response) {
-  User.destroy({where: {}});
-  tUser.destroy({where: {}});
-  Match.destroy({where:{}});
-  response.redirect("/");
-});
+// // removes all entries from the users table
+// app.get("/clear", function (request, response) {
+//   User.destroy({where: {}});
+//   tUser.destroy({where: {}});
+//   Match.destroy({where:{}});
+//   response.redirect("/");
+// });
 
 // listen for requests :)
 var listener = app.listen(process.env.PORT, function () {
@@ -254,10 +254,32 @@ function onMessageHandler (target, context, msg, self) {
         client.say(target, response);
       });
     }
+    else if (command[0] == `!undo` && command.length == 3){
+      let winner = command[1];
+      if(winner.startsWith('@')){
+        winner = winner.substring(1);
+      }
+      else{
+        client.say(target,`Please tag the user with the @ symbol`);
+        return;
+      }
+      let loser = command[2];
+      if(loser.startsWith('@')){
+        loser = loser.substring(1);
+      }
+      else{
+        client.say(target,`Please tag the user with the @ symbol`);
+        return;
+      }
+      undo(winner,loser).then(function(response){
+        client.say(target, response);
+      });
+    }
     else if (command[0] == `!elohelp` && command.length === 1){
       let res = `\"!rating\" to find your rating
     \"!rating @user\" to find a user's rating
     \"!top\" to find the top 5 users and their ratings.
+\"!link\" a webpage with the full ranking list
  Mod commands:
 \"!match @winner @loser\" Posts a match with @winner beating @loser`
         client.say(target, res);
@@ -266,7 +288,8 @@ function onMessageHandler (target, context, msg, self) {
   else if (command[0] == `!elohelp` && command.length === 1){
     let res = `\"!rating\" to find your rating
 \"!rating @user\" to find a user's rating
-\"!top\" to find the top 5 users and their ratings.`
+\"!top\" to find the top 5 users and their ratings 
+\"!link\" a webpage with the full ranking list.`
     client.say(target, res);
   }
   else {
@@ -358,6 +381,20 @@ function addTuser(tname){
 
 async function lastMatch(winner,loser){
   let check = await Match.findAll({
+    limit : 1,
+    order : [['createdAt', 'DESC']]
+  });
+  if(check.length > 0){
+    return (check[0].winner === winner&&check[0].loser === loser ? true : false)
+  }
+  else{
+    return false;
+  }
+}
+
+async function undo(winner,loser){
+  let check = await Match.findAll({
+    where
     limit : 1,
     order : [['createdAt', 'DESC']]
   });
