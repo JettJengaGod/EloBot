@@ -171,6 +171,9 @@ client.connect();
 // Called every time a message comes in
 function onMessageHandler (target, context, msg, self) {
   if (self) { return; } // Ignore messages from the bot
+  if (!msg.startsWith('!')){
+    return;
+  }
   const command = msg.split(' ');
   const usr = context.username;
   const mod = (context.mod || usr === 'alexjett' || usr === 't5ace');
@@ -355,7 +358,12 @@ async function lastMatch(winner,loser){
     limit : 1,
     order : [['createdAt', 'DESC']]
   });
-  return (check[0].winner === winner&&check[0].loser === loser ? true : false)
+  if(check.length > 0){
+    return (check[0].winner === winner&&check[0].loser === loser ? true : false)
+  }
+  else{
+    return false;
+  }
 }
 
 async function match(winner, loser){
