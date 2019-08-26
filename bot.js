@@ -294,7 +294,7 @@ async function toplist(){
   let i = 0;
   tusers.forEach(function(tname) {
     i++;
-    out.push([` ${i}.${tname.tName}${tname.rating}`]);
+    out.push([` ${i}.${tname.tName} ${tname.rating}`]);
   });
   return `The top 5 is ${out}`
 }
