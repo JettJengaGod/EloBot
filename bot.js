@@ -210,6 +210,9 @@ function onMessageHandler (target, context, msg, self) {
       client.say(target, response);
     })
   }
+  else if (command[0] == `!link` && command.length === 1){
+    client.say(target, `https://topaz-molybdenum.glitch.me`);
+  }
   else if (mod && command[0].startsWith('!')){
     // Mod commands
 //     if (command[0] == `!add` && command.length == 2) {
