@@ -209,25 +209,25 @@ function onMessageHandler (target, context, msg, self) {
   }
   else if (mod && command[0].startsWith('!')){
     // Mod commands
-    if (command[0] == `!add` && command.length == 2) {
-      checkTuser(command[1]);
-      addTuser(command[1]);
-      client.say(target, `You added ${command[1]}`);
-    }
-    else if (command[0] == `!check` && command.length == 2){
-      checkTuser(command[1]).then(function(exists){
-        client.say(target, `You checked ${command[1]} and ${exists}`);
-      });
-    }
-    else if (command[0] == `!update` && command.length == 3){
-      var tname = command[1];
-      var rating = parseInt(command[2]);
-      updateTuser(tname,rating).then(function(response){
-            client.say(target, response);
-          });
+//     if (command[0] == `!add` && command.length == 2) {
+//       checkTuser(command[1]);
+//       addTuser(command[1]);
+//       client.say(target, `You added ${command[1]}`);
+//     }
+//     else if (command[0] == `!check` && command.length == 2){
+//       checkTuser(command[1]).then(function(exists){
+//         client.say(target, `You checked ${command[1]} and ${exists}`);
+//       });
+//     }
+//     else if (command[0] == `!update` && command.length == 3){
+//       var tname = command[1];
+//       var rating = parseInt(command[2]);
+//       updateTuser(tname,rating).then(function(response){
+//             client.say(target, response);
+//           });
 
-    }
-    else if (command[0] == `!match` && command.length == 3){
+//     }
+    if (command[0] == `!match` && command.length == 3){
       let winner = command[1];
       if(winner.startsWith('@')){
         winner = winner.substring(1);
