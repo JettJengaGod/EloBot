@@ -347,7 +347,7 @@ function addMatch(winner, loser, w_r, l_r, w_rc, l_rc){
 }
 
 function addTuser(tname){
-      tUser.create({ tName: tname, rating: 1200});
+      tUser.create({ tName: tname, rating: 1400});
 }
 
 async function lastMatch(winner,loser){
