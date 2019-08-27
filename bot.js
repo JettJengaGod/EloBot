@@ -399,6 +399,7 @@ async function undo(winner,loser){
     order : [['createdAt', 'DESC']]
   });
   if(check.length > 0){
+    console.log(check[0]);
     return ``;
   }
   else{
