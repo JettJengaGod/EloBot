@@ -275,6 +275,11 @@ function onMessageHandler (target, context, msg, self) {
         client.say(target, response);
       });
     }
+    else if (command[0] == `!del` && command.length == 2){
+      delTuser(command[1]).then(function(exists){
+        client.say(target, `You checked ${command[1]} and ${exists}`);
+      });
+    }
     else if (command[0] == `!elohelp` && command.length === 1){
       let res = `\"!rating\" to find your rating
     \"!rating @user\" to find a user's rating
