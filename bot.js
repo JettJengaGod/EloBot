@@ -378,6 +378,11 @@ function addMatch(winner, loser, w_r, l_r, w_rc, l_rc){
 function addTuser(tname){
       tUser.create({ tName: tname, rating: 1400});
 }
+function delTuser(tname){
+  tUser.destroy({
+    where: {tName: tname}
+  });
+}
 
 async function lastMatch(winner,loser){
   let check = await Match.findAll({
@@ -399,8 +404,24 @@ async function undo(winner,loser){
     order : [['createdAt', 'DESC']]
   });
   if(check.length > 0){
+    match = check[0]
+    if(match.w_r-match.w_rc == 1200){
+      delTuser(match.winner);
+    }
+    else{
+      updateTuser(match.winner, match.w_r-match.w_rc);
+    }
+    if(match.l_r+match.l_rc == 1200){
+      delTuser(match.loser);
+    }
+    else{
+      updateTuser(match.loser, match.l_r-match.l_rc);
+    }
+    await Match.destroy({
+      where: { id : match.id }
+    })
     console.log(check[0]);
-    return ``;
+    return `Match between ${winner} and ${loser} deleted.`;
   }
   else{
     return `Match not found are you sure you typed it in right?`;
