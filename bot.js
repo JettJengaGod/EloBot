@@ -276,8 +276,17 @@ function onMessageHandler (target, context, msg, self) {
       });
     }
     else if (command[0] == `!del` && command.length == 2){
-      delTuser(command[1]).then(function(exists){
-        client.say(target, `You checked ${command[1]} and ${exists}`);
+      let loser = command[1]
+      if(loser.startsWith('@')){
+        loser = loser.substring(1);
+      }
+      else{
+        client.say(target,`Please tag the user with the @ symbol`);
+        return;
+      }
+      delTuser(loser).then(function(exists){
+        console.log(exists);
+        client.say(target, `You deleted ${loser}`);
       });
     }
     else if (command[0] == `!elohelp` && command.length === 1){
@@ -383,8 +392,8 @@ function addMatch(winner, loser, w_r, l_r, w_rc, l_rc){
 function addTuser(tname){
       tUser.create({ tName: tname, rating: 1400});
 }
-function delTuser(tname){
-  tUser.destroy({
+async function delTuser(tname){
+  return tUser.destroy({
     where: {tName: tname}
   });
 }
