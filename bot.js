@@ -176,7 +176,7 @@ function onMessageHandler (target, context, msg, self) {
   }
   const command = msg.split(' ');
   const usr = context.username;
-  const mod = (context.mod || usr === 'alexjett' || usr === 't5ace');
+  const mod = (context.mod || usr === 'alexjett' || usr.toLowerCase() === 't5ace');
   console.log(command,context,mod);
   console.log("**********");
   // Remove whitespace from chat message
