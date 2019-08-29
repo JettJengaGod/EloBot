@@ -295,7 +295,8 @@ function onMessageHandler (target, context, msg, self) {
     \"!top\" to find the top 5 users and their ratings.
 \"!link\" a webpage with the full ranking list
  Mod commands:
-\"!match @winner @loser\" Posts a match with @winner beating @loser`
+\"!match @winner @loser\" Posts a match with @winner beating @loser
+\"!undo @winner @loser\" Undoes the last match with @winner beating @loser`
         client.say(target, res);
     }
   }
