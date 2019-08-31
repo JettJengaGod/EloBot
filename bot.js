@@ -161,7 +161,15 @@ const opts = {
 
 // Create a client with our options
 const client = new tmi.client(opts);
-
+function atHandle(name){
+    if(name.startsWith('@')){
+      name = name.substring(1);
+      return name;
+    }
+    else{
+      return false;
+    }
+}
 // Register our event handlers (defined below)
 client.on('message', onMessageHandler);
 client.on('connected', onConnectedHandler);
@@ -332,7 +340,7 @@ async function history_two(usr1,usr2){
     limit : 5,
     order : [['createdAt', 'DESC']],
     where : { 
-            [Op.or]: [{winner: usr}, {loser: usr}]
+            [Op.or]: [{winner: usr1, loser: usr2}, {winner: usr2, loser: usr1}]
           }
   });
   let out = [];
@@ -341,7 +349,7 @@ async function history_two(usr1,usr2){
     i++;
     out.push([` ${i}.${match.winner}${match.w_r}(+${match.w_rc}) beat ${match.loser}${match.l_r}(${match.l_rc}) `]);
   });
-  return `${usr}'s last ${i} matches are ${out}`
+  return `${usr1} vs ${usr2}'s last ${i} matches are ${out}`
 }
 
 async function matchlist(){
