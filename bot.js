@@ -205,8 +205,13 @@ function onMessageHandler (target, context, msg, self) {
       client.say(target, response);
     })
   }
+  else if (command[0] == `!matchlist` && command.length === 1){
+    matchlist().then(function(response){
+      client.say(target, response);
+    })
+  }
   else if (command[0] == `!history` && command.length === 1){
-    matchlist(usr).then(function(response){
+    history('t5Ace').then(function(response){
       client.say(target, response);
     })
   }
@@ -311,7 +316,34 @@ function onMessageHandler (target, context, msg, self) {
     console.log(`* Unknown command ${commandName}`);
   }
 }
-// TODO finish implemnting this 
+async function history(usr){
+  let matches = await Match.findAll({
+    limit : 5,
+    order : [['createdAt', 'DESC']],
+    where : { 
+            
+            $or: [
+              {
+                winner: {
+                  $eq: usr
+                },
+              }
+                loser: {
+                  $eq:usr
+                }
+              }
+            ]
+          }
+  });
+  let out = [];
+  let i = 0;
+  matches.forEach(function(match) {
+    i++;
+    out.push([` ${i}.${match.winner}${match.w_r}(+${match.w_rc}) beat ${match.loser}${match.l_r}(${match.l_rc}) `]);
+  });
+  return `The last 5 matches are ${out}`
+}
+
 async function matchlist(){
   let matches = await Match.findAll({
     limit : 5,
@@ -321,7 +353,7 @@ async function matchlist(){
   let i = 0;
   matches.forEach(function(match) {
     i++;
-    out.push([` ${i}.${match.winner}(+${match.w_rc})${match.w_r+match.w_rc} beat ${match.loser}(+${match.l_rc})${match.l_r+match.l_rc} `]);
+    out.push([` ${i}.${match.winner}${match.w_r}(+${match.w_rc}) beat ${match.loser}${match.l_r}(${match.l_rc}) `]);
   });
   return `The last 5 matches are ${out}`
 }
