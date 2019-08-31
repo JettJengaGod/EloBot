@@ -221,6 +221,11 @@ function onMessageHandler (target, context, msg, self) {
       client.say(target, response);
     })
   }
+    else if (command[0] == `!history` && command.length === 3){
+    history(command[1],command[2]).then(function(response){
+      client.say(target, response);
+    })
+  }
   else if (command[0] == `!link` && command.length === 1){
     client.say(target, `https://topaz-molybdenum.glitch.me`);
   }
@@ -322,7 +327,7 @@ function onMessageHandler (target, context, msg, self) {
     console.log(`* Unknown command ${commandName}`);
   }
 }
-async function history(usr){
+async function history_two(usr1,usr2){
   let matches = await Match.findAll({
     limit : 5,
     order : [['createdAt', 'DESC']],
