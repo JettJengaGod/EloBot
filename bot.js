@@ -315,15 +315,15 @@ function onMessageHandler (target, context, msg, self) {
 async function matchlist(){
   let matches = await Match.findAll({
     limit : 5,
-    order : [['rating', 'DESC']]
+    order : [['createdAt', 'DESC']]
   });
   let out = [];
   let i = 0;
-  tusers.forEach(function(tname) {
+  matches.forEach(function(match) {
     i++;
-    out.push([` ${i}.${tname.tName}${tname.rating}`]);
+    out.push([` ${i}.${match.winner}(+${match.w_rc})${match.w_r+match.w_rc} beat ${match.loser}(+${match.l_rc})${match.l_r+match.l_rc} `]);
   });
-  return `The top 5 is ${out}`
+  return `The last 5 matches are ${out}`
 }
 
 async function toplist(){
