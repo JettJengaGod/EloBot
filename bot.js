@@ -230,7 +230,7 @@ function onMessageHandler (target, context, msg, self) {
     })
   }
     else if (command[0] == `!history` && command.length === 3){
-    history(command[1],command[2]).then(function(response){
+    history_two(command[1],command[2]).then(function(response){
       client.say(target, response);
     })
   }
