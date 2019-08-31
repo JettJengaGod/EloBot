@@ -5,6 +5,7 @@ var Sequelize = require('sequelize');
 var EloRank = require('elo-rank');
 var elo = new EloRank();
 var app = express();
+const Op = Sequelize.Op;
 // default user list
 var users = [
       ["John","Hancock"],
@@ -211,7 +212,12 @@ function onMessageHandler (target, context, msg, self) {
     })
   }
   else if (command[0] == `!history` && command.length === 1){
-    history('t5Ace').then(function(response){
+    history(usr).then(function(response){
+      client.say(target, response);
+    })
+  }
+  else if (command[0] == `!history` && command.length === 2){
+    history(command[1]).then(function(response){
       client.say(target, response);
     })
   }
@@ -321,18 +327,7 @@ async function history(usr){
     limit : 5,
     order : [['createdAt', 'DESC']],
     where : { 
-            
-            $or: [
-              {
-                winner: {
-                  $eq: usr
-                },
-              }
-                loser: {
-                  $eq:usr
-                }
-              }
-            ]
+            [Op.or]: [{winner: usr}, {loser: usr}]
           }
   });
   let out = [];
@@ -341,7 +336,7 @@ async function history(usr){
     i++;
     out.push([` ${i}.${match.winner}${match.w_r}(+${match.w_rc}) beat ${match.loser}${match.l_r}(${match.l_rc}) `]);
   });
-  return `The last 5 matches are ${out}`
+  return `${usr}'s last ${i} matches are ${out}`
 }
 
 async function matchlist(){
@@ -355,7 +350,7 @@ async function matchlist(){
     i++;
     out.push([` ${i}.${match.winner}${match.w_r}(+${match.w_rc}) beat ${match.loser}${match.l_r}(${match.l_rc}) `]);
   });
-  return `The last 5 matches are ${out}`
+  return `The last ${i} matches are ${out}`
 }
 
 async function toplist(){
