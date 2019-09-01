@@ -220,17 +220,17 @@ function onMessageHandler (target, context, msg, self) {
     })
   }
   else if (command[0] == `!history` && command.length === 1){
-    history(usr).then(function(response){
+    history(atHandle(usr)).then(function(response){
       client.say(target, response);
     })
   }
   else if (command[0] == `!history` && command.length === 2){
-    history(command[1]).then(function(response){
+    history(atHandle(command[1])).then(function(response){
       client.say(target, response);
     })
   }
     else if (command[0] == `!history` && command.length === 3){
-    history_two(command[1],command[2]).then(function(response){
+    history_two(atHandle(command[1]),atHandle(command[2])).then(function(response){
       client.say(target, response);
     })
   }
@@ -352,6 +352,22 @@ async function history_two(usr1,usr2){
   return `${usr1} vs ${usr2}'s last ${i} matches are ${out}`
 }
 
+async function history(usr){
+  let matches = await Match.findAll({
+    limit : 5,
+    order : [['createdAt', 'DESC']],
+    where : { 
+            [Op.or]: [{winner: usr},{loser: usr}]
+          }
+  });
+  let out = [];
+  let i = 0;
+  matches.forEach(function(match) {
+    i++;
+    out.push([` ${i}.${match.winner}${match.w_r}(+${match.w_rc}) beat ${match.loser}${match.l_r}(${match.l_rc}) `]);
+  });
+  return `${usr}'s last ${i} matches are ${out}`
+}
 async function matchlist(){
   let matches = await Match.findAll({
     limit : 5,
