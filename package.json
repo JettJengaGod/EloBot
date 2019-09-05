@@ -7,11 +7,11 @@
     "start": "node bot.js"
   },
   "dependencies": {
+    "elo-rank": "^1.0.3",
     "express": "^4.16.4",
-    "tmi.js": "^1.4.2",
-    "sqlite3": "^4.1.0",
     "sequelize": "^6.0.0",
-    "elo-rank": "^1.0.3"
+    "sqlite3": "^4.1.0",
+    "tmi.js": "^1.4.2"
   },
   "engines": {
     "node": "8.x"

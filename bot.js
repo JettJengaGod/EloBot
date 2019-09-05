@@ -1,28 +1,28 @@
 const tmi = require('tmi.js');
 // init project
-var express = require('express');
-var Sequelize = require('sequelize');
-var EloRank = require('elo-rank');
-var elo = new EloRank();
-var app = express();
+let express = require('express');
+let Sequelize = require('sequelize');
+let EloRank = require('elo-rank');
+let elo = new EloRank();
+let app = express();
 const Op = Sequelize.Op;
 // default user list
-var users = [
-      ["John","Hancock"],
-      ["Liz","Smith"],
-      ["Ahmed","Khan"]
-    ];
-var tusers = [
+let users = [
+  ["John", "Hancock"],
+  ["Liz", "Smith"],
+  ["Ahmed", "Khan"]
+];
+let tusers = [
   ["alexjett", 1500],
   ["jettelobot", 1400],
   ["jettelobot2", 1200]
 ];
-var User;
-var tUser;
-var Match;
+let User;
+let tUser;
+let Match;
 // setup a new database
 // using database credentials set in .env
-var sequelize = new Sequelize('database', process.env.DB_USER, process.env.DB_PASS, {
+let sequelize = new Sequelize('database', process.env.DB_USER, process.env.DB_PASS, {
   host: '0.0.0.0',
   dialect: 'sqlite',
   pool: {
@@ -87,7 +87,7 @@ function setup(){
   User.sync({force : true}) // We use 'force: true' in this example to drop the table users if it already exists, and create a new one. You'll most likely want to remove this setting in your own apps
     .then(function(){
       // Add the default users to the database
-      for(var i=0; i<users.length; i++){ // loop through all users
+      for(let i=0; i<users.length; i++){ // loop through all users
         User.create({ firstName: users[i][0], lastName: users[i][1]}); // create a new entry in the users table
       }
     });
@@ -102,7 +102,7 @@ app.get("/", function (request, response) {
 });
 
 app.get("/users", function (request, response) {
-  var dbUsers=[];
+  let dbUsers=[];
   User.findAll().then(function(users) { // find all entries in the users tables
     users.forEach(function(user) {
       dbUsers.push([user.firstName,user.lastName]); // adds their info to the dbUsers value
@@ -112,7 +112,7 @@ app.get("/users", function (request, response) {
 });
 
 app.get("/tusers", function (request, response) {
-  var dbtUsers=[];
+  let dbtUsers=[];
   tUser.findAll().then(function(tusers) { // find all entries in the users tables
     tusers.forEach(function(tuser) {
       dbtUsers.push([tuser.tName,tuser.rating]); // adds their info to the dbUsers value
@@ -145,7 +145,7 @@ app.post("/users", function (request, response) {
 // });
 
 // listen for requests :)
-var listener = app.listen(process.env.PORT, function () {
+let listener = app.listen(process.env.PORT, function () {
   console.log('Your app is listening on port ' + listener.address().port);
 });
 // Define configuration options
@@ -250,8 +250,8 @@ function onMessageHandler (target, context, msg, self) {
 //       });
 //     }
 //     else if (command[0] == `!update` && command.length == 3){
-//       var tname = command[1];
-//       var rating = parseInt(command[2]);
+//       let tname = command[1];
+//       let rating = parseInt(command[2]);
 //       updateTuser(tname,rating).then(function(response){
 //             client.say(target, response);
 //           });
