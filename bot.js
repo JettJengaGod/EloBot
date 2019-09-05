@@ -91,6 +91,8 @@ function setup(){
         User.create({ firstName: users[i][0], lastName: users[i][1]}); // create a new entry in the users table
       }
     });
+  tUser.sync();
+  Match.sync();
 }
 
 // http://expressjs.com/en/starter/static-files.html
