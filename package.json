@@ -3,15 +3,23 @@
   "version": "0.0.1",
   "description": "A simple app chatbot example. Using the command !echo will simply repeat the message.",
   "main": "bot.js",
+  "test-unit": "NODE_ENV=test mocha '/*.spec.js'",
   "scripts": {
-    "start": "node bot.js"
+    "start": "node bot.js",
+    "test": "npm run test-unit",
+    "test-unit": "mocha --recursive --require co-mocha 'test/'"
   },
   "dependencies": {
+    "chai": "^4.2.0",
     "elo-rank": "^1.0.3",
     "express": "^4.16.4",
+    "mocha": "^6.2.2",
+    "request": "latest",
     "sequelize": "^6.0.0",
+    "sequelize-test-helpers": "^1.2.0",
+    "sinon": "^7.5.0",
     "sqlite3": "^4.1.0",
-    "tmi.js": "^1.4.2"
+    "tmi.js": "^1.5.0"
   },
   "engines": {
     "node": "8.x"
@@ -24,5 +32,9 @@
     "twitch",
     "chatbots",
     "irc"
-  ]
+  ],
+  "devDependencies": {
+    "co-mocha": "^1.1.2",
+    "sinon-chai": "^3.3.0"
+  }
 }
