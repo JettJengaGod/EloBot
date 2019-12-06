@@ -4,7 +4,7 @@ const {
     checkModelName,
     checkPropertyExists
 } = require('sequelize-test-helpers');
-const MatchModel = require('../../models/Match');
+const MatchModel = require('../../src/models/Match');
 describe('src/models/Match', () => {
     const Model = MatchModel(sequelize, dataTypes);
     const instance = new Model();

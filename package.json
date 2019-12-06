@@ -1,22 +1,33 @@
 {
   "name": "twitch-chatbot",
+  "type": "module",
   "version": "0.0.1",
   "description": "A simple app chatbot example. Using the command !echo will simply repeat the message.",
   "main": "bot.js",
   "test-unit": "NODE_ENV=test mocha '/*.spec.js'",
   "scripts": {
-    "start": "node bot.js",
+    "start": "npm run prod",
+    "server": "babel-node src/bot_rewrite.js",
+    "server:prod": "node ./dist/bot_rewrite.js",
+    "dev": "NODE_ENV=development npm-run-all server",
+    "clean": "rimraf dist",
+    "build": "babel ./src --out-dir dist",
+    "prod": "NODE_ENV=production npm-run-all clean build server:prod",
+    "watch": "nodemon",
+    "rew": "node src/bot_rewrite.js",
     "test": "npm run test-unit",
-    "test-unit": "mocha --recursive --require co-mocha 'test/'"
+    "test-unit": "mocha --recursive --require @babel/register --require co-mocha 'test/' "
   },
   "dependencies": {
+    "@babel/polyfill": "^7.7.0",
     "chai": "^4.2.0",
     "elo-rank": "^1.0.3",
     "express": "^4.16.4",
     "mocha": "^6.2.2",
+    "npm-run-all": "^4.1.5",
     "request": "latest",
+    "rimraf": "^3.0.0",
     "sequelize": "^6.0.0",
-    "sequelize-test-helpers": "^1.2.0",
     "sinon": "^7.5.0",
     "sqlite3": "^4.1.0",
     "tmi.js": "^1.5.0"
@@ -34,7 +45,19 @@
     "irc"
   ],
   "devDependencies": {
-    "co-mocha": "^1.1.2",
+    "@babel/cli": "^7.7.4",
+    "@babel/core": "^7.7.4",
+    "@babel/node": "^7.7.4",
+    "@babel/preset-env": "^7.7.4",
+    "@babel/register": "^7.7.4",
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-plugin-transform-regenerator": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "co-mocha": "^1.2.2",
+    "nodemon": "^1.17.4",
+    "proxyquire": "^2.1.3",
+    "sequelize-test-helpers": "^1.2.0",
     "sinon-chai": "^3.3.0"
   }
 }

@@ -1,7 +1,8 @@
 const model = (sequelize, DataTypes) => {
     const User = sequelize.define('User', {
         tName: {
-            type: DataTypes.STRING
+            type: DataTypes.STRING,
+            unique: true
         },
         rating: {
             type: DataTypes.INTEGER
