@@ -14,7 +14,7 @@ const options = {
     },
     // Security note: the database is saved to the file `database.sqlite` on the local filesystem. It's deliberately placed in the `.data` directory
     // which doesn't get copied if someone remixes the project.
-    storage: '.data/EloDB.sqlite'
+    storage: '.data/' + process.env.NODE_ENV + 'EloDB.sqlite'
 };
 const basename = path.basename(module.filename);
 const sequelize = new Sequelize(dbName, dbUser, dbPass, options);

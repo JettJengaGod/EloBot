@@ -10,6 +10,6 @@ describe('src/models/User', () => {
     const instance = new Model();
     checkModelName(Model)('User');
     context('properties', () => {
-        ['tName', 'rating'].forEach(checkPropertyExists(instance))
+        ['id', 'tName', 'rating'].forEach(checkPropertyExists(instance))
     })
 });

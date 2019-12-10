@@ -13,7 +13,7 @@ const mockModels = makeMockModels({ User: { findOne: sinon.stub(), create: sinon
 const database = proxyquire('../src/utils/database', {
     '../models': mockModels
 });
-
+const starting_rating = Number(process.env.DEFAULT_RATING);
 describe('add user', () =>{
 
     const fakeUser = {};
@@ -36,7 +36,7 @@ describe('add user', () =>{
         it("added to DB", () => {
             expect(mockModels.User.create).to.have.been.calledWith({
                 tName: tName,
-                rating: process.env.DEFAULT_RATING
+                rating: starting_rating
                 }
             )
         });
@@ -68,7 +68,7 @@ describe('rating', () =>{
     const tName = 'Testy';
     const fakeUser = {
         tName : 'Testy',
-        rating : process.env.DEFAULT_RATING };
+        rating : starting_rating };
     const resetStubs = () => {
         mockModels.User.findOne.resetHistory();
     };
@@ -96,7 +96,7 @@ describe('rating', () =>{
             expect(mockModels.User.findOne).to.have.been.called
         });
         it('returned the rating', () => {
-            expect(result).to.be.equal(process.env.DEFAULT_RATING)
+            expect(result).to.be.equal(starting_rating)
         })
     })
 });
@@ -105,7 +105,7 @@ describe('update user', () =>{
 
     const fakeUser = { update: sinon.stub() };
     const tName = 'Testy';
-    const endRating =  process.env.DEFAULT_RATING + 100;
+    const endRating =  starting_rating + 100;
     const resetStubs = () => {
         mockModels.User.findOne.resetHistory();
         fakeUser.update.resetHistory()
@@ -139,7 +139,7 @@ describe('update user', () =>{
         });
         it('called user.update', () => {
             expect(fakeUser.update).to.have.been.calledWith(
-                'rating', endRating)
+                {'rating': endRating})
         });
         it('returned the user', () => {
             expect(result).to.deep.equal(fakeUser)
