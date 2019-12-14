@@ -11,7 +11,7 @@ chai.use(sinonChai);
 
 const stub = sinon.stub(Bot, 'king_chal');
 import models from '../src/models';
-import { addUser, rating, rating_add, updateUser} from "../src/utils/database";
+import { addUser, rating, ratingAdd, updateUser} from "../src/utils/database";
 import truncate from '../scripts/truncate';
 
 const dotenv = require('dotenv');

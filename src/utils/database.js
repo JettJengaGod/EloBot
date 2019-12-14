@@ -1,4 +1,4 @@
-const { User } = require('../models');
+const { User, Match } = require('../models');
 
 
 export const addUser = async( name) => {
@@ -18,7 +18,7 @@ export let rating = async ( name ) => {
     return null;
 };
 
-export let rating_add = async ( name ) => {
+export let ratingAdd = async (name ) => {
     const user = await addUser(name);
     return user.rating;
 };
@@ -35,6 +35,30 @@ export const updateUser = async ( name, rating ) => {
     return null
 };
 
-export const addMatch = async (winner, loser, w_rc, l_rc) =>{
-    //TODO Add match
+export const addMatch = async (winner, loser, w_r, l_r, w_rc, l_rc) =>{
+    return await Match.create({
+        winner: winner,
+        w_r: w_r,
+        w_rc: w_rc,
+        loser: loser,
+        l_r: l_r,
+        l_rc: l_rc
+        }
+    )
+};
+
+
+export const rank = async (user) =>{
+    let users = await User.findAll(
+        {order: [
+            ['rating', 'DESC']
+            ]});
+    let value = null;
+    for(let i = 0; i < users.length; i++){
+        if(users[i].tName === user){
+            value = i+1;
+            break;
+        }
+    }
+    return value
 };

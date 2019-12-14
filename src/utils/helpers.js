@@ -1,5 +1,5 @@
 import {Command, CommandList} from "./commands.js";
-import { addUser, rating, updateUser, rating_add} from "./database";
+import { addUser, rating, updateUser, ratingAdd, addMatch} from "./database";
 let models = require('../models');
 let EloRank = require('elo-rank');
 let elo = new EloRank();
@@ -78,8 +78,9 @@ let score_match = async(winner, loser, target, client) => {
     // Update users
     let wup = updateUser(winner.name, new_w_r);
     let lup = updateUser(loser.name, new_l_r);
-    await Promise.all([wup, lup]);
-    // #TODO Add new match to db here
+    let match = addMatch(winner.name, loser.name,
+        new_w_r, new_l_r, new_w_r-winner.rating, loser.rating -new_l_r)
+    await Promise.all([wup, lup, match]);
     let ret = `${winner.name} ${new_w_r}(+${new_w_r-winner.rating})
      ${loser.name} ${new_l_r}(-${loser.rating-new_l_r})`;
     client.say(target, ret);
@@ -87,12 +88,12 @@ let score_match = async(winner, loser, target, client) => {
 };
 
 let bot_match = async(msg, target, client, king, challenger) => {
-    let kingR = await rating_add(king);
+    let kingR = await ratingAdd(king);
     let kingUser = {
         name : king,
         rating : kingR
     };
-    let chalR = await rating_add(challenger);
+    let chalR = await ratingAdd(challenger);
     let chalUser = {
         name : challenger,
         rating : chalR

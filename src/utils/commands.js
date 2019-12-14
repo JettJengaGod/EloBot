@@ -1,4 +1,4 @@
-import { addUser, rating, updateUser, rating_add} from "./database";
+import { addUser, rating, updateUser, ratingAdd, rank} from "./database";
 import {atHandle} from "./helpers";
 
 function default_handle(args, target, client, usr) {
@@ -17,16 +17,16 @@ export class Command{
 
 }
 
-function base(args, target, client, usr) {
+function baseHandle(args, target, client, usr) {
     client.say(target, 'Works');
 }
 
 let baseCom = new Command(
     'base',
     'No help',
-    base);
+    baseHandle);
 
-let rank = async (args, target, client, usr)=>{
+let ratingHandle = async (args, target, client, usr)=>{
     let msg = `rating expects either '!rating' to find your rating or '!rating @username' to find another's rating`;
     if(args.length > 1){
 
@@ -47,10 +47,10 @@ let rank = async (args, target, client, usr)=>{
     client.say(target, msg)
 };
 
-let rankCom = new Command(
-    'rank',
+let ratingCom = new Command(
+    'rating',
     `Use '!rating' to find your rating or '!rating @username' to find another's rating`,
-    rank);
+    ratingHandle);
 
 let help = function (args, target, client, usr) {
     if(args.length === 1){
@@ -69,8 +69,37 @@ let helpCom = new Command(
     `use '!help command' to get help or a specific command or visit https://pastebin.com/MN7KQ3mH to find out more.`,
     help
 );
+
+let rankHandle =  async (args, target, client, usr)=>{
+    let msg = `rank expects either '!rank' to find your rank or '!rank @username' to find another's rank`;
+    if(args.length > 1){
+
+        client.say(target, msg);
+        return
+    }
+    if(args.length === 1){
+        usr = atHandle(args[0]);
+    }
+    const usr_r = await rating(usr);
+    const usr_rank = await rank(usr);
+    if(usr_r !== null && usr_rank !== null){
+        msg = `${usr}'s rank is ${usr_rank}(${usr_r})`;
+    }
+    else{
+        msg = `${usr} does not have a rank, play a match to get a rank`
+    }
+
+    client.say(target, msg);
+};
+
+let rankCom = new Command(
+    'rank',
+    `user '!rank' to find what your rank is or '!rank @username' to find someone else rank`,
+    rankHandle
+);
 export let CommandList = {
     'base' : baseCom,
-    'rating' : rankCom,
-    'help' : helpCom
+    'rating' : ratingCom,
+    'help' : helpCom,
+    'rank' : rankCom
 };
