@@ -15,7 +15,7 @@
     "prod": "NODE_ENV=production npm-run-all clean build server:prod",
     "watch": "nodemon",
     "rew": "node src/bot_rewrite.js",
-    "test-unit": "NODE_ENV=test mocha --recursive -r @babel/register -r esm --require co-mocha 'test/' "
+    "test-unit": "NODE_ENV=test mocha --recursive -r @babel/register --require co-mocha 'test/' "
   },
   "dependencies": {
     "@babel/polyfill": "^7.7.0",
