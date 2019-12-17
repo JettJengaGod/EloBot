@@ -4,6 +4,7 @@ let models = require('../models');
 let EloRank = require('elo-rank');
 let elo = new EloRank();
 import {king_chal} from "../bot_rewrite";
+import {ModCommandList} from "./modCommands";
 
 export function atHandle(name){
     if (name.startsWith('@')) {
@@ -68,22 +69,30 @@ export let parseKingandChal = (msg) => {
     king_chal(king, chal);
 };
 
-let score_match = async(winner, loser, target, client) => {
+export let score_match = async(winner, loser) => {
     // Set expected values if either party won
-    let es_w = elo.getExpected(winner.rating, loser.rating);
-    let es_l = elo.getExpected(loser.rating, loser.rating);
+    let w_rating = await ratingAdd(winner);
+    let l_rating = await ratingAdd(loser);
+    let es_w = elo.getExpected(w_rating, l_rating);
+    let es_l = elo.getExpected(l_rating, l_rating);
     // Get new actual values
-    let new_w_r = elo.updateRating(es_w, 1, winner.rating);
-    let new_l_r = elo.updateRating(es_l, 0, loser.rating);
+    let new_w_r = elo.updateRating(es_w, 1, w_rating);
+    let new_l_r = elo.updateRating(es_l, 0, l_rating);
+    const w_rc = new_w_r-w_rating;
+    const l_rc = l_rating - new_l_r;
     // Update users
-    let wup = updateUser(winner.name, new_w_r);
-    let lup = updateUser(loser.name, new_l_r);
-    let match = addMatch(winner.name, loser.name,
-        new_w_r, new_l_r, new_w_r-winner.rating, loser.rating -new_l_r)
+    let wup = updateUser(winner, new_w_r);
+    let lup = updateUser(loser, new_l_r);
+    let match = addMatch(winner, loser,
+        new_w_r, new_l_r, w_rc, l_rc);
     await Promise.all([wup, lup, match]);
-    let ret = `${winner.name} ${new_w_r}(+${new_w_r-winner.rating})
-     ${loser.name} ${new_l_r}(-${loser.rating-new_l_r})`;
-    client.say(target, ret);
+    let ret = {
+        'w_r' : new_w_r,
+        'l_r' : new_l_r,
+        'win_r_c': w_rc,
+        'lose_r_c' : l_rc
+    };
+    return ret
 
 };
 
@@ -115,10 +124,11 @@ let bot_match = async(msg, target, client, king, challenger) => {
 
 };
 export const handle_command = async(command, args, target, client, mod, usr) => {
-    if(command in CommandList) {
+    if(command in ModCommandList && mod) {
+        await ModCommandList[command].handle(args, target, client, usr);
+    }
+    else if(command in CommandList) {
         await CommandList[command].handle(args, target, client, usr);
     }
-    // else if(command in mod_commands && mod) {
-    //     commands[command](args, target, client);
-    // }
+    // else
 };

@@ -68,109 +68,109 @@ describe('Parse king and chal', function () {
         expect(stub).to.have.been.calledWith(name1, name2);
     });
 });
-
-describe('Bot handle match', function () {
-
-    let u1,u2,u3;
-    let client = {
-        say: function (target, msg) {}
-    };
-    const starting_rating = Number(process.env.DEFAULT_RATING);
-    const mockC = sinon.mock(client);
-    const name1 = 'Testy';
-    const name2 = 'McTestface';
-    const name3 = 'Third';
-    const name4 = 'McThirdface';
-    const king_pre = ': The King';
-    const king_w = king_pre+' wins! @irrelevent is victorious and remains King! ';
-    const king_l = king_pre+' falls! @irrelevent is the new King!';
-    const king_post = ` @${name3} is the next challenger. Please let @t5ace know that you are ready.`
-    beforeEach(async () => {
-        await truncate();
-        await addUser(name1);
-        await addUser(name2);
-        u1 = await models.User.findOne({where: { tName : name1}});
-        u2 = await models.User.findOne({where: { tName : name2}});
-    });
-    it('two existing users king wins no challenger properly updates ratings', async() =>{
-        let msg = king_w;
-        await handle_bot(msg, '', client, name1, name2);
-        let u1r = await rating(name1);
-        let u2r = await rating(name2);
-        expect(stub).to.have.been.calledWith(
-            name1, 'default c'
-        );
-        expect(u1r > u2r)
-    });
-
-    it('two existing users king loses no challenger properly updates ratings', async() =>{
-        let msg = king_l;
-
-        await handle_bot(msg, '', client, name1, name2);
-        let u1r = await rating(name1);
-        let u2r = await rating(name2);
-        expect(stub).to.have.been.calledWith(
-            name2, 'default c'
-        );
-        expect(u2r > u1r)
-    });
-
-    it('two existing users king wins yes challenger properly updates ratings', async() =>{
-        let msg = king_w + king_post;
-        await handle_bot(msg, '', client, name1, name2);
-        let u1r = await rating(name1);
-        let u2r = await rating(name2);
-        expect(stub).to.have.been.calledWith(
-            name1, name3
-        );
-        expect(u1r > u2r)
-    });
-
-    it('two existing users king loses yes challenger properly updates ratings', async() =>{
-        let msg = king_l + king_post ;
-
-        await handle_bot(msg, '', client, name1, name2);
-        let u1r = await rating(name1);
-        let u2r = await rating(name2);
-        expect(stub).to.have.been.calledWith(
-            name2, name3
-        );
-        expect(u2r > u1r)
-    });
-
-    it('one existing user king wins no challenger properly updates ratings', async() =>{
-        let msg = king_w;
-        await handle_bot(msg, '', client, name1, name3);
-        let u1r = await rating(name1);
-        let u3r = await rating(name3);
-        expect(stub).to.have.been.calledWith(
-            name1, 'default c'
-        );
-        expect(u1r > u3r)
-    });
-
-    it('one existing user king loses no challenger properly updates ratings', async() =>{
-        let msg = king_l;
-        await handle_bot(msg, '', client, name1, name3);
-        let u1r = await rating(name1);
-        let u3r = await rating(name3);
-        expect(stub).to.have.been.calledWith(
-            name1, 'default c'
-        );
-        expect(u3r > u1r)
-    });
-
-    it('no existing user king loses no challenger properly updates ratings', async() =>{
-        let msg = king_l;
-        await handle_bot(msg, '', client, name4, name3);
-        let u4r = await rating(name1);
-        let u3r = await rating(name3);
-        expect(stub).to.have.been.calledWith(
-            name1, 'default c'
-        );
-        expect(u3r > u4r)
-    });
-});
+//
+// describe('Bot handle match', function () {
+//
+//     let u1,u2,u3;
+//     let client = {
+//         say: function (target, msg) {}
+//     };
+//     const starting_rating = Number(process.env.DEFAULT_RATING);
+//     const mockC = sinon.mock(client);
+//     const name1 = 'Testy';
+//     const name2 = 'McTestface';
+//     const name3 = 'Third';
+//     const name4 = 'McThirdface';
+//     const king_pre = ': The King';
+//     const king_w = king_pre+' wins! @irrelevent is victorious and remains King! ';
+//     const king_l = king_pre+' falls! @irrelevent is the new King!';
+//     const king_post = ` @${name3} is the next challenger. Please let @t5ace know that you are ready.`
+//     beforeEach(async () => {
+//         await truncate();
+//         await addUser(name1);
+//         await addUser(name2);
+//         u1 = await models.User.findOne({where: { tName : name1}});
+//         u2 = await models.User.findOne({where: { tName : name2}});
+//     });
+//     it('two existing users king wins no challenger properly updates ratings', async() =>{
+//         let msg = king_w;
+//         await handle_bot(msg, '', client, name1, name2);
+//         let u1r = await rating(name1);
+//         let u2r = await rating(name2);
+//         expect(stub).to.have.been.calledWith(
+//             name1, 'default c'
+//         );
+//         expect(u1r > u2r)
+//     });
+//
+//     it('two existing users king loses no challenger properly updates ratings', async() =>{
+//         let msg = king_l;
+//
+//         await handle_bot(msg, '', client, name1, name2);
+//         let u1r = await rating(name1);
+//         let u2r = await rating(name2);
+//         expect(stub).to.have.been.calledWith(
+//             name2, 'default c'
+//         );
+//         expect(u2r > u1r)
+//     });
+//
+//     it('two existing users king wins yes challenger properly updates ratings', async() =>{
+//         let msg = king_w + king_post;
+//         await handle_bot(msg, '', client, name1, name2);
+//         let u1r = await rating(name1);
+//         let u2r = await rating(name2);
+//         expect(stub).to.have.been.calledWith(
+//             name1, name3
+//         );
+//         expect(u1r > u2r)
+//     });
+//
+//     it('two existing users king loses yes challenger properly updates ratings', async() =>{
+//         let msg = king_l + king_post ;
+//
+//         await handle_bot(msg, '', client, name1, name2);
+//         let u1r = await rating(name1);
+//         let u2r = await rating(name2);
+//         expect(stub).to.have.been.calledWith(
+//             name2, name3
+//         );
+//         expect(u2r > u1r)
+//     });
+//
+//     it('one existing user king wins no challenger properly updates ratings', async() =>{
+//         let msg = king_w;
+//         await handle_bot(msg, '', client, name1, name3);
+//         let u1r = await rating(name1);
+//         let u3r = await rating(name3);
+//         expect(stub).to.have.been.calledWith(
+//             name1, 'default c'
+//         );
+//         expect(u1r > u3r)
+//     });
+//
+//     it('one existing user king loses no challenger properly updates ratings', async() =>{
+//         let msg = king_l;
+//         await handle_bot(msg, '', client, name1, name3);
+//         let u1r = await rating(name1);
+//         let u3r = await rating(name3);
+//         expect(stub).to.have.been.calledWith(
+//             name1, 'default c'
+//         );
+//         expect(u3r > u1r)
+//     });
+//
+//     it('no existing user king loses no challenger properly updates ratings', async() =>{
+//         let msg = king_l;
+//         await handle_bot(msg, '', client, name4, name3);
+//         let u4r = await rating(name1);
+//         let u3r = await rating(name3);
+//         expect(stub).to.have.been.calledWith(
+//             name1, 'default c'
+//         );
+//         expect(u3r > u4r)
+//     });
+// });
 
 
 describe('handles commands', function () {
@@ -186,6 +186,7 @@ describe('handles commands', function () {
         mockC.verify();
     })
 });
+
 
 describe('handles rank', function () {
     let client = {

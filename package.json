@@ -30,19 +30,22 @@
     "sequelize": "^6.0.0",
     "sinon": "^7.5.0",
     "sqlite3": "^4.1.1",
-    "tmi.js": "^1.5.0"
+    "tmi.js": "^1.5.0",
+    "braces": ">=2.3.1"
   },
   "engines": {
     "node": "8.x"
   },
   "repository": {
-    "url": "https://glitch.com/edit/#!/twitch-chatbot"
+    "url": "https://github.com/JettJengaGod/EloBot"
   },
   "license": "MIT",
   "keywords": [
     "twitch",
     "chatbots",
-    "irc"
+    "irc",
+    "elo",
+    "king of the hill"
   ],
   "devDependencies": {
     "@babel/cli": "^7.7.5",

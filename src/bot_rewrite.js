@@ -1,8 +1,4 @@
 const fs = require('fs');
-export let king_chal = (kName = 'default k', cName = 'default c') => {
-    king = kName;
-    challenger = cName;
-};
 
 // Setup DB
 let Sequelize = require('sequelize');
@@ -57,10 +53,7 @@ if(process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== undefined) {
     client.connect();
 }
 
-const koth_bot = 'smash4ubot';
-let king;
-let challenger;
-king_chal();
+const koth_bot = 'smash4fefweubot';
 let help = require('./utils/helpers');
 // Called every time a message comes in
 function onMessageHandler (target, context, msg, self) {
@@ -70,29 +63,16 @@ function onMessageHandler (target, context, msg, self) {
     const command = msg.split(' ');
     console.log(command,context, usr);
     console.log("**********");
-    if (usr === koth_bot ){
-        help.handle_bot(msg, target, client, king, challenger).then(function () {
-            setTimeout(function(){
-
-                if( king === 'default k' || challenger === 'default c'){
-                    client.say(target, '!list')
-                }
-            }, 1000);
-        })
-
-    }
-    else if(command[0].startsWith('!')){
+    if(command[0].startsWith('!')){
 
         const mod = (context.mod || usr === 'alexjett' || usr.toLowerCase() === 't5ace');
         help.handle_command(command[0].substr(1), command.slice(1), target, client, mod, usr);
     }
-    console.log(king, challenger);
 }
 
 
 
 function onConnectedHandler (addr, port) {
-    client.say(process.env.CHANNEL_NAME, '!list');
     console.log(`* Connected to ${addr}:${port}`);
 }
 
