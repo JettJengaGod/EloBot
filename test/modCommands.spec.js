@@ -1,7 +1,7 @@
 import {ModCommandList} from "../src/utils/modCommands.js";
-const sinon = require('sinon');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
+import sinon from "sinon";
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
 chai.use(sinonChai);
 const { expect } = require('chai');
 import 'babel-polyfill'
@@ -10,7 +10,7 @@ import {addUser, rating, updateUser} from "../src/utils/database";
 import models from "../src/models";
 import Koth from '../src/utils/koth'
 import {CommandList} from "../src/utils/commands";
-const dotenv = require('dotenv');
+import dotenv from 'dotenv';
 dotenv.config();
 
 

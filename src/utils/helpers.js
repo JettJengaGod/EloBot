@@ -1,7 +1,6 @@
 import {CommandList} from "./commands.js";
 import { addUser, rating, updateUser, ratingAdd, addMatch} from "./database";
-let models = require('../models');
-let EloRank = require('elo-rank');
+import EloRank from 'elo-rank';
 let elo = new EloRank();
 import {king_chal} from "../bot_rewrite";
 import {ModCommandList} from "./modCommands";

@@ -1,5 +1,5 @@
 
-const { expect } = require('chai');
+import { expect } from'chai';
 import Koth from '../src/utils/koth'
 
 

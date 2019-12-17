@@ -1,4 +1,4 @@
-const { User, Match } = require('../models');
+import { User, Match } from '../models';
 
 
 export const addUser = async( name) => {

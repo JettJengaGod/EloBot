@@ -1,12 +1,12 @@
 import {stub} from "sinon";
 
-const { expect } = require('chai');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
+import { expect } from'chai';
+import sinon from "sinon";
+import chai from 'chai';
+import sinonChai from 'sinon-chai';
 chai.use(sinonChai);
-const sinon = require('sinon');
-const proxyquire = require('proxyquire');
-const { makeMockModels } = require('sequelize-test-helpers');
+import proxyquire from 'proxyquire'
+import { makeMockModels} from 'sequelize-test-helpers';
 import 'babel-polyfill'
 
 const mockModels = makeMockModels({ User: { findOne: sinon.stub(), create: sinon.stub() } });

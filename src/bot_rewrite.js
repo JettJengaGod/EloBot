@@ -1,11 +1,10 @@
-let models = require('./models');
+import models from './models';
 models.sequelize.sync();
 
 
 // Setup requests to redirect to the index page
-let express = require('express');
-const dotenv = require('dotenv');
-
+import express from 'express'
+import dotenv from 'dotenv'
 import 'babel-polyfill'
 dotenv.config();
 let app = express();
@@ -32,7 +31,7 @@ const opts = {
 };
 let client;
 // Create a client with our options
-const tmi = require('tmi.js');
+import tmi from 'tmi.js';
 if(process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== undefined) {
 
 // listen for requests :)
@@ -50,7 +49,7 @@ if(process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== undefined) {
 }
 
 const koth_bot = 'smash4fefweubot';
-let help = require('./utils/helpers');
+import help from './utils/helpers';
 // Called every time a message comes in
 function onMessageHandler (target, context, msg, self) {
     if (self) { return; }
