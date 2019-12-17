@@ -15,11 +15,13 @@
     "prod": "NODE_ENV=production npm-run-all clean build server:prod",
     "watch": "nodemon",
     "rew": "node src/bot_rewrite.js",
-    "test-unit": "NODE_ENV=test mocha --recursive --require @babel/register --require co-mocha 'test/' "
+    "test-unit": "NODE_ENV=test mocha --recursive -r @babel/register -r esm --require co-mocha 'test/' "
   },
   "dependencies": {
     "@babel/polyfill": "^7.7.0",
+    "braces": ">=2.3.1",
     "chai": "^4.2.0",
+    "core-js": "^3.5.0",
     "dotenv": "^8.2.0",
     "elo-rank": "^1.0.3",
     "express": "^4.16.4",
@@ -30,8 +32,7 @@
     "sequelize": "^6.0.0",
     "sinon": "^7.5.0",
     "sqlite3": "^4.1.1",
-    "tmi.js": "^1.5.0",
-    "braces": ">=2.3.1"
+    "tmi.js": "^1.5.0"
   },
   "engines": {
     "node": "8.x"
@@ -59,6 +60,7 @@
     "babel-preset-env": "^1.7.0",
     "child-process-promise": "^2.2.1",
     "co-mocha": "^1.2.2",
+    "esm": "^3.2.25",
     "faker": "^4.1.0",
     "lodash": "latest",
     "nodemon": "^1.17.4",

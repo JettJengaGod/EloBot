@@ -1,7 +1,3 @@
-const fs = require('fs');
-
-// Setup DB
-let Sequelize = require('sequelize');
 let models = require('./models');
 models.sequelize.sync();
 

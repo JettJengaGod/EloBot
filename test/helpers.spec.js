@@ -8,8 +8,6 @@ import * as Bot from '../src/bot_rewrite';
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 chai.use(sinonChai);
-
-const stub = sinon.stub(Bot, 'king_chal');
 import models from '../src/models';
 import { addUser, rating, ratingAdd, updateUser} from "../src/utils/database";
 import truncate from '../scripts/truncate';
@@ -25,49 +23,49 @@ describe('At handler', function (){
         expect(res === testout)
     })
 });
-
-describe('Parse chal', function () {
-    it('parses chal out of properly formatted str', function () {
-        const msg = 'The King falls! @skylexifox is the new King! @zynders is the next challenger. Please let @t5ace know that you are ready.';
-        const ret = parseChal(msg);
-        expect(ret === 'zynders')
-    });
-    it('returns default chal out of properly formatted str', function () {
-        const msg = 'The King falls! @skylexifox is the new King!';
-        const ret = parseChal(msg);
-        expect(ret === 'default c')
-    })
-});
-
-describe('Parse king and chal', function () {
-    const name1 = 'Testy';
-    const name2 = 'McTestface';
-    it('parses neither out of empty list', function () {
-        const msg = 'The KotH line is empty.';
-        parseKingandChal(msg);
-        expect(stub).to.have.been.calledWith();
-    });
-    it('parses king with no challengers', function () {
-        const msg = `King: @${name1}. Challengers: There are no challengers at the moment.`;
-        parseKingandChal(msg);
-        expect(stub).to.have.been.calledWith(name1);
-    });
-    it('parses king and chal with 1 chal', function () {
-        const msg = `King: @${name1}. Challengers: ${name2}`;
-        parseKingandChal(msg);
-        expect(stub).to.have.been.calledWith(name1, name2);
-    });
-    it('parses king and chal with 2 chal', function () {
-        const msg = `King: @${name1}. Challengers: ${name2},name`;
-        parseKingandChal(msg);
-        expect(stub).to.have.been.calledWith(name1, name2);
-    });
-    it('parses king and chal with many chal', function () {
-        const msg = `King: @${name1}. Challengers: ${name2},name,f,a,lots,here,sevral`;
-        parseKingandChal(msg);
-        expect(stub).to.have.been.calledWith(name1, name2);
-    });
-});
+//
+// describe('Parse chal', function () {
+//     it('parses chal out of properly formatted str', function () {
+//         const msg = 'The King falls! @skylexifox is the new King! @zynders is the next challenger. Please let @t5ace know that you are ready.';
+//         const ret = parseChal(msg);
+//         expect(ret === 'zynders')
+//     });
+//     it('returns default chal out of properly formatted str', function () {
+//         const msg = 'The King falls! @skylexifox is the new King!';
+//         const ret = parseChal(msg);
+//         expect(ret === 'default c')
+//     })
+// });
+//
+// describe('Parse king and chal', function () {
+//     const name1 = 'Testy';
+//     const name2 = 'McTestface';
+//     it('parses neither out of empty list', function () {
+//         const msg = 'The KotH line is empty.';
+//         parseKingandChal(msg);
+//         expect(stub).to.have.been.calledWith();
+//     });
+//     it('parses king with no challengers', function () {
+//         const msg = `King: @${name1}. Challengers: There are no challengers at the moment.`;
+//         parseKingandChal(msg);
+//         expect(stub).to.have.been.calledWith(name1);
+//     });
+//     it('parses king and chal with 1 chal', function () {
+//         const msg = `King: @${name1}. Challengers: ${name2}`;
+//         parseKingandChal(msg);
+//         expect(stub).to.have.been.calledWith(name1, name2);
+//     });
+//     it('parses king and chal with 2 chal', function () {
+//         const msg = `King: @${name1}. Challengers: ${name2},name`;
+//         parseKingandChal(msg);
+//         expect(stub).to.have.been.calledWith(name1, name2);
+//     });
+//     it('parses king and chal with many chal', function () {
+//         const msg = `King: @${name1}. Challengers: ${name2},name,f,a,lots,here,sevral`;
+//         parseKingandChal(msg);
+//         expect(stub).to.have.been.calledWith(name1, name2);
+//     });
+// });
 //
 // describe('Bot handle match', function () {
 //

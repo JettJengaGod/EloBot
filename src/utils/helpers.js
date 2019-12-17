@@ -1,4 +1,4 @@
-import {Command, CommandList} from "./commands.js";
+import {CommandList} from "./commands.js";
 import { addUser, rating, updateUser, ratingAdd, addMatch} from "./database";
 let models = require('../models');
 let EloRank = require('elo-rank');

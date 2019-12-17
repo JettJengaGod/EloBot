@@ -1,7 +1,22 @@
-import { addUser, rating, updateUser, ratingAdd, rank} from "./database";
 import {atHandle, score_match} from "./helpers";
 import Koth from './koth'
-import {Command, CommandList} from './commands'
+import {CommandList} from './commands'
+
+function default_handle(args, target, client, usr) {
+    client.say(target, 'This command isn\'t properly setup')
+}
+class Command{
+    constructor(com='', help='', handle=default_handle) {
+        this.com = com;
+        this.help = help;
+        this.handle = handle;
+    }
+
+    helpPrompt() {
+        return this.help
+    }
+
+}
 
 let idHandle = async (args, target, client, usr)=> {
     if(args.length === 1){
