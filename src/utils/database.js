@@ -1,5 +1,5 @@
 import { User, Match } from '../models';
-
+import 'babel-polyfill'
 
 export const addUser = async( name) => {
     const user = await lookup(name);
