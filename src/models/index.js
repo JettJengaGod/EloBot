@@ -5,16 +5,16 @@ const dbName = 'EloDB';
 const dbUser = process.env.DB_USER;
 const dbPass = process.env.DB_PASS;
 const options = {
-    host: '0.0.0.0',
-        dialect: 'sqlite',
+
+        host: '0.0.0.0',
+        protocol: 'postgres',
+
+        dialect: 'postgres',
         pool: {
         max: 5,
             min: 0,
             idle: 10000
     },
-    // Security note: the database is saved to the file `database.sqlite` on the local filesystem. It's deliberately placed in the `.data` directory
-    // which doesn't get copied if someone remixes the project.
-    storage: '.data/' + process.env.NODE_ENV + 'EloDB.sqlite'
 };
 const basename = path.basename(module.filename);
 const sequelize = new Sequelize(dbName, dbUser, dbPass, options);
