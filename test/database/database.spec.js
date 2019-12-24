@@ -4,7 +4,6 @@ import models, {User} from '../../src/models';
 import {addUser, rating, ratingAdd, updateUser, rank, top, topRank} from "../../src/utils/database";
 import truncate from '../../scripts/truncate';
 
-import 'babel-polyfill'
 const dotenv = require('dotenv');
 dotenv.config();
 const starting_rating = Number(process.env.DEFAULT_RATING);

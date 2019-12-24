@@ -5,7 +5,8 @@ models.sequelize.sync();
 // Setup requests to redirect to the index page
 import express from 'express'
 import dotenv from 'dotenv'
-import 'babel-polyfill'
+import "core-js/stable";
+import "regenerator-runtime/runtime";
 dotenv.config();
 let app = express();
 import router from './routers/router'

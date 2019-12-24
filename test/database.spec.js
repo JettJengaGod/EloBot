@@ -7,7 +7,6 @@ import sinonChai from 'sinon-chai';
 chai.use(sinonChai);
 import proxyquire from 'proxyquire'
 import { makeMockModels} from 'sequelize-test-helpers';
-import 'babel-polyfill'
 
 const mockModels = makeMockModels({ User: { findOne: sinon.stub(), create: sinon.stub() } });
 const database = proxyquire('../src/utils/database', {

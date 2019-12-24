@@ -18,7 +18,6 @@
     "test-unit": "NODE_ENV=test mocha --recursive -r @babel/register --require co-mocha 'test/' "
   },
   "dependencies": {
-    "@babel/polyfill": "^7.7.0",
     "braces": ">=3.0.2",
     "chai": "^4.2.0",
     "core-js": "^3.6.0",
@@ -27,6 +26,7 @@
     "express": "^4.17.1",
     "mocha": "^6.2.2",
     "npm-run-all": "^4.1.5",
+    "regenerator-runtime": "^0.13.3",
     "request": "latest",
     "rimraf": "^3.0.0",
     "sequelize": "^6.0.0",
@@ -52,6 +52,7 @@
     "@babel/cli": "^7.7.7",
     "@babel/core": "^7.7.7",
     "@babel/node": "^7.7.7",
+    "@babel/polyfill": "^7.7.0",
     "@babel/preset-env": "^7.7.7",
     "@babel/register": "^7.7.7",
     "child-process-promise": "^2.2.1",

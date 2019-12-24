@@ -1,5 +1,7 @@
 import { User, Match } from '../models';
-import 'babel-polyfill'
+
+import "core-js/stable";
+import "regenerator-runtime/runtime";
 
 export const addUser = async( name) => {
     const user = await lookup(name);

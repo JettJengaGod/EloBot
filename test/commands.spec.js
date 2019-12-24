@@ -4,7 +4,6 @@ import chai from 'chai';
 import sinonChai from 'sinon-chai';
 chai.use(sinonChai);
 import { expect } from'chai';
-import 'babel-polyfill'
 import truncate from "../scripts/truncate";
 import {addUser, updateUser} from "../src/utils/database";
 import models from "../src/models";
