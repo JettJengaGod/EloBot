@@ -64,6 +64,7 @@ describe('Command List Tests', function () {
             const target = "";
             mockC = sinon.mock(client);
             mockC.expects("say").once();
+            console.log(com);
             await CommandList[com].handle([], target, client, 'usr');
 
             mockC.verify();
