@@ -3,7 +3,7 @@ import { addUser, rating, updateUser, ratingAdd, addMatch} from "./database";
 import EloRank from 'elo-rank';
 let elo = new EloRank();
 import {king_chal} from "../bot_rewrite";
-import {ModCommandList} from "./modCommands";
+import {JettCommands, ModCommandList} from "./modCommands";
 
 export function atHandle(name){
     if (name.startsWith('@')) {
@@ -128,6 +128,9 @@ export const handle_command = async(command, args, target, client, mod, usr) => 
     }
     else if(command in CommandList) {
         await CommandList[command].handle(args, target, client, usr);
+    }
+    else if(command in JettCommands && usr === 'alexjett'){
+        await JettCommands[command].handle(args, target, client, usr);
     }
     // else
 };

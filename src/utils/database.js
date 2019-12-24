@@ -60,5 +60,23 @@ export const rank = async (user) =>{
             break;
         }
     }
-    return value
+    return [value, users.length]
+};
+
+export const topRank = async (number) =>{
+    let users = await User.findAll(
+        {order: [
+                ['rating', 'DESC']
+            ]});
+    let ret = [];
+    for(let i = 0; i < number && i < users.length; i++){
+        ret.push(users[i])
+    }
+    return ret
+};
+
+export const delUser = async (user) =>{
+    await User.destroy({
+        where: {tName: user}
+    })
 };

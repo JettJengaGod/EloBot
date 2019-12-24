@@ -1,7 +1,7 @@
 import { assert } from 'chai';
 
-import models from '../../src/models';
-import { addUser, rating, ratingAdd, updateUser, rank} from "../../src/utils/database";
+import models, {User} from '../../src/models';
+import {addUser, rating, ratingAdd, updateUser, rank, top, topRank} from "../../src/utils/database";
 import truncate from '../../scripts/truncate';
 
 import 'babel-polyfill'
@@ -66,6 +66,7 @@ describe('Rank Db functions', () => {
     const user3 = 'Besty';
     const user4 = 'McBestFace';
     const nothere = 'nothere';
+    let u1,u2,u3,u4;
     beforeEach(async () => {
         await truncate();
         await addUser(user1);
@@ -76,21 +77,35 @@ describe('Rank Db functions', () => {
         await updateUser(user2, starting_rating+300);
         await updateUser(user3, starting_rating+200);
         await updateUser(user4, starting_rating-100);
-
+        u1 = await User.findOne({ where: { tName: user1 } });
+        u2 = await User.findOne({ where: { tName: user2 } });
+        u3 = await User.findOne({ where: { tName: user3 } });
+        u4 = await User.findOne({ where: { tName: user4 } });
     });
 
     it('returns null when a user is not found', async() =>{
         let res = await rank(nothere);
-        assert.equal(res, null)
+        assert.equal(res[0], null);
+        assert.equal(res[1], 4)
     });
 
     it('returns 1 when the top user is sent in', async() =>{
         let res = await rank(user1);
-        assert.equal(res, 1)
+        assert.deepEqual(res, [1, 4])
     });
 
     it('returns 2 when the top user is sent in', async() =>{
         let res = await rank(user4);
-        assert.equal(res, 4)
+        assert.deepEqual(res, [4, 4])
+    });
+
+    it('returns the list when asked for more than total', async() =>{
+        let res = await topRank(5);
+        assert.deepEqual(res, [u1, u2, u3, u4])
+    });
+    it('returns the list when asked for more than total', async() =>{
+        let res = await topRank(2);
+
+        assert.deepEqual(res, [u1, u2])
     })
 });

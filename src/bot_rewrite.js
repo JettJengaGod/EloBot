@@ -49,25 +49,27 @@ if(process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== undefined) {
 }
 
 const koth_bot = 'smash4fefweubot';
-import help from './utils/helpers';
+import {handle_command} from './utils/helpers';
 // Called every time a message comes in
 function onMessageHandler (target, context, msg, self) {
     if (self) { return; }
 
     const usr = context.username;
     const command = msg.split(' ');
-    console.log(command,context, usr);
-    console.log("**********");
+    // console.log(command,context, usr);
+    // console.log("**********");
     if(command[0].startsWith('!')){
 
         const mod = (context.mod || usr === 'alexjett' || usr.toLowerCase() === 't5ace');
-        help.handle_command(command[0].substr(1), command.slice(1), target, client, mod, usr);
+        handle_command(command[0].substr(1), command.slice(1), target, client, mod, usr);
     }
 }
 
 
 
 function onConnectedHandler (addr, port) {
+    client.say(process.env.CHANNEL_NAME, 'I have just been restarted for some reason. ' +
+        'if there were players in the queue, they need to be re added.')
     console.log(`* Connected to ${addr}:${port}`);
 }
 

@@ -1,6 +1,7 @@
 import {atHandle, score_match} from "./helpers";
 import Koth from './koth'
 import {CommandList} from './commands'
+import {updateUser, delUser} from "./database";
 
 function default_handle(args, target, client, usr) {
     client.say(target, 'This command isn\'t properly setup')
@@ -21,52 +22,52 @@ class Command{
 let idHandle = async (args, target, client, usr)=> {
     if(args.length === 1){
         Koth.aid = args[0];
-        client.say(target, `The arena id is set to ${Koth.aid}`)
+        client.say(target, `The Arena ID is set to ${Koth.aid}.`)
     }
     else if(args.length === 0){
         return CommandList['arenaid'].handle(args,target,client,usr)
     }
     else{
 
-        client.say(target, `Please only send in the arena id separated by a space after !arenaid`)
+        client.say(target, `Please only send in the Arena ID separated by a space after !arenaid`)
     }
 };
 
 let idCom = new Command(
     'arenaid',
-    `Use '!arenaid' to find the arena id! or '!arenaid [idhere]' to set a new one`,
+    `Use '!arenaid' to find the Arena ID! or '!arenaid [idhere]' to set a new one`,
     idHandle);
 
 let idHandle2 = async (args, target, client, usr)=> {
     if(args.length === 1){
         Koth.aid2 = args[0];
-        client.say(target, `The arena 2 id is set to ${Koth.aid2}`)
+        client.say(target, `The Arena 2 ID is set to ${Koth.aid2}.`)
     }
     else if(args.length === 0){
         return CommandList['arenaid2'].handle(args,target,client,usr)
     }
     else{
 
-        client.say(target, `Please only send in the arena id separated by a space after !arenaid2`)
+        client.say(target, `Please only send in the Arena ID separated by a space after !arenaid2`)
     }
 };
 
 let idCom2 = new Command(
     'arenaid2',
-    `Use '!arenaid2' to find the arena id! or '!arenaid2 [idhere]' to set a new one`,
+    `Use '!arenaid2' to find the Arena ID! or '!arenaid2 [idhere]' to set a new one`,
     idHandle2);
 
 let idHandle3 = async (args, target, client, usr)=> {
     if(args.length === 1){
         Koth.aid3 = args[0];
-        client.say(target, `The arena 3 id is set to ${Koth.aid3}`)
+        client.say(target, `The Arena 3 ID is set to ${Koth.aid3}.`)
     }
     else if(args.length === 0){
         return CommandList['arenaid3'].handle(args,target,client,usr)
     }
     else{
 
-        client.say(target, `Please only send in the arena id separated by a space after !arenaid3`)
+        client.say(target, `Please only send in the Arena ID separated by a space after !arenaid3`)
     }
 };
 
@@ -74,7 +75,18 @@ let idCom3 = new Command(
     'arenaid3',
     `Use '!arenaid3' to find the arena id! or '!arenaid3 [idhere]' to set a new one`,
     idHandle3);
-
+let queueApped = (msg, queue) =>{
+    if(queue.length>=2){
+        msg += `${queue[1]} is next (ArenaID: ${Koth.aid})`
+    }
+    if(queue.length>=3){
+        msg += ` ${queue[2]} is on deck`
+    }
+    if(queue.length>=4){
+        msg += ` and ${queue[3]} is in the hole`
+    }
+    return msg
+}
 let winHandle = async (args, target, client, usr)=> {
     let msg = `There needs to be at least a king and one challenger for someone to win.`;
     let queue = Koth.get();
@@ -88,10 +100,8 @@ let winHandle = async (args, target, client, usr)=> {
     const rChanges = await score_match(king, loser);
     Koth.win();
     msg = `The King ${king} ${rChanges['w_r']}(+${rChanges['win_r_c']}) defeated ${loser} ${rChanges['l_r']}(-${rChanges['lose_r_c']}) 
-            and remains king.`;
-    if(queue.length>2){
-        msg += `${queue[2]} is next (ArenaID: ${Koth.aid}`
-    }
+            and remains King.  `;
+    msg = queueApped(msg, queue);
     client.say(target, msg);
 };
 
@@ -111,11 +121,9 @@ let loseHandle = async (args, target, client, usr)=> {
     const loser = queue[0];
     const rChanges = await score_match(winner, loser);
     Koth.lose();
-    msg = `The King ${loser} ${rChanges['l_r']}(-${rChanges['lose_r_c']}) is defeated ${winner} ${rChanges['w_r']}(+${rChanges['win_r_c']}) 
-            is the new King.`;
-    if(queue.length>2){
-        msg += `${queue[2]} is next (ArenaID: ${Koth.aid}`
-    }
+    msg = `The King ${loser} ${rChanges['l_r']}(-${rChanges['lose_r_c']}) is defeated. ${winner} ${rChanges['w_r']}(+${rChanges['win_r_c']}) 
+            is the new King.  `;
+    msg = queueApped(msg, queue);
     client.say(target, msg);
 };
 
@@ -231,4 +239,47 @@ export let ModCommandList = {
     'add': addCom,
     'remove' : removeCom,
     'clear' : clearCom
+};
+
+let setRatingHandle = async (args, target, client, usr)=> {
+    let msg = 'Invalid input';
+    if(args.length === 2){
+        const username = atHandle(args[0]);
+        if(!Number.isInteger(Number(args[1]))){
+            msg = `Please use a number when calling '!setrating @username [number]'`
+        }
+        else {
+            let number = Number(args[1]);
+            msg = `${username} updated to ${number}.`;
+            await updateUser(username, number);
+            }
+        }
+
+    client.say(target, msg);
+    };
+
+let setRatingCom = new Command(
+    'setrating',
+    `Use '!add @username' as a mod to add username to the list`,
+    setRatingHandle);
+
+
+let delHandle = async (args, target, client, usr)=> {
+    let msg = `please call add like this '!deluser @username'`;
+    if(args.length === 1){
+        const username = atHandle(args[0]);
+        await delUser(username);
+        msg = `User ${username} deleted from database.`
+    }
+    client.say(target, msg);
+};
+
+let delCom = new Command(
+    'deluser',
+    `Use '!add @username' as a mod to add username to the list`,
+    delHandle);
+
+export let JettCommands ={
+    'setrating' : setRatingCom,
+    'deluser' : delCom
 };

@@ -205,7 +205,7 @@ describe('rank actual responses', async() =>{
         const args = [];
 
         mockC.expects("say").once().withExactArgs('',
-            `${usr}'s rank is 1(${changed_r})` );
+            `${usr}'s rank is 1/2 (${changed_r})` );
         await CommandList[command].handle(args, '', client , usr);
         mockC.verify();
     });
@@ -213,7 +213,7 @@ describe('rank actual responses', async() =>{
         const args = [usr2];
 
         mockC.expects("say").once().withExactArgs('',
-            `${usr2}'s rank is 2(${process.env.DEFAULT_RATING})` );
+            `${usr2}'s rank is 2/2 (${process.env.DEFAULT_RATING})` );
         await CommandList[command].handle(args, '', client , usr);
         mockC.verify();
     });
@@ -234,7 +234,7 @@ describe('list command', async() =>{
     });
     it('responds properly when there is no users in the list', async()=>{
         mockC.expects("say").once().withExactArgs(target,
-            `No users in the list, use '!challenge' to join the list`);
+            `No users in the list, use '!challenge' to join the list.`);
         await CommandList[command].handle(args, target, client , user);
         mockC.verify();
     });
@@ -242,7 +242,7 @@ describe('list command', async() =>{
     it('responds properly when only the king is in the queue', async()=>{
         Koth.add(user);
         mockC.expects("say").once().withExactArgs(target,
-            `King: ${user} Challengers: There are no challengers, use '!challenge' to join the list`);
+            `King: ${user} ~~~~ Challengers: There are no challengers, use '!challenge' to join the list.`);
         await CommandList[command].handle(args, target, client , user);
         mockC.verify();
     });
@@ -251,7 +251,7 @@ describe('list command', async() =>{
         Koth.add(user);
         Koth.add(user2);
         mockC.expects("say").once().withExactArgs(target,
-            `King: ${user} Challengers: ${user2}`);
+            `King: ${user} ~~~~ Challengers: ${user2}`);
         await CommandList[command].handle(args, target, client , user);
         mockC.verify();
     });
@@ -262,7 +262,7 @@ describe('list command', async() =>{
         Koth.add(user3);
         Koth.add(user4);
         mockC.expects("say").once().withExactArgs(target,
-            `King: ${user} Challengers: ${user2}, ${user3}, ${user4}`);
+            `King: ${user} ~~~~ Challengers: ${user2}, ${user3}, ${user4}`);
         await CommandList[command].handle(args, target, client , user);
         mockC.verify();
     });
@@ -279,7 +279,7 @@ describe('challenge command', async() =>{
     });
    it('adds the user to queue when user is not in queue', async ()=>{
        mockC.expects("say").once().withExactArgs(target,
-           `${user} has been added to the queue`);
+           `${user} has been added to the queue.`);
        await CommandList[command].handle(args, target, client , user);
        mockC.verify();
        expect(Koth.get(user)).to.equal(0)
@@ -287,7 +287,7 @@ describe('challenge command', async() =>{
     it('does not add the user to queue when it is in already', async ()=>{
         Koth.add(user);
         mockC.expects("say").once().withExactArgs(target,
-            `${user} is already in the queue`);
+            `${user} is already in the queue.`);
         await CommandList[command].handle(args, target, client , user);
         mockC.verify();
         expect(Koth.get()[0]).to.equal(user);
@@ -319,7 +319,7 @@ describe('dropspot command', async() =>{
     it('drops the user from queue when user is in queue', async ()=>{
         Koth.add(user);
         mockC.expects("say").once().withExactArgs(target,
-            `${user} has left the queue`);
+            `${user} has left the queue.`);
         await CommandList[command].handle(args, target, client , user);
         mockC.verify();
         expect(Koth.get(user)).to.equal(-1)
@@ -327,7 +327,7 @@ describe('dropspot command', async() =>{
     it('does not drop user when it is not in queue', async ()=>{
         Koth.add(user2);
         mockC.expects("say").once().withExactArgs(target,
-            `Cannot drop ${user} as they are not in queue`);
+            `Cannot drop ${user} as they are not in queue.`);
         await CommandList[command].handle(args, target, client , user);
         mockC.verify();
         expect(Koth.get().length).to.equal(1)
@@ -421,7 +421,7 @@ describe('arenaid command', async() =>{
     it('responds with the aid', async ()=>{
         Koth.aid = aid;
         mockC.expects("say").once().withExactArgs(target,
-            `The arena id is ${aid}`);
+            `The Arena ID is ${aid}.`);
         await CommandList[command].handle(args, target, client , '');
         mockC.verify();
     });
@@ -439,7 +439,7 @@ describe('arenaid2 command', async() =>{
     it('responds with the aid', async ()=>{
         Koth.aid2 = aid;
         mockC.expects("say").once().withExactArgs(target,
-            `The arena 2 id is ${aid}`);
+            `The Arena 2 ID is ${aid}.`);
         await CommandList[command].handle(args, target, client , '');
         mockC.verify();
     });
@@ -457,7 +457,7 @@ describe('arenaid3 command', async() =>{
     it('responds with the aid', async ()=>{
         Koth.aid3 = aid;
         mockC.expects("say").once().withExactArgs(target,
-            `The arena 3 id is ${aid}`);
+            `The Arena 3 ID is ${aid}.`);
         await CommandList[command].handle(args, target, client , '');
         mockC.verify();
     });

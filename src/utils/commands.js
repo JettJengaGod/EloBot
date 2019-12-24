@@ -1,4 +1,4 @@
-import { addUser, rating, updateUser, ratingAdd, rank} from "./database";
+import { addUser, rating, updateUser, ratingAdd, rank, topRank} from "./database";
 import {atHandle} from "./helpers";
 import Koth from './koth'
 
@@ -67,7 +67,7 @@ let help = function (args, target, client, usr) {
 
 let helpCom = new Command(
     'help',
-    `use '!help command' to get help or a specific command or visit https://pastebin.com/MN7KQ3mH to find out more.`,
+    `use '!help command' to get help on a specific command or visit https://pastebin.com/MN7KQ3mH to find out more.`,
     help
 );
 
@@ -83,8 +83,8 @@ let rankHandle =  async (args, target, client, usr)=>{
     }
     const usr_r = await rating(usr);
     const usr_rank = await rank(usr);
-    if(usr_r !== null && usr_rank !== null){
-        msg = `${usr}'s rank is ${usr_rank}(${usr_r})`;
+    if(usr_r !== null && usr_rank[0] !== null){
+        msg = `${usr}'s rank is ${usr_rank[0]}/${usr_rank[1]} (${usr_r})`;
     }
     else{
         msg = `${usr} does not have a rank, play a match to get a rank`
@@ -104,13 +104,13 @@ let listHandle = async (args, target, client, usr)=> {
     let queue = Koth.get();
     switch (queue.length) {
         case 0:
-            msg = `No users in the list, use '!challenge' to join the list`;
+            msg = `No users in the list, use '!challenge' to join the list.`;
             break;
         case 1:
-            msg = `King: ${queue[0]} Challengers: There are no challengers, use '!challenge' to join the list`;
+            msg = `King: ${queue[0]} ~~~~ Challengers: There are no challengers, use '!challenge' to join the list.`;
             break;
         default:
-            msg = `King: ${queue[0]} Challengers: `;
+            msg = `King: ${queue[0]} ~~~~ Challengers: `;
             for(let i = 1; i < queue.length; i++){
                 msg += `${queue[i]}, `
             }
@@ -122,16 +122,16 @@ let listHandle = async (args, target, client, usr)=> {
 
 let listCom = new Command(
     'list',
-    `use '!list' to find who is the king and what players are in the queue`,
+    `Use '!list' to find who is the king and what players are in the queue`,
     listHandle);
 
 let challengeHandle = async (args, target, client, usr)=> {
     if (Koth.open) {
         if (Koth.get(usr) === -1) {
             Koth.add(usr);
-            client.say(target, `${usr} has been added to the queue`);
+            client.say(target, `${usr} has been added to the queue.`);
         } else {
-            client.say(target, `${usr} is already in the queue`);
+            client.say(target, `${usr} is already in the queue.`);
         }
     }
     else{
@@ -147,11 +147,11 @@ let challengeCom = new Command(
 
 let dropspotHandle = async (args, target, client, usr)=> {
     if(Koth.get(usr) === -1) {
-        client.say(target, `Cannot drop ${usr} as they are not in queue`);
+        client.say(target, `Cannot drop ${usr} as they are not in queue.`);
     }
     else{
         Koth.remove(usr);
-        client.say(target, `${usr} has left the queue`);
+        client.say(target, `${usr} has left the queue.`);
     }
 };
 
@@ -186,7 +186,7 @@ let spotCom = new Command(
 
 
 let idHandle = async (args, target, client, usr)=> {
-    client.say(target, `The arena id is ${Koth.aid}`)
+    client.say(target, `The Arena ID is ${Koth.aid}.`)
 };
 
 let idCom = new Command(
@@ -195,7 +195,7 @@ let idCom = new Command(
     idHandle);
 
 let idHandle2 = async (args, target, client, usr)=> {
-    client.say(target, `The arena 2 id is ${Koth.aid2}`)
+    client.say(target, `The Arena 2 ID is ${Koth.aid2}.`)
 };
 //TODO refactor arenaid2 and 3
 let idCom2 = new Command(
@@ -204,13 +204,30 @@ let idCom2 = new Command(
     idHandle2);
 
 let idHandle3 = async (args, target, client, usr)=> {
-    client.say(target, `The arena 3 id is ${Koth.aid3}`)
+    client.say(target, `The Arena 3 ID is ${Koth.aid3}.`)
 };
 
 let idCom3 = new Command(
     'arenaid3',
-    `Use '!arenaid2' to find the arena id 3!`,
+    `Use '!arenaid3' to find the arena id 3!`,
     idHandle3);
+
+let topHandle = async (args, target, client, usr)=> {
+    let tops = await topRank(5);
+    let msg = `The Top 5 is: `;
+    let i = 0;
+    for(let i = 0; i < tops.length; i ++){
+        msg += `${i+1}. ${tops[i].tName}(${tops[i].rating}), `;
+    }
+    msg = msg.substring(0, msg.length-2);
+    client.say(target, msg);
+};
+
+let topCom = new Command(
+    'top',
+    `Use '!top to see the top 5 players`,
+    topHandle);
+
 
 export let CommandList = {
     'base' : baseCom,
@@ -224,5 +241,6 @@ export let CommandList = {
     'spot' : spotCom,
     'arenaid' : idCom,
     'arenaid2' : idCom2,
-    'arenaid3' : idCom3
+    'arenaid3' : idCom3,
+    'top' : topCom
 };

@@ -32,7 +32,7 @@ describe('arenaid command', async() =>{
     it('responds with the aid', async ()=>{
         Koth.aid = aid;
         mockC.expects("say").once().withExactArgs(target,
-            `The arena id is ${aid}`);
+            `The Arena ID is ${aid}.`);
         await ModCommandList[command].handle(args, target, client , '');
         mockC.verify();
     });
@@ -41,7 +41,7 @@ describe('arenaid command', async() =>{
         Koth.aid = aid;
         args = [aid2];
         mockC.expects("say").once().withExactArgs(target,
-            `The arena id is set to ${aid2}`);
+            `The Arena ID is set to ${aid2}.`);
         await ModCommandList[command].handle(args, target, client , '');
         mockC.verify();
         expect(Koth.aid).to.equal(aid2)
@@ -50,7 +50,7 @@ describe('arenaid command', async() =>{
         Koth.aid = aid;
         args = [aid2, aid];
         mockC.expects("say").once().withExactArgs(target,
-            `Please only send in the arena id separated by a space after !arenaid`);
+            `Please only send in the Arena ID separated by a space after !arenaid`);
         await ModCommandList[command].handle(args, target, client , '');
         mockC.verify();
     });
@@ -69,7 +69,7 @@ describe('arenaid2 command', async() =>{
     it('responds with the aid', async ()=>{
         Koth.aid2 = aid;
         mockC.expects("say").once().withExactArgs(target,
-            `The arena 2 id is ${aid}`);
+            `The Arena 2 ID is ${aid}.`);
         await ModCommandList[command].handle(args, target, client , '');
         mockC.verify();
     });
@@ -78,7 +78,7 @@ describe('arenaid2 command', async() =>{
         Koth.aid2 = aid;
         args = [aid2];
         mockC.expects("say").once().withExactArgs(target,
-            `The arena 2 id is set to ${aid2}`);
+            `The Arena 2 ID is set to ${aid2}.`);
         await ModCommandList[command].handle(args, target, client , '');
         mockC.verify();
         expect(Koth.aid2).to.equal(aid2)
@@ -87,7 +87,7 @@ describe('arenaid2 command', async() =>{
         Koth.aid2 = aid;
         args = [aid2, aid];
         mockC.expects("say").once().withExactArgs(target,
-            `Please only send in the arena id separated by a space after !arenaid2`);
+            `Please only send in the Arena ID separated by a space after !arenaid2`);
         await ModCommandList[command].handle(args, target, client , '');
         mockC.verify();
     });
@@ -106,7 +106,7 @@ describe('arenaid3 command', async() =>{
     it('responds with the aid', async ()=>{
         Koth.aid3 = aid;
         mockC.expects("say").once().withExactArgs(target,
-            `The arena 3 id is ${aid}`);
+            `The Arena 3 ID is ${aid}.`);
         await ModCommandList[command].handle(args, target, client , '');
         mockC.verify();
     });
@@ -115,7 +115,7 @@ describe('arenaid3 command', async() =>{
         Koth.aid3 = aid;
         args = [aid2];
         mockC.expects("say").once().withExactArgs(target,
-            `The arena 3 id is set to ${aid2}`);
+            `The Arena 3 ID is set to ${aid2}.`);
         await ModCommandList[command].handle(args, target, client , '');
         mockC.verify();
         expect(Koth.aid3).to.equal(aid2)
@@ -124,7 +124,7 @@ describe('arenaid3 command', async() =>{
         Koth.aid3 = aid;
         args = [aid2, aid];
         mockC.expects("say").once().withExactArgs(target,
-            `Please only send in the arena id separated by a space after !arenaid3`);
+            `Please only send in the Arena ID separated by a space after !arenaid3`);
         await ModCommandList[command].handle(args, target, client , '');
         mockC.verify();
     });
