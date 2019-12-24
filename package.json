@@ -1,6 +1,7 @@
 {
   "name": "twitch-chatbot",
   "type": "module",
+  "@std/esm": "js",
   "version": "0.0.1",
   "description": "A simple app chatbot example. Using the command !echo will simply repeat the message.",
   "main": "bot.js",
@@ -18,6 +19,7 @@
     "test-unit": "NODE_ENV=test mocha --recursive -r @babel/register --require co-mocha 'test/' "
   },
   "dependencies": {
+    "@std/esm": "^0.26.0",
     "braces": ">=3.0.2",
     "chai": "^4.2.0",
     "core-js": "^3.6.0",
