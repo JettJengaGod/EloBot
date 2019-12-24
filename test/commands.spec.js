@@ -6,7 +6,6 @@ chai.use(sinonChai);
 import { expect } from'chai';
 import truncate from "../scripts/truncate";
 import {addUser, updateUser} from "../src/utils/database";
-import models from "../src/models";
 import Koth from '../src/utils/koth'
 import dotenv from 'dotenv';
 dotenv.config();

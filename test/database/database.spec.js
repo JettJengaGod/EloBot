@@ -1,5 +1,4 @@
 import { assert } from 'chai';
-
 import models, {User} from '../../src/models';
 import {addUser, rating, ratingAdd, updateUser, rank, top, topRank} from "../../src/utils/database";
 import truncate from '../../scripts/truncate';
