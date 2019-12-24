@@ -63,12 +63,13 @@ export const rank = async (user) =>{
     return [value, users.length]
 };
 
-export const topRank = async (number) =>{
+export const topRank = async (number = 0) =>{
     let users = await User.findAll(
         {order: [
                 ['rating', 'DESC']
             ]});
     let ret = [];
+    if(number === 0) number = users.length;
     for(let i = 0; i < number && i < users.length; i++){
         ret.push(users[i])
     }

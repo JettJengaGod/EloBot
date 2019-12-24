@@ -5,12 +5,7 @@
 // add other scripts at the bottom of index.html
 
 $(function() {
-  $.get('/users', function(users) {
-    users.forEach(function(user) {
-      $('<li></li>').text(user[0] + " " + user[1]).appendTo('ul#users');
-    });
-  });
-  $.get('/tusers', function(tusers) {
+  $.get('/users', function(tusers) {
     tusers.forEach(function(tuser) {
       $('<li></li>').text(tuser[0] + " " + tuser[1]).appendTo('ol#tusers');
     });

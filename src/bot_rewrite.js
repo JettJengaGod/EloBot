@@ -8,13 +8,12 @@ import dotenv from 'dotenv'
 import 'babel-polyfill'
 dotenv.config();
 let app = express();
+import router from './routers/router'
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static('public'));
 
 // http://expressjs.com/en/starter/basic-routing.html
-app.get("/", function (request, response) {
-    response.sendFile(__dirname + '/views/index.html');
-});
+app.use('/', router);
 
 // Start our server
 
