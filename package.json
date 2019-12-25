@@ -10,7 +10,6 @@
     "start": "npm run prod",
     "server": "NODE_ENV=development @babel-node src/bot_rewrite.js",
     "server:prod": "NODE_ENV=production node ./dist/bot_rewrite.js",
-    "dev": "NODE_ENV=development npm-run-all server",
     "clean": "rimraf dist",
     "build": "babel ./src --out-dir dist",
     "prod": "NODE_ENV=production npm-run-all clean build server:prod",
