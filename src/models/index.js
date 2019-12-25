@@ -6,7 +6,11 @@ let dbName, dbUser, dbPass, options, sequelize;
 dbUser = process.env.DB_USER;
 dbPass = process.env.DB_PASS;
 if(process.env.DB_URL) {
-    sequelize = sheroku.connect(Sequelize);
+    options = {
+        dialect:  'postgres',
+        protocol: 'postgres'
+    };
+    sequelize = new Sequelize(process.env.DB_URL, options);
 }
 else {
 
