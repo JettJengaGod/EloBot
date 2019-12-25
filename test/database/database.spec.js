@@ -1,12 +1,13 @@
 import { assert } from 'chai';
-import models, {User} from '../../src/models';
+import models, {User, Match} from '../../src/models';
 import {addUser, rating, ratingAdd, updateUser, rank, top, topRank} from "../../src/utils/database";
 import truncate from '../../scripts/truncate';
 
 const dotenv = require('dotenv');
 dotenv.config();
 const starting_rating = Number(process.env.DEFAULT_RATING);
-
+User.sync();
+Match.sync();
 describe('User DB Functions', () => {
     let addeduser;
     const username = 'Testy';
