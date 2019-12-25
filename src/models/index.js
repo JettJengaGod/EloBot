@@ -45,4 +45,14 @@ fs.readdirSync(__dirname)
     .filter(onlyModels)
     .forEach(importModel);
 Object.keys(db).forEach(associate);
+let UserName ='User';
+if(process.env.DB_URL){
+    UserName += process.env.NODE_ENV;
+}
+let MatchName ='Match';
+if(process.env.DB_URL){
+    MatchName += process.env.NODE_ENV;
+}
+db[UserName].sync();
+db[UserName].sync();
 module.exports = db;
