@@ -1,9 +1,5 @@
-let name ='Match';
-if(process.env.DB_URL){
-    name += process.env.NODE_ENV;
-}
 const model = (sequelize, DataTypes) => {
-    const Match = sequelize.define(name, {
+    const Match = sequelize.define('Match', {
         winner: { // Winner of the match's username
             type: DataTypes.STRING
         },
