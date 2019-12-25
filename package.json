@@ -8,7 +8,7 @@
   "test-unit": "NODE_ENV=test mocha '/*.spec.js'",
   "scripts": {
     "start": "npm run dev",
-    "server": "NODE_ENV=development babel-node src/bot_rewrite.js",
+    "server": "NODE_ENV=development @babel-node src/bot_rewrite.js",
     "server:prod": "NODE_ENV=production node ./dist/bot_rewrite.js",
     "dev": "NODE_ENV=development npm-run-all server",
     "clean": "rimraf dist",
