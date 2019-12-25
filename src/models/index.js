@@ -1,23 +1,31 @@
 import fs from 'fs';
 import path from 'path'
 import Sequelize from "sequelize";
-const dbName = 'EloDB';
-const dbUser = process.env.DB_USER;
-const dbPass = process.env.DB_PASS;
-const options = {
+let dbName, dbUser, dbPass, options, sequelize;
+dbUser = process.env.DB_USER;
+dbPass = process.env.DB_PASS;
+if(process.env.DB_URL) {
+    sequelize = new Sequelize(process.env.DB_URL);
+}
+else {
 
+    dbName = 'EloDB';
+    options = {
         host: '0.0.0.0',
-        protocol: 'postgres',
-
-        dialect: 'postgres',
+        dialect: 'sqlite',
         pool: {
-        max: 5,
+            max: 5,
             min: 0,
             idle: 10000
-    },
-};
+        },
+        // Security note: the database is saved to the file `database.sqlite` on the local filesystem. It's deliberately placed in the `.data` directory
+        // which doesn't get copied if someone remixes the project.
+        storage: '.data/' + process.env.NODE_ENV + 'EloDB.sqlite'
+    };
+
+    sequelize = new Sequelize(dbName, dbUser, dbPass, options);
+}
 const basename = path.basename(module.filename);
-const sequelize = new Sequelize(dbName, dbUser, dbPass, options);
 const db = { Sequelize, sequelize };
 const onlyModels = file =>
     file.indexOf('.') !== 0 &&
