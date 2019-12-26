@@ -125,8 +125,8 @@ describe('rating default commands', async() =>{
 
 describe('rating actual responses', async() =>{
     const command = 'rating';
-    const usr = 'Testy';
-    const usr2 = 'McTestface';
+    const usr = 'testy';
+    const usr2 = 'mctestface';
     const changed_r = Number(process.env.DEFAULT_RATING)+100;
     beforeEach(async () => {
         await truncate();
@@ -190,8 +190,8 @@ describe('rank default commands', async() =>{
 
 describe('rank actual responses', async() =>{
     const command = 'rank';
-    const usr = 'Testy';
-    const usr2 = 'McTestface';
+    const usr = 'testy';
+    const usr2 = 'mctestface';
     const changed_r = Number(process.env.DEFAULT_RATING)+100;
     beforeEach(async () => {
         await truncate();
@@ -222,10 +222,10 @@ describe('rank actual responses', async() =>{
 describe('list command', async() =>{
     const target = '';
     const command = 'list';
-    const user = 'Testy';
-    const user2 = 'McTestface';
-    const user3 = 'Besty';
-    const user4 = 'McBestface';
+    const user = 'testy';
+    const user2 = 'mctestface';
+    const user3 = 'besty';
+    const user4 = 'mcbestface';
     const args = [];
     beforeEach(async () => {
         mockC = sinon.mock(client);
@@ -270,7 +270,7 @@ describe('list command', async() =>{
 describe('challenge command', async() =>{
     const target = '';
     const command = 'challenge';
-    const user = 'Testy';
+    const user = 'testy';
     const args = [];
     beforeEach(async () => {
         mockC = sinon.mock(client);
@@ -308,8 +308,8 @@ describe('challenge command', async() =>{
 describe('dropspot command', async() =>{
     const target = '';
     const command = 'dropspot';
-    const user = 'Testy';
-    const user2 = 'McTestyface';
+    const user = 'testy';
+    const user2 = 'mctestyface';
     const args = [];
     beforeEach(async () => {
         mockC = sinon.mock(client);
@@ -337,8 +337,8 @@ describe('dropspot command', async() =>{
 describe('spot command', async() =>{
     const target = '';
     const command = 'spot';
-    const user = 'Testy';
-    const user2 = 'McTestyface';
+    const user = 'testy';
+    const user2 = 'mctestyface';
     let args = [];
     beforeEach(async () => {
         mockC = sinon.mock(client);
@@ -374,8 +374,8 @@ describe('spot command', async() =>{
 describe('spot command with parameter user', async() =>{
     const target = '';
     const command = 'spot';
-    const user = 'Testy';
-    const user2 = 'McTestyface';
+    const user = 'testy';
+    const user2 = 'mctestyface';
     let args = [user2];
     beforeEach(async () => {
         mockC = sinon.mock(client);
@@ -457,6 +457,22 @@ describe('arenaid3 command', async() =>{
         Koth.aid3 = aid;
         mockC.expects("say").once().withExactArgs(target,
             `The Arena 3 ID is ${aid}.`);
+        await CommandList[command].handle(args, target, client , '');
+        mockC.verify();
+    });
+});
+
+describe('website command', async() =>{
+    const target = '';
+    const command = 'website';
+    const args = [];
+    beforeEach(async () => {
+        mockC = sinon.mock(client);
+        Koth.clear()
+    });
+    it('responds with the aid', async ()=>{
+        mockC.expects("say").once().withExactArgs(target,
+            `The website is https://jettelobot.herokuapp.com/`);
         await CommandList[command].handle(args, target, client , '');
         mockC.verify();
     });

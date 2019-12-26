@@ -37,6 +37,9 @@ let ratingHandle = async (args, target, client, usr)=>{
     if(args.length === 1){
         usr = atHandle(args[0]);
     }
+    else{
+        usr = atHandle(usr);
+    }
     const usr_r = await rating(usr);
     if(usr_r !== null){
         msg = `${usr}'s rating is ${usr_r}`;
@@ -71,6 +74,17 @@ let helpCom = new Command(
     help
 );
 
+let websiteHandle = function (args, target, client, usr) {
+    client.say(target, `The website is https://jettelobot.herokuapp.com/`)
+};
+
+let websiteCom = new Command(
+    'website',
+    `use '!website' to get a link to the website https://jettelobot.herokuapp.com/.`,
+    websiteHandle
+);
+
+
 let rankHandle =  async (args, target, client, usr)=>{
     let msg = `rank expects either '!rank' to find your rank or '!rank @username' to find another's rank`;
     if(args.length > 1){
@@ -79,8 +93,9 @@ let rankHandle =  async (args, target, client, usr)=>{
         return
     }
     if(args.length === 1){
-        usr = atHandle(args[0]);
+        usr = args[0];
     }
+    usr = atHandle(usr);
     const usr_r = await rating(usr);
     const usr_rank = await rank(usr);
     if(usr_r !== null && usr_rank[0] !== null){
@@ -126,6 +141,7 @@ let listCom = new Command(
     listHandle);
 
 let challengeHandle = async (args, target, client, usr)=> {
+    usr = atHandle(usr);
     if (Koth.open) {
         if (Koth.get(usr) === -1) {
             Koth.add(usr);
@@ -146,6 +162,7 @@ let challengeCom = new Command(
     challengeHandle);
 
 let dropspotHandle = async (args, target, client, usr)=> {
+    usr = atHandle(usr);
     if(Koth.get(usr) === -1) {
         client.say(target, `Cannot drop ${usr} as they are not in queue.`);
     }
@@ -164,6 +181,7 @@ let spotHandle = async (args, target, client, usr)=> {
     if(args.length === 1){
         usr = args[0]
     }
+    usr = atHandle(usr);
     const spot = Koth.get(usr);
     let msg = '';
     switch (spot) {
@@ -233,6 +251,8 @@ export let CommandList = {
     'base' : baseCom,
     'rating' : ratingCom,
     'help' : helpCom,
+    'website' : websiteCom,
+    'leaderboard' : websiteCom,
     'rank' : rankCom,
     'list' : listCom,
     'challenge' : challengeCom,

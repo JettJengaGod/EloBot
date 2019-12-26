@@ -86,7 +86,7 @@ let queueApped = (msg, queue) =>{
         msg += ` and ${queue[3]} is in the hole`
     }
     return msg
-}
+};
 let winHandle = async (args, target, client, usr)=> {
     let msg = `There needs to be at least a king and one challenger for someone to win.`;
     let queue = Koth.get();
