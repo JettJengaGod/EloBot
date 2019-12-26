@@ -218,6 +218,34 @@ let removeCom = new Command(
     `Use '!remove @username' as a mod to remove username from the list`,
     removeHandle);
 
+let moveHandle = async (args, target, client, usr)=> {
+
+    let msg = `Please call move like this '!move @username' or '!move @username [number]'`;
+    if(args.length === 2){
+        const username = atHandle(args[0]);
+        if(!Number.isInteger(Number(args[1]))){
+            msg = `Please use a number when calling '!move @username [number]'`
+        }
+        else {
+            const index = Math.min(Number(args[1]),Koth.get().length);
+            if (Koth.get(username) === -1) {
+                msg = `${username} is not in the list!`
+            }
+            else{
+                Koth.remove(username);
+                Koth.add(username, index);
+                msg = `${username} moved in list to position ${index}!`
+            }
+        }
+    }
+    client.say(target, msg);
+};
+
+let moveCom = new Command(
+    'move',
+    `Use '!move @username [number]' as a mod to move username to the spot in the list`,
+    moveHandle);
+
 let clearHandle = async (args, target, client, usr)=> {
     Koth.clear();
     client.say(target, `The list is now cleared!`);
@@ -250,6 +278,7 @@ export let ModCommandList = {
     'close': closeCom,
     'add': addCom,
     'remove' : removeCom,
+    'move' : moveCom,
     'clear' : clearCom
 };
 

@@ -401,6 +401,45 @@ describe('remove command', async() =>{
 });
 
 
+describe('move command', async() =>{
+    const target = '';
+    const command = 'move';
+    const user = 'testy';
+    const user2 = 'mctestface';
+    let args = [];
+    beforeEach(async () => {
+        mockC = sinon.mock(client);
+        Koth.clear();
+        Koth.add(user);
+    });
+    it('Does not remove user not in list', async ()=> {
+
+        let args = ['@'+user2, 1];
+        mockC.expects("say").once().withExactArgs(target,
+            `${user2} is not in the list!`);
+        await ModCommandList[command].handle(args, target, client, '');
+        mockC.verify();
+        expect(Koth.get(user2)).to.equal(-1)
+    });
+    it('removes user that is in list', async ()=> {
+
+        Koth.add(user2);
+        let args = ['@'+user, 0];
+        mockC.expects("say").once().withExactArgs(target,
+            `${user} moved in list to position ${0}!`);
+        await ModCommandList[command].handle(args, target, client, '');
+        mockC.verify();
+        mockC = sinon.mock(client);
+        expect(Koth.get(user)).to.equal(0);
+        args = ['@'+user, 1];
+        mockC.expects("say").once().withExactArgs(target,
+            `${user} moved in list to position ${1}!`);
+        await ModCommandList[command].handle(args, target, client, '');
+        mockC.verify();
+        expect(Koth.get(user)).to.equal(1)
+    });
+});
+
 describe('clear command', async() =>{
     const target = '';
     const command = 'clear';
