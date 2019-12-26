@@ -5,12 +5,13 @@ import sinonChai from 'sinon-chai';
 chai.use(sinonChai);
 const { expect } = require('chai');
 import truncate from "../scripts/truncate";
-import {addUser, rating, updateUser} from "../src/utils/database";
+import {addMatch, addUser, rating, updateUser} from "../src/utils/database";
 import models from "../src/models";
 import Koth from '../src/utils/koth'
 import {CommandList} from "../src/utils/commands";
 import dotenv from 'dotenv';
 dotenv.config();
+const starting_rating = Number(process.env.DEFAULT_RATING);
 
 
 let client = {
@@ -413,6 +414,36 @@ describe('clear command', async() =>{
         Koth.add('FEFR');
         mockC.expects("say").once().withExactArgs(target,
             `The list is now cleared!`);
+        await ModCommandList[command].handle(args, target, client , '');
+        mockC.verify();
+        expect(Koth.get().length).to.equal(0)
+    });
+});
+
+describe('Undoes a match', async() =>{
+    const target = '';
+    const command = 'undo';
+    let args = [];
+    const winner = 'testy';
+    const loser = 'mctestface';
+    const win_c = 14;
+    const lose_c = 14;
+    beforeEach(async () => {
+        mockC = sinon.mock(client);
+        Koth.clear();
+        await truncate();
+        await addUser(winner);
+        await addUser(loser);
+        await addMatch(winner, loser, starting_rating+win_c, starting_rating-lose_c, win_c, lose_c);
+
+        await updateUser(winner, starting_rating+win_c);
+        await updateUser(loser, starting_rating-lose_c);
+
+    });
+    it('clears the list', async ()=>{
+        mockC.expects("say").once().withExactArgs(target,
+            `Match between ${winner}(${starting_rating}) and ${loser} (${starting_rating} undone and ratings are updated!`
+        );
         await ModCommandList[command].handle(args, target, client , '');
         mockC.verify();
         expect(Koth.get().length).to.equal(0)

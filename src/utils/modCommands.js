@@ -1,7 +1,7 @@
 import {atHandle, score_match} from "./helpers";
 import Koth from './koth'
 import {CommandList} from './commands'
-import {updateUser, delUser} from "./database";
+import {updateUser, delUser, undoLastMatch} from "./database";
 
 function default_handle(args, target, client, usr) {
     client.say(target, 'This command isn\'t properly setup')
@@ -228,12 +228,24 @@ let clearCom = new Command(
     `Use '!clear' as a mod to clear the KotH list`,
     clearHandle);
 
+let undoHandle = async (args, target, client, usr)=> {
+    let last = await undoLastMatch();
+    let msg = `Match between ${last.winner}(${last.w_r - last.w_rc}) and ${last.loser} (${last.l_r + last.l_rc} undone and ratings are updated!`;
+    client.say(target, msg);
+};
+
+let undoCom = new Command(
+    'undo',
+    `Use '!open' as a mod to undo the last match.`,
+    undoHandle);
+
 export let ModCommandList = {
     'arenaid' : idCom,
     'arenaid2' : idCom2,
     'arenaid3' : idCom3,
     'win' : winCom,
     'lose' : loseCom,
+    'undo' : undoCom,
     'open' : openCom,
     'close': closeCom,
     'add': addCom,

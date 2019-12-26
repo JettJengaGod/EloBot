@@ -1,6 +1,6 @@
 import { assert } from 'chai';
 import models, {User, Match} from '../../src/models';
-import {addUser, rating, ratingAdd, updateUser, rank, top, topRank} from "../../src/utils/database";
+import {addUser, rating, ratingAdd, updateUser, rank, addMatch, topRank, undoLastMatch} from "../../src/utils/database";
 import truncate from '../../scripts/truncate';
 
 const dotenv = require('dotenv');
@@ -107,4 +107,79 @@ describe('Rank Db functions', () => {
 
         assert.deepEqual(res, [u1, u2])
     })
+});
+
+describe('Undo tests', () => {
+    const winner = 'testy';
+    const loser = 'mctestface';
+    const win_c = 14;
+    const lose_c = 14;
+    beforeEach(async () => {
+        await truncate();
+        await addUser(winner);
+        await addUser(loser);
+        await addMatch(winner, loser, starting_rating+win_c, starting_rating-lose_c, win_c, lose_c);
+
+        await updateUser(winner, starting_rating+win_c);
+        await updateUser(loser, starting_rating-lose_c);
+    });
+    it(`Deletes the most recent match`, async() =>{
+        await undoLastMatch();
+        const count = await models.Match.count();
+        assert.equal(count, 0);
+    });
+    it(`Deletes only most recent match`, async() =>{
+        await addMatch(winner, loser, starting_rating+win_c*2, starting_rating-lose_c*2, win_c, lose_c);
+        await undoLastMatch();
+        const count = await models.Match.count();
+        assert.equal(count, 1);
+    });
+    it(`Updates the users to proper ratings`, async() =>{
+        await undoLastMatch();
+        const win_r = await rating(winner);
+
+        const lose_r = await rating(loser);
+        assert.equal(starting_rating, win_r);
+        assert.equal(starting_rating, lose_r);
+    });
+    it(`Deletes two matches in a row`, async() =>{
+        await addMatch(winner, loser, starting_rating+win_c*2, starting_rating-lose_c*2, win_c, lose_c);
+
+        await updateUser(winner, starting_rating+win_c*2);
+        await updateUser(loser, starting_rating-lose_c*2);
+        await undoLastMatch();
+        let count = await models.Match.count();
+        assert.equal(count, 1);
+        let win_r = await rating(winner);
+        let lose_r = await rating(loser);
+        assert.equal(starting_rating+win_c, win_r);
+        assert.equal(starting_rating-win_c, lose_r);
+        await undoLastMatch();
+        count = await models.Match.count();
+        assert.equal(count, 0);
+        win_r = await rating(winner);
+        lose_r = await rating(loser);
+        assert.equal(starting_rating, win_r);
+        assert.equal(starting_rating, lose_r);
+    });
+    it(`Deletes two matches in a row swapping winners`, async() =>{
+        await addMatch(loser, winner, starting_rating, starting_rating, win_c, lose_c);
+
+        await updateUser(winner, starting_rating);
+        await updateUser(loser, starting_rating);
+        await undoLastMatch();
+        let count = await models.Match.count();
+        assert.equal(count, 1);
+        let win_r = await rating(winner);
+        let lose_r = await rating(loser);
+        assert.equal(starting_rating+win_c, win_r);
+        assert.equal(starting_rating-win_c, lose_r);
+        await undoLastMatch();
+        count = await models.Match.count();
+        assert.equal(count, 0);
+        win_r = await rating(winner);
+        lose_r = await rating(loser);
+        assert.equal(starting_rating, win_r);
+        assert.equal(starting_rating, lose_r);
+    });
 });

@@ -1,6 +1,6 @@
 // test/truncate.js
-import map from 'lodash/map';
-import { User } from '../src/models';
+import { User, Match } from '../src/models';
 export default async function truncate() {
+    await Match.sync({force : true});
     return await User.sync({force : true});
 }

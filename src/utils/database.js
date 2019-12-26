@@ -38,11 +38,15 @@ export const updateUser = async ( name, rating ) => {
 };
 
 export const addMatch = async (winner, loser, w_r, l_r, w_rc, l_rc) =>{
+    const w_u = await lookup(winner);
+    const l_u = await lookup(loser);
     return await Match.create({
         winner: winner,
+        winnerID : w_u.id,
         w_r: w_r,
         w_rc: w_rc,
         loser: loser,
+        loserID : l_u.id,
         l_r: l_r,
         l_rc: l_rc
         }
@@ -82,4 +86,24 @@ export const delUser = async (user) =>{
     await User.destroy({
         where: {tName: user}
     })
+};
+
+
+export const undoLastMatch = async()=>{
+    const match = await(Match.findOne({
+        order: [ [ 'createdAt', 'DESC' ]]
+    }));
+    if(match) {
+        const last = match;
+        await updateUser(last.winner, last.w_r - last.w_rc);
+        await updateUser(last.loser, last.l_r + last.l_rc);
+        await Match.destroy({
+            where: {
+                id : last.id
+            },
+            limit: 1,
+            order: [['createdAt', 'DESC']]
+        });
+        return last;
+    }
 };
