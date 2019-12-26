@@ -1,6 +1,7 @@
 import { addUser, rating, updateUser, ratingAdd, rank, topRank} from "./database";
 import {atHandle} from "./helpers";
 import Koth from './koth'
+import {ModCommandList} from "./modCommands";
 
 function default_handle(args, target, client, usr) {
     client.say(target, 'This command isn\'t properly setup')
@@ -58,7 +59,16 @@ let ratingCom = new Command(
 
 let help = function (args, target, client, usr) {
     if(args.length === 1){
-        client.say(target, CommandList[args[0]].help)
+        const command = args[0];
+        if(command in CommandList) {
+            client.say(target, CommandList[command].help)
+        }
+        else if(args[0] in ModCommandList){
+            client.say(target, ModCommandList[command].help)
+        }
+        else {
+            client.say(target, `Command: ${command} not recognized.`)
+        }
     }
     else if(args.length === 0){
         client.say(target, helpCom.help)

@@ -264,7 +264,7 @@ let undoHandle = async (args, target, client, usr)=> {
 
 let undoCom = new Command(
     'undo',
-    `Use '!open' as a mod to undo the last match.`,
+    `Use '!undo' as a mod to undo the last match.`,
     undoHandle);
 
 export let ModCommandList = {
