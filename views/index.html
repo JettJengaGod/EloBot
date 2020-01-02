@@ -4,13 +4,13 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Sequelize SQLite3 Example</title>
-    <meta name="description" content="Sequelize SQLite3 Example">
+    <title>T5 Ace Leaderboard</title>
+    <meta name="description" content="T5 Ace Leaderboard">
     <link id="favicon" rel="icon" href="https://hyperdev.com/favicon-app.ico" type="image/x-icon">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/style.scss">
   </head>
   <body>
     <header>
@@ -19,9 +19,36 @@
       </h1>
     </header>
 
+<!--    <div id="tableID">-->
+<!--      <table class="table-list" data-currentpage="1">-->
+<!--        <thead>-->
+<!--&lt;!&ndash;        <th><button type="button" class="sort" data-sort="rank">#<i class="caret"></i></button></th>&ndash;&gt;-->
+<!--        <th><button type="button" class="sort" data-sort="name">Description<i class="caret"></i></button></th>-->
+<!--        <th><button type="button" class="sort textright" data-sort="rating">Total<i class="caret"></i></button></th>-->
+<!--        </thead>-->
+<!--        &lt;!&ndash; IMPORTANT, class="list" must be on tbody &ndash;&gt;-->
+<!--        <tbody class="list">-->
+<!--        <tfoot>-->
+<!--        <tr>-->
+<!--          <td colspan="3" class="table-footer">-->
+<!--            <div class="table-pagination">-->
+<!--              <button type="button" class="btn-tablepage jTablePagePrev">&laquo;</button>-->
+<!--              <ul class="pagination"></ul>-->
+<!--              <button type="button" class="btn-tablepage jTablePageNext">&raquo;</button>-->
+<!--            </div>-->
+<!--            <div class="table-filter ">-->
+<!--              <input class="search " placeholder="Search ">-->
+<!--            </div>-->
+
+<!--          </td>-->
+<!--        </tr>-->
+<!--        </tfoot>-->
+<!--      </table>-->
+
+<!--    </div>-->
     <main>
-      
-      <p>Twitch User Name:</p>
+
+      <p>User Name Rating</p>
       <section class="tusers">
         <ol id="tusers">
         </ol>
@@ -31,10 +58,14 @@
 
 
     <!-- Your web-app is https, so your scripts need to be too -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/list.pagination.js/0.1.1/list.pagination.min.js"></script>
     <script src="https://code.jquery.com/jquery-2.2.1.min.js"
             integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00="
             crossorigin="anonymous"></script>
     <script src="/client.js"></script>
+    <script src="/list.js"></script>
 
   </body>
 </html>

@@ -258,7 +258,7 @@ let clearCom = new Command(
 
 let undoHandle = async (args, target, client, usr)=> {
     let last = await undoLastMatch();
-    let msg = `Match between ${last.winner}(${last.w_r - last.w_rc}) and ${last.loser} (${last.l_r + last.l_rc} undone and ratings are updated!`;
+    let msg = `Match between ${last.winner}(${last.w_r - last.w_rc}) and ${last.loser} (${last.l_r + last.l_rc}) undone and ratings are updated!`;
     client.say(target, msg);
 };
 

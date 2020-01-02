@@ -13,9 +13,9 @@ const model = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER
         }
     });
-    User.associate = function(models) {
-        models.User.hasMany(models.Match);
-    };
+    // User.associate = function(models) {
+    //     models.User.hasMany(models.Match);
+    // };
     return User
 
 };

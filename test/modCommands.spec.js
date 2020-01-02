@@ -481,7 +481,7 @@ describe('Undoes a match', async() =>{
     });
     it('clears the list', async ()=>{
         mockC.expects("say").once().withExactArgs(target,
-            `Match between ${winner}(${starting_rating}) and ${loser} (${starting_rating} undone and ratings are updated!`
+            `Match between ${winner}(${starting_rating}) and ${loser} (${starting_rating}) undone and ratings are updated!`
         );
         await ModCommandList[command].handle(args, target, client , '');
         mockC.verify();

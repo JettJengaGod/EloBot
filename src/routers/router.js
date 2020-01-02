@@ -15,6 +15,18 @@ router.get('/users', async function(req, res) {
     res.send(dbtUsers);
 });
 
+router.get('/fancy_users', async function(req, res) {
+    let dbtUsers=[];
+    let topUsers =  await topRank();
+    topUsers.forEach(function (user) {
+        dbtUsers.push({
+            name :   user.tName,
+            rating : user.rating
+        });
+    });
+    res.send(dbtUsers);
+});
+
 
 
 

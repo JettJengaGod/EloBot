@@ -66,6 +66,7 @@ export const rank = async (user) =>{
             break;
         }
     }
+    //TODO Calculate percentile here and return like silver or smth
     return [value, users.length]
 };
 
@@ -90,11 +91,12 @@ export const delUser = async (user) =>{
 
 
 export const undoLastMatch = async()=>{
-    const match = await(Match.findOne({
+    const match = await(Match.findAll({
+        limit: 1,
         order: [ [ 'createdAt', 'DESC' ]]
     }));
     if(match) {
-        const last = match;
+        const last = match[0];
         await updateUser(last.winner, last.w_r - last.w_rc);
         await updateUser(last.loser, last.l_r + last.l_rc);
         await Match.destroy({
