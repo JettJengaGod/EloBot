@@ -74,7 +74,7 @@ export let score_match = async(winner, loser) => {
     let w_rating = await ratingAdd(winner);
     let l_rating = await ratingAdd(loser);
     let es_w = elo.getExpected(w_rating, l_rating);
-    let es_l = elo.getExpected(l_rating, l_rating);
+    let es_l = elo.getExpected(l_rating, w_rating);
     // Get new actual values
     let new_w_r = elo.updateRating(es_w, 1, w_rating);
     let new_l_r = elo.updateRating(es_l, 0, l_rating);
