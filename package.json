@@ -33,7 +33,7 @@
     "regenerator-runtime": "^0.13.3",
     "request": "latest",
     "rimraf": "^3.0.0",
-    "sequelize": "^6.0.0",
+    "sequelize": "5.21.6",
     "sequelize-cli": "^5.5.1",
     "sequelize-heroku": "^2.1.4",
     "sinon": "^8.0.1",
