@@ -256,6 +256,17 @@ let topCom = new Command(
     `Use '!top to see the top 5 players`,
     topHandle);
 
+let kingHandle = async (args, target, client, usr)=> {
+    let msg = "The king has used : ";
+    msg = msg.concat(Koth.chars().join(","))
+    client.say(target, msg);
+};
+
+let kingCom = new Command(
+    'top',
+    `Use '!top to see the top 5 players`,
+    kingHandle);
+
 
 export let CommandList = {
     'base' : baseCom,
@@ -267,10 +278,16 @@ export let CommandList = {
     'list' : listCom,
     'challenge' : challengeCom,
     'chal' : challengeCom,
+    'join' : challengeCom,
     'dropspot' : dropspotCom,
     'spot' : spotCom,
+    'arena' : idCom,
+    'id' : idCom,
     'arenaid' : idCom,
     'arenaid2' : idCom2,
+    'arena2' : idCom2,
+    'id2' : idCom2,
     'arenaid3' : idCom3,
-    'top' : topCom
+    'top' : topCom,
+    'king' : kingCom
 };

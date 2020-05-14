@@ -35,6 +35,8 @@ class Koth {
             this._aid2 = 'not set';
             this._aid3 = 'not set';
             this._open = true;
+            this._clist = [];
+            this._streak = 0;
         }
 
         return Koth.instance;
@@ -67,9 +69,11 @@ class Koth {
 
     win(){
         this._queue.splice(1, 1);
+        this._streak += 1;
     }
-
     lose(){
+        this._streak = 1;
+        this._clist = [];
         this._queue.splice(0, 1);
     }
     clear(){
@@ -81,7 +85,15 @@ class Koth {
     openList(){
         this._open = true;
     }
-
+    add_char(c){
+        this._clist.push(c);
+    }
+    chars(){
+        return this._clist;
+    }
+    streak(){
+        return this._streak;
+    }
 }
 
 

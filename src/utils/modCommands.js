@@ -77,7 +77,7 @@ let idCom3 = new Command(
     idHandle3);
 let queueApped = (msg, queue) =>{
     if(queue.length>=2){
-        msg += `${queue[1]} is next (ArenaID: ${Koth.aid})`
+        msg += `: ${queue[1]} is next (ArenaID: ${Koth.aid})`
     }
     if(queue.length>=3){
         msg += ` ${queue[2]} is on deck`
@@ -87,6 +87,24 @@ let queueApped = (msg, queue) =>{
     }
     return msg
 };
+let skipHandle = async (args, target, client, usr)=> {
+    let msg = `There needs to be at least a king and one challenger for someone to be skipped.`;
+    let queue = Koth.get();
+    if(queue.length <2){
+        client.say(target, msg);
+        return
+    }
+    const skipped = queue[1];
+    Koth.win();
+    msg = `Skipped ${skipped} `;
+    msg = queueApped(msg, queue);
+    client.say(target, msg);
+};
+
+let skipCom = new Command(
+    'skip',
+    `Use '!skip' as a mod to skip the first challenger`,
+    skipHandle);
 let winHandle = async (args, target, client, usr)=> {
     let msg = `There needs to be at least a king and one challenger for someone to win.`;
     let queue = Koth.get();
@@ -100,7 +118,7 @@ let winHandle = async (args, target, client, usr)=> {
     const rChanges = await score_match(king, loser);
     Koth.win();
     msg = `The King ${king} ${rChanges['w_r']}(+${rChanges['win_r_c']}) defeated ${loser} ${rChanges['l_r']}(-${rChanges['lose_r_c']}) 
-            and remains King.  `;
+            Streak(${Koth.streak()}) and remains King.  `;
     msg = queueApped(msg, queue);
     client.say(target, msg);
 };
@@ -159,6 +177,51 @@ let closeCom = new Command(
     'close',
     `Use '!close' as a mod to close the KotH list`,
     closeHandle);
+let addListHandle = async (args, target, client, usr)=> {
+
+    let msg = `please call add like this '!add @username' or '!add @username [number]'`;
+    if(args.length === 1){
+        const username = atHandle(args[0]);
+        if(Koth.get(username) === -1){
+            Koth.add(username);
+            msg = `${username} added to list!`
+        }
+        else{
+            msg = `${username} is already in the list!`
+        }
+    }
+    else if(args.length >= 2){
+        msg = `Added `;
+        let extras = ``;
+        for(let i = 0; i< args.length; i ++){
+            let username = atHandle(args[i]);
+            if (Koth.get(username) === -1) {
+                Koth.add(username);
+                msg += `${username}, `
+            }
+            else{
+                extras += `${username}, `
+            }
+        }
+        if(msg == `Added `){
+            msg = ``;
+        }
+        else {
+            msg = msg.substring(0, msg.length - 2);
+        }
+        if(extras.length > 0){
+            extras = extras.substring(0, extras.length - 2);
+            msg += ` These Players are already in the list ` + extras
+        }
+    }
+    client.say(target, msg);
+};
+
+let addListCom = new Command(
+    'addlist',
+    `Use '!addlist' and a list of people to add a list queue`,
+    addListHandle);
+
 
 let addHandle = async (args, target, client, usr)=> {
 
@@ -267,6 +330,25 @@ let undoCom = new Command(
     `Use '!undo' as a mod to undo the last match.`,
     undoHandle);
 
+let charHandle = async (args, target, client, usr)=> {
+    let msg = 'You need to say a character';
+
+    if(args.length > 0){
+        let char = "";
+        for(let i = 0; i< args.length; i++){
+            char = char.concat(args[i]);
+        }
+        Koth.add_char(char);
+        msg = "Added ".concat(char);
+    }
+
+    client.say(target, msg);
+};
+let charCom = new Command(
+    'char',
+    `Use '!char character' as a mod to add username to the list`,
+    charHandle);
+
 export let ModCommandList = {
     'arenaid' : idCom,
     'arenaid2' : idCom2,
@@ -277,9 +359,12 @@ export let ModCommandList = {
     'open' : openCom,
     'close': closeCom,
     'add': addCom,
+    'addlist' : addListCom,
+    'skip': skipCom,
     'remove' : removeCom,
     'move' : moveCom,
-    'clear' : clearCom
+    'clear' : clearCom,
+    'char' : charCom
 };
 
 let setRatingHandle = async (args, target, client, usr)=> {
@@ -298,6 +383,9 @@ let setRatingHandle = async (args, target, client, usr)=> {
 
     client.say(target, msg);
     };
+
+
+
 
 let setRatingCom = new Command(
     'setrating',

@@ -7,6 +7,9 @@ import {JettCommands, ModCommandList} from "./modCommands";
 
 export function atHandle(name){
     name = name.toLowerCase();
+    if(name.endsWith(',')){
+        name = name.substring(0, name.length-1)
+    }
     if (name.startsWith('@')) {
         name = name.substring(1);
         return name;
