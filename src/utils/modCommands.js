@@ -95,7 +95,7 @@ let skipHandle = async (args, target, client, usr)=> {
         return
     }
     const skipped = queue[1];
-    Koth.win();
+    Koth.skip();
     msg = `Skipped ${skipped} `;
     msg = queueApped(msg, queue);
     client.say(target, msg);
@@ -191,6 +191,11 @@ let addListHandle = async (args, target, client, usr)=> {
         }
     }
     else if(args.length >= 2){
+        if(args[2] === '~~~~'){
+            args.splice(3,1);
+            args.splice(2,1);
+            args.splice(0,1);
+        }
         msg = `Added `;
         let extras = ``;
         for(let i = 0; i< args.length; i ++){
@@ -353,6 +358,10 @@ export let ModCommandList = {
     'arenaid' : idCom,
     'arenaid2' : idCom2,
     'arenaid3' : idCom3,
+    'arena' : idCom,
+    'id' : idCom,
+    'arena2' : idCom2,
+    'id2' : idCom2,
     'win' : winCom,
     'lose' : loseCom,
     'undo' : undoCom,

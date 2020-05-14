@@ -71,6 +71,9 @@ class Koth {
         this._queue.splice(1, 1);
         this._streak += 1;
     }
+    skip(){
+        this._queue.splice(1, 1);
+    }
     lose(){
         this._streak = 1;
         this._clist = [];

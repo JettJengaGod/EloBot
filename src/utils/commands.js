@@ -139,9 +139,12 @@ let listHandle = async (args, target, client, usr)=> {
             for(let i = 1; i < queue.length; i++){
                 msg += `${queue[i]}, `
             }
-            msg = msg.substring(0, msg.length - 2)
+            msg = msg.substring(0, msg.length - 2);
     }
 
+    if (Koth.get(usr) !== -1) {
+        msg += `\n You are at position ${Koth.get(usr)}.`
+    }
     await client.say(target, msg);
 };
 
@@ -155,9 +158,9 @@ let challengeHandle = async (args, target, client, usr)=> {
     if (Koth.open) {
         if (Koth.get(usr) === -1) {
             Koth.add(usr);
-            client.say(target, `${usr} has been added to the queue.`);
+            client.say(target, `${usr} has been added to the queue at position ${Koth.get(usr)}.`);
         } else {
-            client.say(target, `${usr} is already in the queue.`);
+            client.say(target, `${usr} is already in the queue at position ${Koth.get(usr)}.`);
         }
     }
     else{
