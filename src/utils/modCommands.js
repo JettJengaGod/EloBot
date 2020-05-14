@@ -1,7 +1,7 @@
 import {atHandle, score_match} from "./helpers";
 import Koth from './koth'
 import {CommandList} from './commands'
-import {updateUser, delUser, undoLastMatch} from "./database";
+import {updateUser, delUser, undoLastMatch, nukeDB} from "./database";
 
 function default_handle(args, target, client, usr) {
     client.say(target, 'This command isn\'t properly setup')
@@ -401,6 +401,16 @@ let setRatingCom = new Command(
     `Use '!add @username' as a mod to add username to the list`,
     setRatingHandle);
 
+let nukeHandle = async (args, target, client, usr)=> {
+    await nukeDB();
+    let msg = `All users deleted from database. I hope you're happy. D:`;
+    client.say(target, msg);
+};
+
+let nukeCom = new Command(
+    'nukeall',
+    `Only use nukeall if you know what you are doing`,
+    nukeHandle);
 
 let delHandle = async (args, target, client, usr)=> {
     let msg = `please call add like this '!deluser @username'`;
@@ -419,5 +429,6 @@ let delCom = new Command(
 
 export let JettCommands ={
     'setrating' : setRatingCom,
-    'deluser' : delCom
+    'deluser' : delCom,
+    'nukeall' : nukeCom,
 };

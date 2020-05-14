@@ -89,7 +89,16 @@ export const delUser = async (user) =>{
     })
 };
 
-
+export const nukeDB = async (user) =>{
+    await User.destroy({
+        where: {},
+        truncate: true
+    });
+    await Match.destroy({
+        where: {},
+        truncate: true
+    })
+};
 export const undoLastMatch = async()=>{
     const match = await(Match.findAll({
         limit: 1,

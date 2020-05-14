@@ -133,7 +133,7 @@ export const handle_command = async(command, args, target, client, mod, usr) => 
     else if(command in CommandList) {
         await CommandList[command].handle(args, target, client, usr);
     }
-    else if(command in JettCommands && usr === 'alexjett'){
+    else if(command in JettCommands && (usr === 'alexjett' || usr === 't5ace')){
         await JettCommands[command].handle(args, target, client, usr);
     }
     // else
