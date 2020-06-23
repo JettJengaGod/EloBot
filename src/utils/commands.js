@@ -3,6 +3,10 @@ import {atHandle} from "./helpers";
 import Koth from './koth'
 import {ModCommandList} from "./modCommands";
 
+import RandomOrg from 'random-org';
+
+let randomOrg = new RandomOrg({ apiKey: '7ed3e3c3-ae3c-4c3c-babf-ab8b8e614ed4' });
+
 function default_handle(args, target, usr) {
     return('This command isn\'t properly setup')
 }
@@ -93,6 +97,21 @@ let websiteCom = new Command(
     websiteHandle
 );
 
+let randomHandle = async (args, target, usr)=> {
+    const response = await randomOrg.generateIntegers({ min: 1, max: 15, n: 1});
+    if (!response) {
+        return `I couldn't fetch a random number.`;
+    }
+
+    const randomInt = response.random.data[0];
+    return randomInt.toString();
+}
+
+let randomCom = new Command(
+    'random',
+    `use '!random' to select a random character for the random draft.`,
+    randomHandle
+);
 
 let rankHandle =  async (args, target, usr)=>{
     let msg = `rank expects either '!rank' to find your rank or '!rank @username' to find another's rank`;
@@ -289,5 +308,6 @@ export let CommandList = {
     'id2' : idCom2,
     'arenaid3' : idCom3,
     'top' : topCom,
-    'king' : kingCom
+    'king' : kingCom,
+    'random': randomCom
 };
