@@ -2,11 +2,10 @@ import {CommandList} from "./commands.js";
 import { addUser, rating, updateUser, ratingAdd, addMatch} from "./database";
 import EloRank from 'elo-rank';
 let elo = new EloRank();
-import {king_chal} from "../bot_rewrite";
 import {JettCommands, ModCommandList} from "./modCommands";
 
 export function atHandle(name){
-    name = name.toLowerCase();
+    // name = name.toLowerCase();
     if(name.endsWith(',')){
         name = name.substring(0, name.length-1)
     }
@@ -17,60 +16,6 @@ export function atHandle(name){
         return name;
     }
 }
-
-function rank(args, target, client){
-    console.log(args);
-    let ret = "Invalid Rank command, rank takes in either nothing or '@username'";
-    if(args.length === 0){
-        ret = 'MyRank'
-    }
-    else if(args.length === 1){
-        const checkee = atHandle(args[0]);
-        if(checkee) {
-            ret = `Rank: ${checkee}`
-        }
-    }
-    client.say(target, ret);
-}
-
-export const handle_bot = async(msg, target, client, king, challenger) => {
-    if(msg.startsWith(': The King ')){
-        await bot_match(msg.substr(msg.indexOf('g')+2), target, client, king, challenger );
-    }
-    else if(msg.startsWith('Current King')|| msg.startsWith('King:')){
-        parseKingandChal(msg);
-    }
-};
-
-export let parseChal = (msg) => {
-    const postIndex = msg.indexOf('@', msg.indexOf('@') + 1);
-    if(postIndex>0)
-        return msg.substring(postIndex + 1, msg.indexOf(' ', postIndex+1));
-    else
-        return 'default c'
-};
-export let parseKingandChal = (msg) => {
-    if(msg.includes('The KotH line is empty.')){
-        king_chal();
-        return
-    }
-    const kingIndex = msg.indexOf('@');
-    const king = msg.substring(kingIndex + 1, msg.indexOf('.', kingIndex+1));
-    if(msg.includes('There are no challengers at the moment.')) {
-        king_chal(king);
-        return
-    }
-    const postIndex = msg.indexOf(':', msg.indexOf(':') + 2);
-    let chal;
-    if(msg.includes(',', postIndex)){
-        const subend = msg.indexOf(',', postIndex);
-        chal = msg.substring(postIndex+2, subend)
-    }
-    else{
-        chal = msg.substring(postIndex+2)
-    }
-    king_chal(king, chal);
-};
 
 export let score_match = async(winner, loser) => {
     // Set expected values if either party won
@@ -99,33 +44,6 @@ export let score_match = async(winner, loser) => {
 
 };
 
-let bot_match = async(msg, target, client, king, challenger) => {
-    let kingR = await ratingAdd(king);
-    let kingUser = {
-        name : king,
-        rating : kingR
-    };
-    let chalR = await ratingAdd(challenger);
-    let chalUser = {
-        name : challenger,
-        rating : chalR
-    };
-    let loser;
-    let winner;
-    if(msg.startsWith('falls')){
-        loser = kingUser;
-        winner = chalUser;
-    }
-    else if(msg.startsWith('wins')){
-        winner = kingUser;
-        loser = chalUser;
-    }
-
-    king_chal(winner.name, parseChal(msg));
-
-    await(score_match(winner, loser, target, client));
-
-};
 export const handle_command = async(command, args, target, client, mod, usr) => {
     let resp = "";
     if(command in ModCommandList && mod) {
