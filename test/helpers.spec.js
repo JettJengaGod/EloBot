@@ -44,6 +44,7 @@ describe('handles rank', function () {
     let client = {
         say: function (target, msg) {}
     };
+    const target = 'Test';
     let mockC;
     const command = 'rating';
     const usr = 'Testy';
@@ -52,23 +53,23 @@ describe('handles rank', function () {
     const changed_r = Number(process.env.DEFAULT_RATING)+100;
     beforeEach(async () => {
         await truncate();
-        await addUser(atHandle(usr));
-        await updateUser(atHandle(usr), changed_r);
+        await addUser(atHandle(usr), target);
+        await updateUser(atHandle(usr), changed_r, target);
         u1 = await models.User.findOne({where: { tName : usr}});
         mockC = sinon.mock(client);
     });
     it('!rating ', async() =>{
         const args = [];
-        mockC.expects("say").once().withExactArgs('',
+        mockC.expects("say").once().withExactArgs(target,
             `${atHandle(usr)}'s rating is ${changed_r}`);
-        await handle_command(command, args, '', client, false, usr);
+        await handle_command(command, args, target, client, false, usr);
         mockC.verify();
     });
     it('!rating @username', async() =>{
         const args = ['@'+usr2];
-        mockC.expects("say").once().withExactArgs('',
+        mockC.expects("say").once().withExactArgs(target,
             `${atHandle(usr2)} does not have a rating, play a match to get a rating`);
-        await handle_command(command, args, '', client, false, usr);
+        await handle_command(command, args, target, client, false, usr);
         mockC.verify();
     })
 });

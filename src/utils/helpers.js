@@ -17,10 +17,10 @@ export function atHandle(name){
     }
 }
 
-export let score_match = async(winner, loser) => {
+export let score_match = async(winner, loser, target) => {
     // Set expected values if either party won
-    let w_rating = await ratingAdd(winner);
-    let l_rating = await ratingAdd(loser);
+    let w_rating = await ratingAdd(winner, target);
+    let l_rating = await ratingAdd(loser, target);
     let es_w = elo.getExpected(w_rating, l_rating);
     let es_l = elo.getExpected(l_rating, w_rating);
     // Get new actual values
@@ -29,11 +29,11 @@ export let score_match = async(winner, loser) => {
     const w_rc = new_w_r-w_rating;
     const l_rc = l_rating - new_l_r;
     // Update users
-    let wup = updateUser(winner, new_w_r);
-    let lup = updateUser(loser, new_l_r);
-    let match = addMatch(winner, loser,
-        new_w_r, new_l_r, w_rc, l_rc);
-    await Promise.all([wup, lup, match]);
+    let wup = await updateUser(winner, new_w_r, target);
+    let lup = await updateUser(loser, new_l_r, target);
+    let match = await addMatch(winner, loser,
+        new_w_r, new_l_r, w_rc, l_rc, target);
+    // await Promise.all([wup, lup, match]);
     let ret = {
         'w_r' : new_w_r,
         'l_r' : new_l_r,

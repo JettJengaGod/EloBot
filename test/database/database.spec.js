@@ -8,13 +8,14 @@ dotenv.config();
 const starting_rating = Number(process.env.DEFAULT_RATING);
 User.sync();
 Match.sync();
+const stream = 'Test';
 describe('User DB Functions', () => {
     let addeduser;
     const username = 'Testy';
         beforeEach(async () => {
         await truncate();
-        await addUser(username);
-        addeduser = await models.User.findOne({where: { tName : username}});
+        await addUser(username,stream);
+        addeduser = await models.User.findOne({where: { tName : username, stream : stream}});
     });
 
     it('should add a user', async () => {
@@ -25,17 +26,17 @@ describe('User DB Functions', () => {
     });
 
     it('should return the proper rating', async () => {
-        let r = await rating(username);
+        let r = await rating(username,stream);
         assert.equal(r, starting_rating);
     });
 
     it('should return null when no user is found', async () => {
-        let r = await rating('bad user');
+        let r = await rating('bad user', stream);
         assert.equal(r, null);
     });
 
     it('should return rating if user is found', async () => {
-        let r = await ratingAdd(username);
+        let r = await ratingAdd(username, stream);
         const count = await models.User.count();
         assert.equal(count, 1);
         assert.equal(r, starting_rating)
@@ -43,15 +44,15 @@ describe('User DB Functions', () => {
     });
 
     it('should add user if no user is found', async () => {
-        let r = await ratingAdd('new_user');
+        let r = await ratingAdd('new_user', stream);
         const count = await models.User.count();
         assert.equal(count, 2);
         assert.equal(r, starting_rating)
     });
 
     it('should update users rating if user is found', async () => {
-        await updateUser(username, starting_rating+10);
-        let r = await rating(username);
+        await updateUser(username, starting_rating+10, stream);
+        let r = await rating(username, stream);
         console.log(starting_rating);
         assert.equal(r, starting_rating+10);
     });
@@ -68,14 +69,14 @@ describe('Rank Db functions', () => {
     let u1,u2,u3,u4;
     beforeEach(async () => {
         await truncate();
-        await addUser(user1);
-        await addUser(user2);
-        await addUser(user3);
-        await addUser(user4);
-        await updateUser(user1, starting_rating+400);
-        await updateUser(user2, starting_rating+300);
-        await updateUser(user3, starting_rating+200);
-        await updateUser(user4, starting_rating-100);
+        await addUser(user1, stream);
+        await addUser(user2, stream);
+        await addUser(user3, stream);
+        await addUser(user4, stream);
+        await updateUser(user1, starting_rating+400, stream);
+        await updateUser(user2, starting_rating+300, stream);
+        await updateUser(user3, starting_rating+200, stream);
+        await updateUser(user4, starting_rating-100, stream);
         u1 = await User.findOne({ where: { tName: user1 } });
         u2 = await User.findOne({ where: { tName: user2 } });
         u3 = await User.findOne({ where: { tName: user3 } });
@@ -83,27 +84,27 @@ describe('Rank Db functions', () => {
     });
 
     it('returns null when a user is not found', async() =>{
-        let res = await rank(nothere);
+        let res = await rank(nothere, stream);
         assert.equal(res[0], null);
         assert.equal(res[1], 4)
     });
 
     it('returns 1 when the top user is sent in', async() =>{
-        let res = await rank(user1);
+        let res = await rank(user1, stream);
         assert.deepEqual(res, [1, 4])
     });
 
     it('returns 2 when the top user is sent in', async() =>{
-        let res = await rank(user4);
+        let res = await rank(user4, stream);
         assert.deepEqual(res, [4, 4])
     });
 
     it('returns the list when asked for more than total', async() =>{
-        let res = await topRank(5);
+        let res = await topRank(5, stream);
         assert.deepEqual(res, [u1, u2, u3, u4])
     });
     it('returns the list when asked for more than total', async() =>{
-        let res = await topRank(2);
+        let res = await topRank(2, stream);
 
         assert.deepEqual(res, [u1, u2])
     })
@@ -116,69 +117,69 @@ describe('Undo tests', () => {
     const lose_c = 14;
     beforeEach(async () => {
         await truncate();
-        await addUser(winner);
-        await addUser(loser);
-        await addMatch(winner, loser, starting_rating+win_c, starting_rating-lose_c, win_c, lose_c);
+        await addUser(winner, stream);
+        await addUser(loser, stream);
+        await addMatch(winner, loser, starting_rating+win_c, starting_rating-lose_c, win_c, lose_c, stream);
 
-        await updateUser(winner, starting_rating+win_c);
-        await updateUser(loser, starting_rating-lose_c);
+        await updateUser(winner, starting_rating+win_c, stream);
+        await updateUser(loser, starting_rating-lose_c, stream);
     });
     it(`Deletes the most recent match`, async() =>{
-        await undoLastMatch();
+        await undoLastMatch(stream);
         const count = await models.Match.count();
         assert.equal(count, 0);
     });
     it(`Deletes only most recent match`, async() =>{
-        await addMatch(winner, loser, starting_rating+win_c*2, starting_rating-lose_c*2, win_c, lose_c);
-        await undoLastMatch();
+        await addMatch(winner, loser, starting_rating+win_c*2, starting_rating-lose_c*2, win_c, lose_c, stream);
+        await undoLastMatch(stream);
         const count = await models.Match.count();
         assert.equal(count, 1);
     });
     it(`Updates the users to proper ratings`, async() =>{
-        await undoLastMatch();
-        const win_r = await rating(winner);
+        await undoLastMatch(stream);
+        const win_r = await rating(winner, stream);
 
-        const lose_r = await rating(loser);
+        const lose_r = await rating(loser, stream);
         assert.equal(starting_rating, win_r);
         assert.equal(starting_rating, lose_r);
     });
     it(`Deletes two matches in a row`, async() =>{
-        await addMatch(winner, loser, starting_rating+win_c*2, starting_rating-lose_c*2, win_c, lose_c);
+        await addMatch(winner, loser, starting_rating+win_c*2, starting_rating-lose_c*2, win_c, lose_c, stream);
 
-        await updateUser(winner, starting_rating+win_c*2);
-        await updateUser(loser, starting_rating-lose_c*2);
-        await undoLastMatch();
+        await updateUser(winner, starting_rating+win_c*2, stream);
+        await updateUser(loser, starting_rating-lose_c*2, stream);
+        await undoLastMatch(stream);
         let count = await models.Match.count();
         assert.equal(count, 1);
-        let win_r = await rating(winner);
-        let lose_r = await rating(loser);
+        let win_r = await rating(winner, stream);
+        let lose_r = await rating(loser, stream);
         assert.equal(starting_rating+win_c, win_r);
         assert.equal(starting_rating-win_c, lose_r);
-        await undoLastMatch();
+        await undoLastMatch(stream);
         count = await models.Match.count();
         assert.equal(count, 0);
-        win_r = await rating(winner);
-        lose_r = await rating(loser);
+        win_r = await rating(winner, stream);
+        lose_r = await rating(loser, stream);
         assert.equal(starting_rating, win_r);
         assert.equal(starting_rating, lose_r);
     });
     it(`Deletes two matches in a row swapping winners`, async() =>{
-        await addMatch(loser, winner, starting_rating, starting_rating, win_c, lose_c);
+        await addMatch(loser, winner, starting_rating, starting_rating, win_c, lose_c, stream);
 
-        await updateUser(winner, starting_rating);
-        await updateUser(loser, starting_rating);
-        await undoLastMatch();
+        await updateUser(winner, starting_rating, stream);
+        await updateUser(loser, starting_rating, stream);
+        await undoLastMatch(stream);
         let count = await models.Match.count();
         assert.equal(count, 1);
-        let win_r = await rating(winner);
-        let lose_r = await rating(loser);
+        let win_r = await rating(winner, stream);
+        let lose_r = await rating(loser, stream);
         assert.equal(starting_rating+win_c, win_r);
         assert.equal(starting_rating-win_c, lose_r);
-        await undoLastMatch();
+        await undoLastMatch(stream);
         count = await models.Match.count();
         assert.equal(count, 0);
-        win_r = await rating(winner);
-        lose_r = await rating(loser);
+        win_r = await rating(winner, stream);
+        lose_r = await rating(loser, stream);
         assert.equal(starting_rating, win_r);
         assert.equal(starting_rating, lose_r);
     });

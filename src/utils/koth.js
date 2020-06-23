@@ -1,4 +1,4 @@
-class Koth {
+class hill {
     get open() {
         return this._open;
     }
@@ -27,19 +27,15 @@ class Koth {
     set aid(value) {
         this._aid = value;
     }
-    constructor(){
-        if(! Koth.instance){
-            this._queue = [];
-            Koth.instance = this;
-            this._aid = 'not set';
-            this._aid2 = 'not set';
-            this._aid3 = 'not set';
-            this._open = true;
-            this._clist = [];
-            this._streak = 0;
-        }
-
-        return Koth.instance;
+    constructor(streamer){
+        this._queue = [];
+        this._aid = 'not set';
+        this._aid2 = 'not set';
+        this._aid3 = 'not set';
+        this._open = true;
+        this._clist = [];
+        this._streak = 0;
+        this.streamer = streamer;
     }
 
     add(user, index = null){
@@ -100,7 +96,25 @@ class Koth {
     }
 }
 
+class Koth{
+    constructor(){
+        if(! Koth.instance){
+            this._hills = {};
+            Koth.instance = this;
+        }
 
+        return Koth.instance;
+    };
+    addHill(streamer){
+        this._hills[streamer] = new hill(streamer);
+    }
+    hill(streamer){
+        if(!(streamer in this._hills)){
+            this._hills[streamer] = new hill(streamer);
+        }
+        return this._hills[streamer];
+    }
+}
 const instance = new Koth();
 
 export default instance;

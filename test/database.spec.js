@@ -26,7 +26,7 @@ describe('add user', () =>{
     context('user does not exist', () => {
         before(async () => {
             mockModels.User.findOne.resolves(undefined);
-            result = await database.addUser(tName)
+            result = await database.addUser(tName, "Test")
         });
         after(resetStubs);
         it('called User.findOne', () => {
@@ -35,7 +35,8 @@ describe('add user', () =>{
         it("added to DB", () => {
             expect(mockModels.User.create).to.have.been.calledWith({
                 tName: tName,
-                rating: starting_rating
+                rating: starting_rating,
+                stream: "Test"
                 }
             )
         });

@@ -29,6 +29,9 @@ const model = (sequelize, DataTypes) => {
         l_rc: { // Loser of the match's rating change
             type: DataTypes.INTEGER
         },
+        stream: { // Stream the match was on
+            type: DataTypes.STRING
+        }
     });
 
     Match.associate = function(models) {

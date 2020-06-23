@@ -11,7 +11,18 @@ const model = (sequelize, DataTypes) => {
         },
         rating: {
             type: DataTypes.INTEGER
+        },
+        stream: {
+            type: DataTypes.STRING
         }
+    },
+    {
+        indexes: [
+            {
+                unique: true,
+                fields: ['tName', 'stream']
+            }
+        ]
     });
     // User.associate = function(models) {
     //     models.User.hasMany(models.Match);

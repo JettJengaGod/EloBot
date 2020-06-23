@@ -40,7 +40,7 @@ let ratingHandle = async (args, target, usr)=>{
     else{
         usr = atHandle(usr);
     }
-    const usr_r = await rating(usr);
+    const usr_r = await rating(usr,target);
     if(usr_r !== null){
         msg = `${usr}'s rating is ${usr_r}`;
     }
@@ -104,8 +104,8 @@ let rankHandle =  async (args, target, usr)=>{
         usr = args[0];
     }
     usr = atHandle(usr);
-    const usr_r = await rating(usr);
-    const usr_rank = await rank(usr);
+    const usr_r = await rating(usr, target);
+    const usr_rank = await rank(usr, target);
     if(usr_r !== null && usr_rank[0] !== null){
         msg = `${usr}'s rank is ${usr_rank[0]}/${usr_rank[1]} (${usr_r})`;
     }
@@ -124,7 +124,7 @@ let rankCom = new Command(
 
 let listHandle = async (args, target, usr)=> {
     let msg = '';
-    let queue = Koth.get();
+    let queue = Koth.hill(target).get();
     switch (queue.length) {
         case 0:
             msg = `No users in the list, use '!challenge' to join the list.`;
@@ -140,8 +140,8 @@ let listHandle = async (args, target, usr)=> {
             msg = msg.substring(0, msg.length - 2);
     }
 
-    if (Koth.get(usr) !== -1) {
-        msg += ` You are at position ${Koth.get(usr)}.`
+    if (Koth.hill(target).get(usr) !== -1) {
+        msg += ` You are at position ${Koth.hill(target).get(usr)}.`
     }
     return msg;
 };
@@ -153,12 +153,12 @@ let listCom = new Command(
 
 let challengeHandle = async (args, target, usr)=> {
     usr = atHandle(usr);
-    if (Koth.open) {
-        if (Koth.get(usr) === -1) {
-            Koth.add(usr);
-            return `${usr} has been added to the queue at position ${Koth.get(usr)}.`;
+    if (Koth.hill(target).open) {
+        if (Koth.hill(target).get(usr) === -1) {
+            Koth.hill(target).add(usr);
+            return `${usr} has been added to the queue at position ${Koth.hill(target).get(usr)}.`;
         } else {
-            return `${usr} is already in the queue at position ${Koth.get(usr)}.`;
+            return `${usr} is already in the queue at position ${Koth.hill(target).get(usr)}.`;
         }
     }
     else{
@@ -174,11 +174,11 @@ let challengeCom = new Command(
 
 let dropspotHandle = async (args, target, usr)=> {
     usr = atHandle(usr);
-    if(Koth.get(usr) === -1) {
+    if(Koth.hill(target).get(usr) === -1) {
         return `Cannot drop ${usr} as they are not in queue.`;
     }
     else{
-        Koth.remove(usr);
+        Koth.hill(target).remove(usr);
         return `${usr} has left the queue.`;
     }
 };
@@ -193,7 +193,7 @@ let spotHandle = async (args, target, usr)=> {
         usr = args[0]
     }
     usr = atHandle(usr);
-    const spot = Koth.get(usr);
+    const spot = Koth.hill(target).get(usr);
     let msg = '';
     switch (spot) {
         case 0:
@@ -215,7 +215,7 @@ let spotCom = new Command(
 
 
 let idHandle = async (args, target, usr)=> {
-    return `The Arena ID is ${Koth.aid}.`;
+    return `The Arena ID is ${Koth.hill(target).aid}.`;
 };
 
 let idCom = new Command(
@@ -224,7 +224,7 @@ let idCom = new Command(
     idHandle);
 
 let idHandle2 = async (args, target, usr)=> {
-    return `The Arena 2 ID is ${Koth.aid2}.`;
+    return `The Arena 2 ID is ${Koth.hill(target).aid2}.`;
 };
 //TODO refactor arenaid2 and 3
 let idCom2 = new Command(
@@ -233,7 +233,7 @@ let idCom2 = new Command(
     idHandle2);
 
 let idHandle3 = async (args, target, usr)=> {
-    return `The Arena 3 ID is ${Koth.aid3}.`;
+    return `The Arena 3 ID is ${Koth.hill(target).aid3}.`;
 };
 
 let idCom3 = new Command(
@@ -258,7 +258,7 @@ let topCom = new Command(
 
 let kingHandle = async (args, target, usr)=> {
     let msg = "The king has used : ";
-    msg = msg.concat(Koth.chars().join(", "))
+    msg = msg.concat(Koth.hill(target).chars().join(", "))
     return msg;
 };
 
@@ -272,8 +272,8 @@ export let CommandList = {
     'base' : baseCom,
     'rating' : ratingCom,
     'help' : helpCom,
-    // 'website' : websiteCom,
-    // 'leaderboard' : websiteCom,
+    'website' : websiteCom,
+    'leaderboard' : websiteCom,
     'rank' : rankCom,
     'list' : listCom,
     'challenge' : challengeCom,

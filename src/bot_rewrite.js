@@ -1,6 +1,7 @@
 import models from './models';
 models.sequelize.sync();
 
+import Koth from './utils/koth'
 
 // Setup requests to redirect to the index page
 import express from 'express'
@@ -43,12 +44,10 @@ if(process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== undefined) {
 // Register our event handlers (defined below)
     client.on('message', onMessageHandler);
     client.on('connected', onConnectedHandler);
-
 // Connect to Twitch:
     client.connect();
 }
 
-const koth_bot = 'smash4fefweubot';
 import {handle_command} from './utils/helpers';
 // Called every time a message comes in
 function onMessageHandler (target, context, msg, self) {
@@ -71,6 +70,7 @@ function onConnectedHandler (addr, port) {
     client.say(process.env.CHANNEL_NAME, 'I have just been restarted for some reason. ' +
         'if there were players in the queue, they need to be re added.')
     console.log(`* Connected to ${addr}:${port}`);
+    Koth.addHill(process.env.CHANNEL_NAME);
 }
 
 
