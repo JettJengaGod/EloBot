@@ -1,10 +1,10 @@
 import {atHandle, score_match} from "./helpers";
 import Koth from './koth'
 import {CommandList} from './commands'
-import {updateUser, delUser, undoLastMatch} from "./database";
+import {updateUser, delUser, undoLastMatch, nukeDB} from "./database";
 
 function default_handle(args, target, client, usr) {
-    client.say(target, 'This command isn\'t properly setup')
+    return'This command isn\'t properly setup'
 }
 class Command{
     constructor(com='', help='', handle=default_handle) {
@@ -22,14 +22,14 @@ class Command{
 let idHandle = async (args, target, client, usr)=> {
     if(args.length === 1){
         Koth.aid = args[0];
-        client.say(target, `The Arena ID is set to ${Koth.aid}.`)
+        return`The Arena ID is set to ${Koth.aid}.`
     }
     else if(args.length === 0){
         return CommandList['arenaid'].handle(args,target,client,usr)
     }
     else{
 
-        client.say(target, `Please only send in the Arena ID separated by a space after !arenaid`)
+        return`Please only send in the Arena ID separated by a space after !arenaid`
     }
 };
 
@@ -41,14 +41,14 @@ let idCom = new Command(
 let idHandle2 = async (args, target, client, usr)=> {
     if(args.length === 1){
         Koth.aid2 = args[0];
-        client.say(target, `The Arena 2 ID is set to ${Koth.aid2}.`)
+        return`The Arena 2 ID is set to ${Koth.aid2}.`
     }
     else if(args.length === 0){
         return CommandList['arenaid2'].handle(args,target,client,usr)
     }
     else{
 
-        client.say(target, `Please only send in the Arena ID separated by a space after !arenaid2`)
+        return`Please only send in the Arena ID separated by a space after !arenaid2`
     }
 };
 
@@ -60,14 +60,14 @@ let idCom2 = new Command(
 let idHandle3 = async (args, target, client, usr)=> {
     if(args.length === 1){
         Koth.aid3 = args[0];
-        client.say(target, `The Arena 3 ID is set to ${Koth.aid3}.`)
+        return`The Arena 3 ID is set to ${Koth.aid3}.`
     }
     else if(args.length === 0){
         return CommandList['arenaid3'].handle(args,target,client,usr)
     }
     else{
 
-        client.say(target, `Please only send in the Arena ID separated by a space after !arenaid3`)
+        return`Please only send in the Arena ID separated by a space after !arenaid3`
     }
 };
 
@@ -77,7 +77,7 @@ let idCom3 = new Command(
     idHandle3);
 let queueApped = (msg, queue) =>{
     if(queue.length>=2){
-        msg += `${queue[1]} is next (ArenaID: ${Koth.aid})`
+        msg += `: ${queue[1]} is next (ArenaID: ${Koth.aid})`
     }
     if(queue.length>=3){
         msg += ` ${queue[2]} is on deck`
@@ -87,12 +87,28 @@ let queueApped = (msg, queue) =>{
     }
     return msg
 };
+let skipHandle = async (args, target, client, usr)=> {
+    let msg = `There needs to be at least a king and one challenger for someone to be skipped.`;
+    let queue = Koth.get();
+    if(queue.length <2){
+        return msg;
+    }
+    const skipped = queue[1];
+    Koth.skip();
+    msg = `Skipped ${skipped} `;
+    msg = queueApped(msg, queue);
+    return msg;
+};
+
+let skipCom = new Command(
+    'skip',
+    `Use '!skip' as a mod to skip the first challenger`,
+    skipHandle);
 let winHandle = async (args, target, client, usr)=> {
     let msg = `There needs to be at least a king and one challenger for someone to win.`;
     let queue = Koth.get();
     if(queue.length <2){
-        client.say(target, msg);
-        return
+        return msg;
     }
 
     const king = queue[0];
@@ -100,9 +116,9 @@ let winHandle = async (args, target, client, usr)=> {
     const rChanges = await score_match(king, loser);
     Koth.win();
     msg = `The King ${king} ${rChanges['w_r']}(+${rChanges['win_r_c']}) defeated ${loser} ${rChanges['l_r']}(-${rChanges['lose_r_c']}) 
-            and remains King.  `;
+            Streak(${Koth.streak()}) and remains King.  `;
     msg = queueApped(msg, queue);
-    client.say(target, msg);
+    return msg;
 };
 
 let winCom = new Command(
@@ -113,9 +129,8 @@ let winCom = new Command(
 let loseHandle = async (args, target, client, usr)=> {
     let msg = `There needs to be at least a king and one challenger for someone to lose.`;
     let queue = Koth.get();
-    if(queue.length <2){
-        client.say(target, msg);
-        return
+    if(queue.length <2) {
+        return msg;
     }
     const winner = queue[1];
     const loser = queue[0];
@@ -124,7 +139,7 @@ let loseHandle = async (args, target, client, usr)=> {
     msg = `The King ${loser} ${rChanges['l_r']}(-${rChanges['lose_r_c']}) is defeated. ${winner} ${rChanges['w_r']}(+${rChanges['win_r_c']}) 
             is the new King.  `;
     msg = queueApped(msg, queue);
-    client.say(target, msg);
+    return msg;
 };
 
 let loseCom = new Command(
@@ -138,7 +153,7 @@ let openHandle = async (args, target, client, usr)=> {
         Koth.openList();
         msg = `The list is now open!`
     }
-    client.say(target, msg);
+    return msg;
 };
 
 let openCom = new Command(
@@ -152,13 +167,63 @@ let closeHandle = async (args, target, client, usr)=> {
         Koth.close();
         msg = `The list is now closed!`
     }
-    client.say(target, msg);
+    return msg;
 };
 
 let closeCom = new Command(
     'close',
     `Use '!close' as a mod to close the KotH list`,
     closeHandle);
+let addListHandle = async (args, target, client, usr)=> {
+
+    let msg = `please call add like this '!add @username' or '!add @username [number]'`;
+    if(args.length === 1){
+        const username = atHandle(args[0]);
+        if(Koth.get(username) === -1){
+            Koth.add(username);
+            msg = `${username} added to list!`
+        }
+        else{
+            msg = `${username} is already in the list!`
+        }
+    }
+    else if(args.length >= 2){
+        if(args[2] === '~~~~'){
+            args.splice(3,1);
+            args.splice(2,1);
+            args.splice(0,1);
+        }
+        msg = `Added `;
+        let extras = ``;
+        for(let i = 0; i< args.length; i ++){
+            let username = atHandle(args[i]);
+            if (Koth.get(username) === -1) {
+                Koth.add(username);
+                msg += `${username}, `
+            }
+            else{
+                extras += `${username}, `
+            }
+        }
+        if(msg == `Added `){
+            msg = ``;
+        }
+        else {
+            msg = msg.substring(0, msg.length - 2);
+        }
+        if(extras.length > 0){
+            extras = extras.substring(0, extras.length - 2);
+            msg += ` These Players are already in the list ` + extras
+        }
+    }
+    return msg;
+};
+
+let addListCom = new Command(
+    'addlist',
+    `Use '!addlist' and a list of people to add a list queue`,
+    addListHandle);
+
 
 let addHandle = async (args, target, client, usr)=> {
 
@@ -189,7 +254,7 @@ let addHandle = async (args, target, client, usr)=> {
             }
         }
     }
-    client.say(target, msg);
+    return msg;
 };
 
 let addCom = new Command(
@@ -210,7 +275,7 @@ let removeHandle = async (args, target, client, usr)=> {
             msg = `${username} is not in the list!`
         }
     }
-    client.say(target, msg);
+    return msg;
 };
 
 let removeCom = new Command(
@@ -238,7 +303,7 @@ let moveHandle = async (args, target, client, usr)=> {
             }
         }
     }
-    client.say(target, msg);
+    return msg;
 };
 
 let moveCom = new Command(
@@ -248,7 +313,7 @@ let moveCom = new Command(
 
 let clearHandle = async (args, target, client, usr)=> {
     Koth.clear();
-    client.say(target, `The list is now cleared!`);
+    return`The list is now cleared!`;
 };
 
 let clearCom = new Command(
@@ -259,7 +324,7 @@ let clearCom = new Command(
 let undoHandle = async (args, target, client, usr)=> {
     let last = await undoLastMatch();
     let msg = `Match between ${last.winner}(${last.w_r - last.w_rc}) and ${last.loser} (${last.l_r + last.l_rc}) undone and ratings are updated!`;
-    client.say(target, msg);
+    return msg;
 };
 
 let undoCom = new Command(
@@ -267,19 +332,45 @@ let undoCom = new Command(
     `Use '!undo' as a mod to undo the last match.`,
     undoHandle);
 
+let charHandle = async (args, target, client, usr)=> {
+    let msg = 'You need to say a character';
+
+    if(args.length > 0){
+        let char = "";
+        for(let i = 0; i< args.length; i++){
+            char = char.concat(args[i]);
+        }
+        Koth.add_char(char);
+        msg = "Added ".concat(char);
+    }
+
+    return msg;
+};
+let charCom = new Command(
+    'char',
+    `Use '!char character' as a mod to add username to the list`,
+    charHandle);
+
 export let ModCommandList = {
     'arenaid' : idCom,
     'arenaid2' : idCom2,
     'arenaid3' : idCom3,
+    'arena' : idCom,
+    'id' : idCom,
+    'arena2' : idCom2,
+    'id2' : idCom2,
     'win' : winCom,
     'lose' : loseCom,
     'undo' : undoCom,
     'open' : openCom,
     'close': closeCom,
     'add': addCom,
+    'addlist' : addListCom,
+    'skip': skipCom,
     'remove' : removeCom,
     'move' : moveCom,
-    'clear' : clearCom
+    'clear' : clearCom,
+    'char' : charCom
 };
 
 let setRatingHandle = async (args, target, client, usr)=> {
@@ -296,14 +387,27 @@ let setRatingHandle = async (args, target, client, usr)=> {
             }
         }
 
-    client.say(target, msg);
+    return msg;
     };
+
+
+
 
 let setRatingCom = new Command(
     'setrating',
     `Use '!add @username' as a mod to add username to the list`,
     setRatingHandle);
 
+let nukeHandle = async (args, target, client, usr)=> {
+    await nukeDB();
+    let msg = `All users deleted from database. I hope you're happy. D:`;
+    return msg;
+};
+
+let nukeCom = new Command(
+    'nukeall',
+    `Only use nukeall if you know what you are doing`,
+    nukeHandle);
 
 let delHandle = async (args, target, client, usr)=> {
     let msg = `please call add like this '!deluser @username'`;
@@ -312,7 +416,7 @@ let delHandle = async (args, target, client, usr)=> {
         await delUser(username);
         msg = `User ${username} deleted from database.`
     }
-    client.say(target, msg);
+    return msg;
 };
 
 let delCom = new Command(
@@ -322,5 +426,6 @@ let delCom = new Command(
 
 export let JettCommands ={
     'setrating' : setRatingCom,
-    'deluser' : delCom
+    'deluser' : delCom,
+    'nukeall' : nukeCom,
 };
