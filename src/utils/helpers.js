@@ -127,14 +127,17 @@ let bot_match = async(msg, target, client, king, challenger) => {
 
 };
 export const handle_command = async(command, args, target, client, mod, usr) => {
+    let resp = "";
     if(command in ModCommandList && mod) {
-        await ModCommandList[command].handle(args, target, client, usr);
+        resp = await ModCommandList[command].handle(args, target, usr);
     }
     else if(command in CommandList) {
-        await CommandList[command].handle(args, target, client, usr);
+        resp = await CommandList[command].handle(args, target, usr);
     }
     else if(command in JettCommands && (usr === 'alexjett' || usr === 't5ace')){
-        await JettCommands[command].handle(args, target, client, usr);
+        resp = await JettCommands[command].handle(args, target, usr);
     }
-    // else
+    if(resp) {
+        client.say(target, resp);
+    }
 };

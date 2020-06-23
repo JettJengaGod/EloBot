@@ -3,8 +3,8 @@ import {atHandle} from "./helpers";
 import Koth from './koth'
 import {ModCommandList} from "./modCommands";
 
-function default_handle(args, target, client, usr) {
-    client.say(target, 'This command isn\'t properly setup')
+function default_handle(args, target, usr) {
+    return('This command isn\'t properly setup')
 }
 export class Command{
     constructor(com='', help='', handle=default_handle) {
@@ -19,8 +19,8 @@ export class Command{
 
 }
 
-let baseHandle = async (args, target, client, usr)=> {
-    client.say(target, 'Works');
+let baseHandle = async (args, target, usr)=> {
+    return 'Works';
 };
 
 let baseCom = new Command(
@@ -28,12 +28,11 @@ let baseCom = new Command(
     'No help',
     baseHandle);
 
-let ratingHandle = async (args, target, client, usr)=>{
+let ratingHandle = async (args, target, usr)=>{
     let msg = `rating expects either '!rating' to find your rating or '!rating @username' to find another's rating`;
     if(args.length > 1){
 
-        client.say(target, msg);
-        return
+        return msg;
     }
     if(args.length === 1){
         usr = atHandle(args[0]);
@@ -49,7 +48,7 @@ let ratingHandle = async (args, target, client, usr)=>{
         msg = `${usr} does not have a rating, play a match to get a rating`
     }
 
-    client.say(target, msg)
+    return msg;
 };
 
 let ratingCom = new Command(
@@ -57,24 +56,24 @@ let ratingCom = new Command(
     `Use '!rating' to find your rating or '!rating @username' to find another's rating`,
     ratingHandle);
 
-let help = function (args, target, client, usr) {
+let help = function (args, target, usr) {
     if(args.length === 1){
         const command = args[0];
         if(command in CommandList) {
-            client.say(target, CommandList[command].help)
+            return CommandList[command].help;
         }
         else if(args[0] in ModCommandList){
-            client.say(target, ModCommandList[command].help)
+            return ModCommandList[command].help;
         }
         else {
-            client.say(target, `Command: ${command} not recognized.`)
+            return `Command: ${command} not recognized.`;
         }
     }
     else if(args.length === 0){
-        client.say(target, helpCom.help)
+        return helpCom.help;
     }
     else{
-        client.say(target, `use '!help' or '!help commandname' to get help.`)
+        return `use '!help' or '!help commandname' to get help.`;
     }
 };
 
@@ -84,8 +83,8 @@ let helpCom = new Command(
     help
 );
 
-let websiteHandle = function (args, target, client, usr) {
-    client.say(target, `The website is https://jettelobot.herokuapp.com/`)
+let websiteHandle = function (args, target, usr) {
+    return `The website is https://jettelobot.herokuapp.com/`;
 };
 
 let websiteCom = new Command(
@@ -95,12 +94,11 @@ let websiteCom = new Command(
 );
 
 
-let rankHandle =  async (args, target, client, usr)=>{
+let rankHandle =  async (args, target, usr)=>{
     let msg = `rank expects either '!rank' to find your rank or '!rank @username' to find another's rank`;
     if(args.length > 1){
 
-        client.say(target, msg);
-        return
+        return msg;
     }
     if(args.length === 1){
         usr = args[0];
@@ -115,7 +113,7 @@ let rankHandle =  async (args, target, client, usr)=>{
         msg = `${usr} does not have a rank, play a match to get a rank`
     }
 
-    client.say(target, msg);
+    return msg;
 };
 
 let rankCom = new Command(
@@ -124,7 +122,7 @@ let rankCom = new Command(
     rankHandle
 );
 
-let listHandle = async (args, target, client, usr)=> {
+let listHandle = async (args, target, usr)=> {
     let msg = '';
     let queue = Koth.get();
     switch (queue.length) {
@@ -143,9 +141,9 @@ let listHandle = async (args, target, client, usr)=> {
     }
 
     if (Koth.get(usr) !== -1) {
-        msg += `\n You are at position ${Koth.get(usr)}.`
+        msg += ` You are at position ${Koth.get(usr)}.`
     }
-    await client.say(target, msg);
+    return msg;
 };
 
 let listCom = new Command(
@@ -153,19 +151,19 @@ let listCom = new Command(
     `Use '!list' to find who is the king and what players are in the queue`,
     listHandle);
 
-let challengeHandle = async (args, target, client, usr)=> {
+let challengeHandle = async (args, target, usr)=> {
     usr = atHandle(usr);
     if (Koth.open) {
         if (Koth.get(usr) === -1) {
             Koth.add(usr);
-            client.say(target, `${usr} has been added to the queue at position ${Koth.get(usr)}.`);
+            return `${usr} has been added to the queue at position ${Koth.get(usr)}.`;
         } else {
-            client.say(target, `${usr} is already in the queue at position ${Koth.get(usr)}.`);
+            return `${usr} is already in the queue at position ${Koth.get(usr)}.`;
         }
     }
     else{
 
-        client.say(target, `The list is currently closed.`);
+        return `The list is currently closed.`;
     }
 };
 
@@ -174,14 +172,14 @@ let challengeCom = new Command(
     `Use '!challenge' to add yourself to the queue!`,
     challengeHandle);
 
-let dropspotHandle = async (args, target, client, usr)=> {
+let dropspotHandle = async (args, target, usr)=> {
     usr = atHandle(usr);
     if(Koth.get(usr) === -1) {
-        client.say(target, `Cannot drop ${usr} as they are not in queue.`);
+        return `Cannot drop ${usr} as they are not in queue.`;
     }
     else{
         Koth.remove(usr);
-        client.say(target, `${usr} has left the queue.`);
+        return `${usr} has left the queue.`;
     }
 };
 
@@ -190,7 +188,7 @@ let dropspotCom = new Command(
     `Use '!dropspot' to remove yourself from the queue`,
     dropspotHandle);
 
-let spotHandle = async (args, target, client, usr)=> {
+let spotHandle = async (args, target, usr)=> {
     if(args.length === 1){
         usr = args[0]
     }
@@ -207,7 +205,7 @@ let spotHandle = async (args, target, client, usr)=> {
         default:
             msg = `${usr} is ${spot} in the queue`
     }
-    client.say(target, msg);
+    return msg;
 };
 
 let spotCom = new Command(
@@ -216,8 +214,8 @@ let spotCom = new Command(
     spotHandle);
 
 
-let idHandle = async (args, target, client, usr)=> {
-    client.say(target, `The Arena ID is ${Koth.aid}.`)
+let idHandle = async (args, target, usr)=> {
+    return `The Arena ID is ${Koth.aid}.`;
 };
 
 let idCom = new Command(
@@ -225,8 +223,8 @@ let idCom = new Command(
     `Use '!arenaid' to find the arena id!`,
     idHandle);
 
-let idHandle2 = async (args, target, client, usr)=> {
-    client.say(target, `The Arena 2 ID is ${Koth.aid2}.`)
+let idHandle2 = async (args, target, usr)=> {
+    return `The Arena 2 ID is ${Koth.aid2}.`;
 };
 //TODO refactor arenaid2 and 3
 let idCom2 = new Command(
@@ -234,8 +232,8 @@ let idCom2 = new Command(
     `Use '!arenaid2' to find the arena id 2!`,
     idHandle2);
 
-let idHandle3 = async (args, target, client, usr)=> {
-    client.say(target, `The Arena 3 ID is ${Koth.aid3}.`)
+let idHandle3 = async (args, target, usr)=> {
+    return `The Arena 3 ID is ${Koth.aid3}.`;
 };
 
 let idCom3 = new Command(
@@ -243,15 +241,14 @@ let idCom3 = new Command(
     `Use '!arenaid3' to find the arena id 3!`,
     idHandle3);
 
-let topHandle = async (args, target, client, usr)=> {
+let topHandle = async (args, target, usr)=> {
     let tops = await topRank(5);
     let msg = `The Top 5 is: `;
-    let i = 0;
     for(let i = 0; i < tops.length; i ++){
         msg += `${i+1}. ${tops[i].tName}(${tops[i].rating}), `;
     }
     msg = msg.substring(0, msg.length-2);
-    client.say(target, msg);
+    return msg;
 };
 
 let topCom = new Command(
@@ -259,10 +256,10 @@ let topCom = new Command(
     `Use '!top to see the top 5 players`,
     topHandle);
 
-let kingHandle = async (args, target, client, usr)=> {
+let kingHandle = async (args, target, usr)=> {
     let msg = "The king has used : ";
-    msg = msg.concat(Koth.chars().join(","))
-    client.say(target, msg);
+    msg = msg.concat(Koth.chars().join(", "))
+    return msg;
 };
 
 let kingCom = new Command(

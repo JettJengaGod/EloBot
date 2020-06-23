@@ -4,7 +4,7 @@ import {CommandList} from './commands'
 import {updateUser, delUser, undoLastMatch, nukeDB} from "./database";
 
 function default_handle(args, target, client, usr) {
-    client.say(target, 'This command isn\'t properly setup')
+    return'This command isn\'t properly setup'
 }
 class Command{
     constructor(com='', help='', handle=default_handle) {
@@ -22,14 +22,14 @@ class Command{
 let idHandle = async (args, target, client, usr)=> {
     if(args.length === 1){
         Koth.aid = args[0];
-        client.say(target, `The Arena ID is set to ${Koth.aid}.`)
+        return`The Arena ID is set to ${Koth.aid}.`
     }
     else if(args.length === 0){
         return CommandList['arenaid'].handle(args,target,client,usr)
     }
     else{
 
-        client.say(target, `Please only send in the Arena ID separated by a space after !arenaid`)
+        return`Please only send in the Arena ID separated by a space after !arenaid`
     }
 };
 
@@ -41,14 +41,14 @@ let idCom = new Command(
 let idHandle2 = async (args, target, client, usr)=> {
     if(args.length === 1){
         Koth.aid2 = args[0];
-        client.say(target, `The Arena 2 ID is set to ${Koth.aid2}.`)
+        return`The Arena 2 ID is set to ${Koth.aid2}.`
     }
     else if(args.length === 0){
         return CommandList['arenaid2'].handle(args,target,client,usr)
     }
     else{
 
-        client.say(target, `Please only send in the Arena ID separated by a space after !arenaid2`)
+        return`Please only send in the Arena ID separated by a space after !arenaid2`
     }
 };
 
@@ -60,14 +60,14 @@ let idCom2 = new Command(
 let idHandle3 = async (args, target, client, usr)=> {
     if(args.length === 1){
         Koth.aid3 = args[0];
-        client.say(target, `The Arena 3 ID is set to ${Koth.aid3}.`)
+        return`The Arena 3 ID is set to ${Koth.aid3}.`
     }
     else if(args.length === 0){
         return CommandList['arenaid3'].handle(args,target,client,usr)
     }
     else{
 
-        client.say(target, `Please only send in the Arena ID separated by a space after !arenaid3`)
+        return`Please only send in the Arena ID separated by a space after !arenaid3`
     }
 };
 
@@ -91,14 +91,13 @@ let skipHandle = async (args, target, client, usr)=> {
     let msg = `There needs to be at least a king and one challenger for someone to be skipped.`;
     let queue = Koth.get();
     if(queue.length <2){
-        client.say(target, msg);
-        return
+        return msg;
     }
     const skipped = queue[1];
     Koth.skip();
     msg = `Skipped ${skipped} `;
     msg = queueApped(msg, queue);
-    client.say(target, msg);
+    return msg;
 };
 
 let skipCom = new Command(
@@ -109,8 +108,7 @@ let winHandle = async (args, target, client, usr)=> {
     let msg = `There needs to be at least a king and one challenger for someone to win.`;
     let queue = Koth.get();
     if(queue.length <2){
-        client.say(target, msg);
-        return
+        return msg;
     }
 
     const king = queue[0];
@@ -120,7 +118,7 @@ let winHandle = async (args, target, client, usr)=> {
     msg = `The King ${king} ${rChanges['w_r']}(+${rChanges['win_r_c']}) defeated ${loser} ${rChanges['l_r']}(-${rChanges['lose_r_c']}) 
             Streak(${Koth.streak()}) and remains King.  `;
     msg = queueApped(msg, queue);
-    client.say(target, msg);
+    return msg;
 };
 
 let winCom = new Command(
@@ -131,9 +129,8 @@ let winCom = new Command(
 let loseHandle = async (args, target, client, usr)=> {
     let msg = `There needs to be at least a king and one challenger for someone to lose.`;
     let queue = Koth.get();
-    if(queue.length <2){
-        client.say(target, msg);
-        return
+    if(queue.length <2) {
+        return msg;
     }
     const winner = queue[1];
     const loser = queue[0];
@@ -142,7 +139,7 @@ let loseHandle = async (args, target, client, usr)=> {
     msg = `The King ${loser} ${rChanges['l_r']}(-${rChanges['lose_r_c']}) is defeated. ${winner} ${rChanges['w_r']}(+${rChanges['win_r_c']}) 
             is the new King.  `;
     msg = queueApped(msg, queue);
-    client.say(target, msg);
+    return msg;
 };
 
 let loseCom = new Command(
@@ -156,7 +153,7 @@ let openHandle = async (args, target, client, usr)=> {
         Koth.openList();
         msg = `The list is now open!`
     }
-    client.say(target, msg);
+    return msg;
 };
 
 let openCom = new Command(
@@ -170,7 +167,7 @@ let closeHandle = async (args, target, client, usr)=> {
         Koth.close();
         msg = `The list is now closed!`
     }
-    client.say(target, msg);
+    return msg;
 };
 
 let closeCom = new Command(
@@ -219,7 +216,7 @@ let addListHandle = async (args, target, client, usr)=> {
             msg += ` These Players are already in the list ` + extras
         }
     }
-    client.say(target, msg);
+    return msg;
 };
 
 let addListCom = new Command(
@@ -257,7 +254,7 @@ let addHandle = async (args, target, client, usr)=> {
             }
         }
     }
-    client.say(target, msg);
+    return msg;
 };
 
 let addCom = new Command(
@@ -278,7 +275,7 @@ let removeHandle = async (args, target, client, usr)=> {
             msg = `${username} is not in the list!`
         }
     }
-    client.say(target, msg);
+    return msg;
 };
 
 let removeCom = new Command(
@@ -306,7 +303,7 @@ let moveHandle = async (args, target, client, usr)=> {
             }
         }
     }
-    client.say(target, msg);
+    return msg;
 };
 
 let moveCom = new Command(
@@ -316,7 +313,7 @@ let moveCom = new Command(
 
 let clearHandle = async (args, target, client, usr)=> {
     Koth.clear();
-    client.say(target, `The list is now cleared!`);
+    return`The list is now cleared!`;
 };
 
 let clearCom = new Command(
@@ -327,7 +324,7 @@ let clearCom = new Command(
 let undoHandle = async (args, target, client, usr)=> {
     let last = await undoLastMatch();
     let msg = `Match between ${last.winner}(${last.w_r - last.w_rc}) and ${last.loser} (${last.l_r + last.l_rc}) undone and ratings are updated!`;
-    client.say(target, msg);
+    return msg;
 };
 
 let undoCom = new Command(
@@ -347,7 +344,7 @@ let charHandle = async (args, target, client, usr)=> {
         msg = "Added ".concat(char);
     }
 
-    client.say(target, msg);
+    return msg;
 };
 let charCom = new Command(
     'char',
@@ -390,7 +387,7 @@ let setRatingHandle = async (args, target, client, usr)=> {
             }
         }
 
-    client.say(target, msg);
+    return msg;
     };
 
 
@@ -404,7 +401,7 @@ let setRatingCom = new Command(
 let nukeHandle = async (args, target, client, usr)=> {
     await nukeDB();
     let msg = `All users deleted from database. I hope you're happy. D:`;
-    client.say(target, msg);
+    return msg;
 };
 
 let nukeCom = new Command(
@@ -419,7 +416,7 @@ let delHandle = async (args, target, client, usr)=> {
         await delUser(username);
         msg = `User ${username} deleted from database.`
     }
-    client.say(target, msg);
+    return msg;
 };
 
 let delCom = new Command(

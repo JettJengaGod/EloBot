@@ -13,12 +13,6 @@ import dotenv from 'dotenv';
 dotenv.config();
 const starting_rating = Number(process.env.DEFAULT_RATING);
 
-
-let client = {
-    say: function (target, msg) {}
-};
-let mockC = sinon.mock(client);
-
 describe('arenaid command', async() =>{
     const target = '';
     const command = 'arenaid';
@@ -26,33 +20,32 @@ describe('arenaid command', async() =>{
     const aid2 = 'SECONDARENA';
     let args = [];
     beforeEach(async () => {
-        mockC = sinon.mock(client);
         Koth.clear()
     });
     it('responds with the aid', async ()=>{
         Koth.aid = aid;
-        mockC.expects("say").once().withExactArgs(target,
-            `The Arena ID is ${aid}.`);
-        await ModCommandList[command].handle(args, target, client , '');
-        mockC.verify();
+        const expected =
+            `The Arena ID is ${aid}.`;
+        const resp = await ModCommandList[command].handle(args, target, '');
+        expect(resp).to.equal(expected);
     });
 
     it('properly sets the aid', async ()=>{
         Koth.aid = aid;
         args = [aid2];
-        mockC.expects("say").once().withExactArgs(target,
-            `The Arena ID is set to ${aid2}.`);
-        await ModCommandList[command].handle(args, target, client , '');
-        mockC.verify();
+        const expected =
+            `The Arena ID is set to ${aid2}.`;
+        const resp = await ModCommandList[command].handle(args, target, '');
+        expect(resp).to.equal(expected);
         expect(Koth.aid).to.equal(aid2)
     });
     it('properly fails with too many args', async ()=>{
         Koth.aid = aid;
         args = [aid2, aid];
-        mockC.expects("say").once().withExactArgs(target,
-            `Please only send in the Arena ID separated by a space after !arenaid`);
-        await ModCommandList[command].handle(args, target, client , '');
-        mockC.verify();
+        const expected =
+            `Please only send in the Arena ID separated by a space after !arenaid`;
+        const resp = await ModCommandList[command].handle(args, target, '');
+        expect(resp).to.equal(expected);
     });
 });
 
@@ -63,33 +56,32 @@ describe('arenaid2 command', async() =>{
     const aid2 = 'SECONDARENA';
     let args = [];
     beforeEach(async () => {
-        mockC = sinon.mock(client);
         Koth.clear()
     });
     it('responds with the aid', async ()=>{
         Koth.aid2 = aid;
-        mockC.expects("say").once().withExactArgs(target,
-            `The Arena 2 ID is ${aid}.`);
-        await ModCommandList[command].handle(args, target, client , '');
-        mockC.verify();
+        const expected =
+            `The Arena 2 ID is ${aid}.`;
+        const resp = await ModCommandList[command].handle(args, target, '');
+        expect(resp).to.equal(expected);
     });
 
     it('properly sets the aid', async ()=>{
         Koth.aid2 = aid;
         args = [aid2];
-        mockC.expects("say").once().withExactArgs(target,
-            `The Arena 2 ID is set to ${aid2}.`);
-        await ModCommandList[command].handle(args, target, client , '');
-        mockC.verify();
-        expect(Koth.aid2).to.equal(aid2)
+        const expected =
+            `The Arena 2 ID is set to ${aid2}.`;
+        const resp = await ModCommandList[command].handle(args, target, '');
+        expect(resp).to.equal(expected);
+        expect(Koth.aid2).to.equal(aid2);
     });
     it('properly fails with too many args', async ()=>{
         Koth.aid2 = aid;
         args = [aid2, aid];
-        mockC.expects("say").once().withExactArgs(target,
-            `Please only send in the Arena ID separated by a space after !arenaid2`);
-        await ModCommandList[command].handle(args, target, client , '');
-        mockC.verify();
+        const expected =
+            `Please only send in the Arena ID separated by a space after !arenaid2`;
+        const resp = await ModCommandList[command].handle(args, target, '');
+        expect(resp).to.equal(expected);
     });
 });
 
@@ -100,33 +92,32 @@ describe('arenaid3 command', async() =>{
     const aid2 = 'SECONDARENA';
     let args = [];
     beforeEach(async () => {
-        mockC = sinon.mock(client);
         Koth.clear()
     });
     it('responds with the aid', async ()=>{
         Koth.aid3 = aid;
-        mockC.expects("say").once().withExactArgs(target,
-            `The Arena 3 ID is ${aid}.`);
-        await ModCommandList[command].handle(args, target, client , '');
-        mockC.verify();
+        const expected =
+            `The Arena 3 ID is ${aid}.`;
+        const resp = await ModCommandList[command].handle(args, target, '');
+        expect(resp).to.equal(expected);
     });
 
     it('properly sets the aid', async ()=>{
         Koth.aid3 = aid;
         args = [aid2];
-        mockC.expects("say").once().withExactArgs(target,
-            `The Arena 3 ID is set to ${aid2}.`);
-        await ModCommandList[command].handle(args, target, client , '');
-        mockC.verify();
+        const expected =
+            `The Arena 3 ID is set to ${aid2}.`;
+        const resp = await ModCommandList[command].handle(args, target, '');
+        expect(resp).to.equal(expected);
         expect(Koth.aid3).to.equal(aid2)
     });
     it('properly fails with too many args', async ()=>{
         Koth.aid3 = aid;
         args = [aid2, aid];
-        mockC.expects("say").once().withExactArgs(target,
-            `Please only send in the Arena ID separated by a space after !arenaid3`);
-        await ModCommandList[command].handle(args, target, client , '');
-        mockC.verify();
+        const expected =
+            `Please only send in the Arena ID separated by a space after !arenaid3`;
+        const resp = await ModCommandList[command].handle(args, target, '');
+        expect(resp).to.equal(expected);
     });
 });
 
@@ -146,45 +137,43 @@ describe('win command', async() =>{
         await addUser(user2);
         Koth.add(user);
         Koth.add(user2);
-        mockC = sinon.mock(client);
     });
     it('Says an error when there is 0 users in the queue', async() => {
         Koth.clear();
-        mockC.expects("say").once().withExactArgs('',
-            `There needs to be at least a king and one challenger for someone to win.`);
-        await ModCommandList[command].handle(args, target, client, user);
+        const expected =
+            `There needs to be at least a king and one challenger for someone to win.`;
+        const resp = await ModCommandList[command].handle(args, target, user);
 
-        mockC.verify();
+        expect(resp).to.equal(expected);
     });
     it('Says an error when there is 1 user in queue', async() => {
         Koth.clear()
         Koth.add(user);
-        mockC.expects("say").once().withExactArgs('',
-            `There needs to be at least a king and one challenger for someone to win.` );
-        await ModCommandList[command].handle(args, target, client , user);
+        const expected =
+            `There needs to be at least a king and one challenger for someone to win.` ;
+        const resp = await ModCommandList[command].handle(args, target, user);
 
-        mockC.verify();
+        expect(resp).to.equal(expected);
     });
     it('Records the king winning properly no one else in queue', async() =>{
-        mockC.expects("say").once();
-        await ModCommandList[command].handle(args, '', client , user);
-        mockC.verify();
+        const resp = await ModCommandList[command].handle(args, '', user);
+        expect(resp).to.not.equal(null);
 
         let u1r = await rating(user);
         let u2r = await rating(user2);
-        expect(u1r).to.be.above(u2r);
+        console.log(u1r,u2r)
+        expect(u1r-starting_rating).to.equal(starting_rating-u2r);
         expect(Koth.get(user2)).to.equal(-1)
     });
 
     it('Records the king winning properly with one more in queue', async() =>{
         Koth.add(user3);
-        mockC.expects("say").once();
-        await ModCommandList[command].handle(args, '', client , user);
-        mockC.verify();
+        const resp = await ModCommandList[command].handle(args, '', user);
+        expect(resp).to.not.equal(null);
 
         let u1r = await rating(user);
         let u2r = await rating(user2);
-        expect(u1r).to.be.above(u2r);
+        expect(u1r-starting_rating).to.equal(starting_rating-u2r);
         expect(Koth.get(user2)).to.equal(-1);
         expect(Koth.get().length).to.equal(2);
     });
@@ -198,7 +187,6 @@ describe('lose command', async() =>{
     const user3 = 'besty';
     const args = [];
     const target = '';
-    const starting_rating = Number(process.env.DEFAULT_RATING);
     beforeEach(async () => {
         Koth.clear();
         await truncate();
@@ -206,46 +194,43 @@ describe('lose command', async() =>{
         await addUser(user2);
         Koth.add(user);
         Koth.add(user2);
-        mockC = sinon.mock(client);
     });
 
     it('Says an error when there is 0 users in the queue', async() => {
         Koth.clear();
-        mockC.expects("say").once().withExactArgs('',
-            `There needs to be at least a king and one challenger for someone to lose.`);
-        await ModCommandList[command].handle(args, target, client, user);
+        const expected =
+            `There needs to be at least a king and one challenger for someone to lose.`;
+        const resp = await ModCommandList[command].handle(args, target, user);
 
-        mockC.verify();
+        expect(resp).to.equal(expected);
     });
     it('Says an error when there is 1 user in queue', async() => {
         Koth.clear();
         Koth.add(user);
-        mockC.expects("say").once().withExactArgs('',
-            `There needs to be at least a king and one challenger for someone to lose.` );
-        await ModCommandList[command].handle(args, target, client , user);
+        const expected =
+            `There needs to be at least a king and one challenger for someone to lose.`;
+        const resp = await ModCommandList[command].handle(args, target, user);
 
-        mockC.verify();
+        expect(resp).to.equal(expected);
     });
     it('Records the king losing properly no one else in queue', async() =>{
-        mockC.expects("say").once();
-        await ModCommandList[command].handle(args, '', client , user);
-        mockC.verify();
+        const resp = await ModCommandList[command].handle(args, '', user);
+        expect(resp).to.not.equal(null);
 
         let u1r = await rating(user);
         let u2r = await rating(user2);
-        expect(u2r).to.be.above(u1r);
+        expect(u2r-starting_rating).to.equal(starting_rating-u1r);
         expect(Koth.get(user)).to.equal(-1)
     });
 
     it('Records the king winning properly with one more in queue', async() =>{
         Koth.add(user3);
-        mockC.expects("say").once();
-        await ModCommandList[command].handle(args, '', client , user);
-        mockC.verify();
+        const resp = await ModCommandList[command].handle(args, '', user);
+        expect(resp).to.not.equal(null);
 
         let u1r = await rating(user);
         let u2r = await rating(user2);
-        expect(u2r).to.be.above(u1r);
+        expect(u2r-starting_rating).to.equal(starting_rating-u1r);
         expect(Koth.get(user)).to.equal(-1);
         expect(Koth.get(user2)).to.equal(0);
         expect(Koth.get().length).to.equal(2);
@@ -258,22 +243,21 @@ describe('open command', async() =>{
     const command = 'open';
     let args = [];
     beforeEach(async () => {
-        mockC = sinon.mock(client);
         Koth.clear()
     });
     it('responds that the list is already open', async ()=>{
-        mockC.expects("say").once().withExactArgs(target,
-            `The list is already open!`);
-        await ModCommandList[command].handle(args, target, client , '');
-        mockC.verify();
+        const expected =
+            `The list is already open!`;
+        const resp = await ModCommandList[command].handle(args, target, '');
+        expect(resp).to.equal(expected);
         expect(Koth.open).to.be.true
     });
     it('responds that the list is now open when closed', async ()=>{
         Koth.close();
-        mockC.expects("say").once().withExactArgs(target,
-            `The list is now open!`);
-        await ModCommandList[command].handle(args, target, client , '');
-        mockC.verify();
+        const expected =
+            `The list is now open!`;
+        const resp = await ModCommandList[command].handle(args, target, '');
+        expect(resp).to.equal(expected);
         expect(Koth.open).to.be.true
     });
 });
@@ -283,23 +267,22 @@ describe('close command', async() =>{
     const command = 'close';
     let args = [];
     beforeEach(async () => {
-        mockC = sinon.mock(client);
         Koth.clear();
         Koth.openList()
     });
     it('responds that the list is already closed', async ()=>{
         Koth.close();
-        mockC.expects("say").once().withExactArgs(target,
-            `The list is already closed!`);
-        await ModCommandList[command].handle(args, target, client , '');
-        mockC.verify();
+        const expected =
+            `The list is already closed!`;
+        const resp = await ModCommandList[command].handle(args, target, '');
+        expect(resp).to.equal(expected);
         expect(Koth.open).to.be.false
     });
     it('responds that the list is now open when closed', async ()=>{
-        mockC.expects("say").once().withExactArgs(target,
-            `The list is now closed!`);
-        await ModCommandList[command].handle(args, target, client , '');
-        mockC.verify();
+        const expected =
+            `The list is now closed!`;
+        const resp = await ModCommandList[command].handle(args, target, '');
+        expect(resp).to.equal(expected);
         expect(Koth.open).to.be.false;
         Koth.openList()
     });
@@ -312,60 +295,59 @@ describe('add command', async() =>{
     const user2 = 'mctestface';
     let args = [];
     beforeEach(async () => {
-        mockC = sinon.mock(client);
         Koth.clear();
     });
     it('Does not add anything to list with no params', async ()=> {
 
-        mockC.expects("say").once().withExactArgs(target,
-            `please call add like this '!add @username' or '!add @username [number]'`);
-        await ModCommandList[command].handle(args, target, client, '');
-        mockC.verify();
-        expect(Koth.get(user)).to.equal(-1)
+        const expected =
+            `please call add like this '!add @username' or '!add @username [number]'`;
+        const resp = await ModCommandList[command].handle(args, target, '');
+        expect(resp).to.equal(expected);
+        expect(Koth.get(user)).to.equal(-1);
     });
     it('Adds user to list', async ()=>{
 
         let args = ['@'+user];
-        mockC.expects("say").once().withExactArgs(target,
-            `${user} added to list!`);
-        await ModCommandList[command].handle(args, target, client , '');
-        mockC.verify();
-        expect(Koth.get(user)).to.equal(0)
+        const expected =
+            `${user} added to list!`;
+        const resp = await ModCommandList[command].handle(args, target, '');
+        expect(resp).to.equal(expected);
+        expect(Koth.get(user)).to.equal(0);
     });
     it('Does not add user to list if already there', async ()=>{
         Koth.add(user);
         let args = ['@'+user];
-        mockC.expects("say").once().withExactArgs(target,
-            `${user} is already in the list!`);
-        await ModCommandList[command].handle(args, target, client , '');
-        mockC.verify();
+        const expected =
+            `${user} is already in the list!`;
+        const resp = await ModCommandList[command].handle(args, target, '');
+        expect(resp).to.equal(expected);
     });
     it('Adds user to list at position', async ()=>{
         Koth.add(user);
         let args = ['@'+user2, '0'];
-        mockC.expects("say").once().withExactArgs(target,
-            `${user2} added to list at position 0!`);
-        await ModCommandList[command].handle(args, target, client , '');
-        mockC.verify();
-        expect(Koth.get(user2)).to.equal(0)
+        const expected =
+            `${user2} added to list at position 0!`;
+        const resp = await ModCommandList[command].handle(args, target, '');
+        expect(resp).to.equal(expected);
+        expect(Koth.get(user2)).to.equal(0);
     });
     it('Does not add user to list at position when it is in list already', async ()=>{
         Koth.add(user);
         let args = ['@'+user, '0'];
-        mockC.expects("say").once().withExactArgs(target,
-            `${user} is already in the list!`);
-        await ModCommandList[command].handle(args, target, client , '');
-        mockC.verify();
-        expect(Koth.get(user)).to.equal(0)
+        const expected =
+            `${user} is already in the list!`;
+        const resp = await ModCommandList[command].handle(args, target, '');
+        expect(resp).to.equal(expected);
+        expect(Koth.get(user)).to.equal(0);
     });
     it('Does not add user to list at position when malformed input', async ()=>{
         Koth.add(user);
         let args = ['@'+user2, 'thisisnotanumber'];
-        mockC.expects("say").once().withExactArgs(target,
-            `Please use a number when calling '!add @username [number]'`);
-        await ModCommandList[command].handle(args, target, client , '');
-        mockC.verify();
-        expect(Koth.get(user2)).to.equal(-1)
+        const expected =
+            `Please use a number when calling '!add @username [number]'`;
+        const resp = await ModCommandList[command].handle(args, target, '');
+        expect(resp).to.equal(expected);
+        expect(Koth.get(user2)).to.equal(-1);
     });
 });
 
@@ -376,26 +358,25 @@ describe('remove command', async() =>{
     const user2 = 'mctestface';
     let args = [];
     beforeEach(async () => {
-        mockC = sinon.mock(client);
         Koth.clear();
         Koth.add(user);
     });
     it('Does not remove user not in list', async ()=> {
 
         let args = ['@'+user2];
-        mockC.expects("say").once().withExactArgs(target,
-            `${user2} is not in the list!`);
-        await ModCommandList[command].handle(args, target, client, '');
-        mockC.verify();
+        const expected =
+            `${user2} is not in the list!`;
+        const resp = await ModCommandList[command].handle(args, target, '');
+        expect(resp).to.equal(expected);
         expect(Koth.get(user2)).to.equal(-1)
     });
     it('removes user that is in list', async ()=> {
 
         let args = ['@'+user];
-        mockC.expects("say").once().withExactArgs(target,
-            `${user} removed from list!`);
-        await ModCommandList[command].handle(args, target, client, '');
-        mockC.verify();
+        const expected =
+            `${user} removed from list!`;
+        const resp = await ModCommandList[command].handle(args, target, '');
+        expect(resp).to.equal(expected);
         expect(Koth.get(user)).to.equal(-1)
     });
 });
@@ -408,34 +389,32 @@ describe('move command', async() =>{
     const user2 = 'mctestface';
     let args = [];
     beforeEach(async () => {
-        mockC = sinon.mock(client);
         Koth.clear();
         Koth.add(user);
     });
     it('Does not remove user not in list', async ()=> {
 
         let args = ['@'+user2, 1];
-        mockC.expects("say").once().withExactArgs(target,
-            `${user2} is not in the list!`);
-        await ModCommandList[command].handle(args, target, client, '');
-        mockC.verify();
+        const expected =
+            `${user2} is not in the list!`;
+        const resp = await ModCommandList[command].handle(args, target, '');
+        expect(resp).to.equal(expected);
         expect(Koth.get(user2)).to.equal(-1)
     });
     it('removes user that is in list', async ()=> {
 
         Koth.add(user2);
         let args = ['@'+user, 0];
-        mockC.expects("say").once().withExactArgs(target,
-            `${user} moved in list to position ${0}!`);
-        await ModCommandList[command].handle(args, target, client, '');
-        mockC.verify();
-        mockC = sinon.mock(client);
+        let expected =
+            `${user} moved in list to position ${0}!`;
+        let resp = await ModCommandList[command].handle(args, target, '');
+        expect(resp).to.equal(expected);
         expect(Koth.get(user)).to.equal(0);
         args = ['@'+user, 1];
-        mockC.expects("say").once().withExactArgs(target,
-            `${user} moved in list to position ${1}!`);
-        await ModCommandList[command].handle(args, target, client, '');
-        mockC.verify();
+        expected =
+            `${user} moved in list to position ${1}!`;
+        resp = await ModCommandList[command].handle(args, target, '');
+        expect(resp).to.equal(expected);
         expect(Koth.get(user)).to.equal(1)
     });
 });
@@ -445,16 +424,15 @@ describe('clear command', async() =>{
     const command = 'clear';
     let args = [];
     beforeEach(async () => {
-        mockC = sinon.mock(client);
         Koth.clear()
     });
     it('clears the list', async ()=>{
         Koth.add('FEIFE');
         Koth.add('FEFR');
-        mockC.expects("say").once().withExactArgs(target,
-            `The list is now cleared!`);
-        await ModCommandList[command].handle(args, target, client , '');
-        mockC.verify();
+        const expected =
+            `The list is now cleared!`;
+        const resp = await ModCommandList[command].handle(args, target, '');
+        expect(resp).to.equal(expected);
         expect(Koth.get().length).to.equal(0)
     });
 });
@@ -468,7 +446,6 @@ describe('Undoes a match', async() =>{
     const win_c = 14;
     const lose_c = 14;
     beforeEach(async () => {
-        mockC = sinon.mock(client);
         Koth.clear();
         await truncate();
         await addUser(winner);
@@ -480,11 +457,11 @@ describe('Undoes a match', async() =>{
 
     });
     it('clears the list', async ()=>{
-        mockC.expects("say").once().withExactArgs(target,
+        const expected =
             `Match between ${winner}(${starting_rating}) and ${loser} (${starting_rating}) undone and ratings are updated!`
-        );
-        await ModCommandList[command].handle(args, target, client , '');
-        mockC.verify();
+        ;
+        const resp = await ModCommandList[command].handle(args, target, '');
+        expect(resp).to.equal(expected);
         expect(Koth.get().length).to.equal(0)
     });
 });

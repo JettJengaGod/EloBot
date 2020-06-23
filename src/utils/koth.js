@@ -81,6 +81,7 @@ class Koth {
     }
     clear(){
         this._queue = [];
+        this._clist = [];
     }
     close(){
         this._open = false;
