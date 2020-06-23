@@ -196,6 +196,16 @@ describe('rank default commands', async() =>{
 
 });
 
+describe('random command', async() =>{
+    const command = 'random';
+    it('gets a random number between 1 and 15', async() =>{
+      const args = [];
+
+      const resp = await CommandList[command].handle(args, '', 'unused');
+      expect(parseInt(resp)).to.be.at.least(1).and.at.most(15);
+    });
+});
+
 describe('rank actual responses', async() =>{
     const command = 'rank';
     const usr = 'testy';
