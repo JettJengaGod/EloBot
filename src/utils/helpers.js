@@ -74,7 +74,7 @@ export const nth = function(d) {
     }
 }
 export let auth = async() =>{
-    await sheet.useApiKey('AIzaSyBHd7v34XnH_w7xcEwzWdgTtJ1vtZoS11c')
+    await sheet.useApiKey(process.env.GOOGLE_API)
     await sheet.loadInfo();
 }
 export let character = async (player, number) =>{

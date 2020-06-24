@@ -110,7 +110,7 @@ let randomHandle = async (args, target, usr)=> {
     else{
         let char = await character(args[0], randomInt)
         if(char !== `player not found`){
-            return `${args} randomed their ${randomInt}${nth(randomInt)} character: ${char}.`
+            return `${args[0]} randomed their ${randomInt}${nth(randomInt)} character: ${char}.`
         }
         else{
             return char;
