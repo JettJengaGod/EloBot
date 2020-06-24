@@ -9,6 +9,7 @@ import {addUser, updateUser} from "../src/utils/database";
 import Koth from '../src/utils/koth'
 import dotenv from 'dotenv';
 import {ModCommandList} from "../src/utils/modCommands";
+import {auth} from "../src/utils/helpers";
 dotenv.config();
 const starting_rating = Number(process.env.DEFAULT_RATING);
 describe('Command class tests', function (){
@@ -203,6 +204,13 @@ describe('random command', async() =>{
 
       const resp = await CommandList[command].handle(args, '', 'unused');
       expect(parseInt(resp)).to.be.at.least(1).and.at.most(15);
+    });
+    it('gets a random number between 1 and 15', async() =>{
+        await auth()
+        const args = ["Jett"];
+
+        const resp = await CommandList[command].handle(args, '', 'unused');
+        expect(parseInt(resp)).to.be.at.least(1).and.at.most(15);
     });
 });
 

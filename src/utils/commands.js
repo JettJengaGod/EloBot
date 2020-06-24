@@ -1,10 +1,9 @@
 import { addUser, rating, updateUser, ratingAdd, rank, topRank} from "./database";
-import {atHandle} from "./helpers";
+import {atHandle, character, nth} from "./helpers";
 import Koth from './koth'
 import {ModCommandList} from "./modCommands";
-
+const { GoogleSpreadsheet } = require('google-spreadsheet');
 import RandomOrg from 'random-org';
-
 let randomOrg = new RandomOrg({ apiKey: '7ed3e3c3-ae3c-4c3c-babf-ab8b8e614ed4' });
 
 function default_handle(args, target, usr) {
@@ -98,13 +97,25 @@ let websiteCom = new Command(
 );
 
 let randomHandle = async (args, target, usr)=> {
-    const response = await randomOrg.generateIntegers({ min: 1, max: 15, n: 1});
+    const response = await randomOrg.generateIntegers({min: 1, max: 15, n: 1});
     if (!response) {
         return `I couldn't fetch a random number.`;
     }
-
     const randomInt = response.random.data[0];
-    return randomInt.toString();
+    if(args.length === 0) {
+
+        let msg = `${usr} randomed their ${randomInt}${nth(randomInt)} character.`
+        return msg;
+    }
+    else{
+        let char = await character(args[0], randomInt)
+        if(char !== `player not found`){
+            return `${args} randomed their ${randomInt}${nth(randomInt)} character: ${char}.`
+        }
+        else{
+            return char;
+        }
+    }
 }
 
 let randomCom = new Command(

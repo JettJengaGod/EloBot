@@ -3,6 +3,10 @@ import { addUser, rating, updateUser, ratingAdd, addMatch} from "./database";
 import EloRank from 'elo-rank';
 let elo = new EloRank();
 import {JettCommands, ModCommandList} from "./modCommands";
+import RandomOrg from "random-org";
+
+const {GoogleSpreadsheet} = require("google-spreadsheet");
+let sheet = new GoogleSpreadsheet("1nHTotuYNshncsHpkjswued5xmVdnbFpqcFINi9o6iMI");
 
 export function atHandle(name){
     // name = name.toLowerCase();
@@ -59,3 +63,37 @@ export const handle_command = async(command, args, target, client, mod, usr) => 
         client.say(target, resp);
     }
 };
+
+export const nth = function(d) {
+    if (d > 3 && d < 21) return 'th';
+    switch (d % 10) {
+        case 1:  return "st";
+        case 2:  return "nd";
+        case 3:  return "rd";
+        default: return "th";
+    }
+}
+export let auth = async() =>{
+    await sheet.useApiKey('AIzaSyBHd7v34XnH_w7xcEwzWdgTtJ1vtZoS11c')
+    await sheet.loadInfo();
+}
+export let character = async (player, number) =>{
+    let worksheet = sheet.sheetsByIndex[0]
+    let rows = await worksheet.getRows()
+    let playerRow = -1
+    for(let i = 0; i < rows.length; i++){
+        let name = String(rows[i].Player)
+        if(name.startsWith(player)){
+            playerRow = i
+            break;
+        }
+    }
+    if(playerRow > -1){
+        await worksheet.loadCells();
+        return await worksheet.getCell(playerRow+1, number).value;
+
+    }
+    else{
+        return `player not found`
+    }
+}
