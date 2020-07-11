@@ -9,7 +9,7 @@ const {GoogleSpreadsheet} = require("google-spreadsheet");
 let sheet = new GoogleSpreadsheet("1nHTotuYNshncsHpkjswued5xmVdnbFpqcFINi9o6iMI");
 
 export function atHandle(name){
-    // name = name.toLowerCase();
+    name = name.toLowerCase();
     if(name.endsWith(',')){
         name = name.substring(0, name.length-1)
     }

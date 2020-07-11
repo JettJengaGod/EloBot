@@ -171,7 +171,7 @@ let listHandle = async (args, target, usr)=> {
     }
 
     if (Koth.get(usr) !== -1) {
-        msg += ` You are at position ${Koth.get(usr)}.`
+        msg += `. ${usr} is at position ${Koth.get(usr)}.`
     }
     return msg;
 };
@@ -310,6 +310,9 @@ export let CommandList = {
     'chal' : challengeCom,
     'join' : challengeCom,
     'dropspot' : dropspotCom,
+    'drop' : dropspotCom,
+    'dodge' : dropspotCom,
+    'spotdodge' : dropspotCom,
     'spot' : spotCom,
     'arena' : idCom,
     'id' : idCom,
@@ -319,6 +322,6 @@ export let CommandList = {
     'id2' : idCom2,
     'arenaid3' : idCom3,
     'top' : topCom,
-    'king' : kingCom,
-    'random': randomCom
+    'king' : kingCom
+    // 'random': randomCom
 };
