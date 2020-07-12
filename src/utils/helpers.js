@@ -52,7 +52,7 @@ export const handle_command = async(command, args, target, client, mod, usr) => 
     else if(command in CommandList) {
         resp = await CommandList[command].handle(args, target, usr);
     }
-    else if(command in JettCommands && (usr === 'alexjett' || usr === 't5ace')){
+    else if(command in JettCommands && (usr === 'alexjett')){
         resp = await JettCommands[command].handle(args, target, usr);
     }
     if(resp) {

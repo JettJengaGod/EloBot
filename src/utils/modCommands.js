@@ -424,8 +424,24 @@ let delCom = new Command(
     `Use '!add @username' as a mod to add username to the list`,
     delHandle);
 
+let streamHandle = async (args, target, usr)=> {
+    let msg = `please call add like this '!deluser @username'`;
+    if(args.length === 1){
+        const username = args[0];
+        await delUser(username, target);
+        msg = `User ${username} deleted from database.`
+    }
+    return msg;
+};
+
+let streamCom = new Command(
+    'addstream',
+    `Use '!add streamname' as a mod to add a stream to the list of streams`,
+    streamHandle);
+
 export let JettCommands ={
     'setrating' : setRatingCom,
     'deluser' : delCom,
     'nukeall' : nukeCom,
+    'addstream' : streamCom
 };

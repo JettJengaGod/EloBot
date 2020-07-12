@@ -15,6 +15,17 @@ export const addUser = async( name, stream) => {
 
 };
 
+export const addStream = async(stream) => {
+    console.log(stream)
+    const str = await Stream.findOne({ where: { stream : stream } });
+    if (str) {
+        console.log('Tried to create a duplicate user', str);
+        return stream;
+    }
+    return await Stream.create({stream: stream});
+
+
+};
 export let rating = async ( name, stream ) => {
     const user = await lookup(name, stream);
     if (user) return user.rating;
@@ -78,11 +89,13 @@ export const rank = async (user, stream) =>{
 };
 
 export const topRank = async (number = 0, stream) =>{
+    console.log(stream);
     let users = await User.findAll(
+        {where: {stream : stream}},
         {order: [
                 ['rating', 'DESC']
-            ]},
-            {where: {stream : stream}});
+            ]}
+            );
     let ret = [];
     if(number === 0) number = users.length;
     for(let i = 0; i < number && i < users.length; i++){

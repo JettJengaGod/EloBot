@@ -242,7 +242,7 @@ let idCom3 = new Command(
     idHandle3);
 
 let topHandle = async (args, target, usr)=> {
-    let tops = await topRank(5);
+    let tops = await topRank(5, target);
     let msg = `The Top 5 is: `;
     for(let i = 0; i < tops.length; i ++){
         msg += `${i+1}. ${tops[i].tName}(${tops[i].rating}), `;

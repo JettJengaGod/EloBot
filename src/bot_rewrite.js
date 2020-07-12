@@ -27,7 +27,8 @@ const opts = {
         password: process.env.OAUTH_TOKEN
     },
     channels: [
-        process.env.CHANNEL_NAME
+        process.env.CHANNEL_NAME,
+        'jettelobot'
     ]
 };
 let client;
@@ -52,14 +53,16 @@ import {handle_command} from './utils/helpers';
 // Called every time a message comes in
 function onMessageHandler (target, context, msg, self) {
     if (self) { return; }
-
     const usr = context.username;
     const command = msg.split(' ');
     // console.log(command,context, usr);
     // console.log("**********");
     if(command[0].startsWith('!')){
-
-        const mod = (context.mod || usr === 'alexjett' || usr.toLowerCase() === 't5ace');
+        let brodcaster = false
+        if (context.badges) {
+            brodcaster = ('broadcaster' in context.badges)
+        }
+        const mod = (context.mod || brodcaster);
         handle_command(command[0].substr(1), command.slice(1), target, client, mod, usr);
     }
 }
