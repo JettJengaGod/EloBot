@@ -60,7 +60,7 @@ function onMessageHandler (target, context, msg, self) {
     // console.log("**********");
     if(command[0].startsWith('!')){
 
-        const mod = (context.mod || usr === 'alexjett' || usr.toLowerCase() === 't5ace');
+        const mod = (context.mod || usr === 'alexjett' || usr.toLowerCase() === 'tharpy_');
         handle_command(command[0].substr(1), command.slice(1), target, client, mod, usr);
     }
 }
